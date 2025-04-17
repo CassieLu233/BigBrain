@@ -16,7 +16,7 @@ const defaultOptions = {
 
 /**
  * Sends a GET request to the backend.
- * - url: API endpoint path (e.g. "/users/1")
+ * - url: API backend path (e.g. "/admin/games")
  * Returns: Promise resolving to parsed JSON data;
  *           throws Error if the response contains an `error` field.
  */
@@ -28,6 +28,58 @@ export const get = (url) => {
       // inject token from localStorage
       Authorization: `Bearer ${window.localStorage.getItem("token")}`,
     },
+  })
+    .then((res) => res.json())
+    .then((data) => {
+      if (data.error) {
+        throw new Error(data.error);
+      }
+      return data;
+    });
+};
+
+/**
+ * Sends a POST request to the backend.
+ * - url: API backend path (e.g. "/admin/auth/register")
+ * Returns: Promise resolving to parsed JSON data;
+ *           throws Error if the response contains an `error` field.
+ */
+export const post = (url, data) => {
+  return fetch(`${BASE_HOST}${url}`, {
+    ...defaultOptions,
+    method: "POST",
+    headers: {
+      ...defaultOptions.headers,
+      // inject token from localStorage
+      Authorization: `Bearer ${window.localStorage.getItem("token")}`,
+    },
+    body: JSON.stringify(data),
+  })
+    .then((res) => res.json())
+    .then((data) => {
+      if (data.error) {
+        throw new Error(data.error);
+      }
+      return data;
+    });
+};
+
+/**
+ * Sends a PUT request to the backend.
+ * - url: API backend path (e.g. "/admin/auth/register")
+ * Returns: Promise resolving to parsed JSON data;
+ *           throws Error if the response contains an `error` field.
+ */
+export const put = (url, data) => {
+  return fetch(`${BASE_HOST}${url}`, {
+    ...defaultOptions,
+    method: "PUT",
+    headers: {
+      ...defaultOptions.headers,
+      // inject token from localStorage
+      Authorization: `Bearer ${window.localStorage.getItem("token")}`,
+    },
+    body: JSON.stringify(data),
   })
     .then((res) => res.json())
     .then((data) => {

@@ -1,23 +1,25 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router";
+import { message } from "antd";
+import { get } from "../../utils/request";
 
 export const GamePage = () => {
   const [game, setGame] = useState(null);
   const { game_id } = useParams();
 
   useEffect(() => {
-    fetch(`https://jsonplaceholder.typicode.com/users/${game_id}`)
-      .then((res) => res.json())
+    get(`https://jsonplaceholder.typicode.com/users/${game_id}`)
       .then((data) => {
-        console.log(data);
         setGame(data);
       })
-      .catch(console.error);
+      .catch((err) => {
+        message.error(err.message);
+      });
   }, [game_id]);
 
   if (!game) {
     return <h1>Loading…</h1>;
   }
 
-  return <h1>Game Page: ID {game.name}</h1>;
+  return <h1>Game Page: {game.name}</h1>;
 };
