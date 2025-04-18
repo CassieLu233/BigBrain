@@ -10,7 +10,6 @@ export const dashboardStyles = {
     display: "flex",
     flexDirection: "column",
     minHeight: "100vh",
-    background: "#ffff00",
   },
   header: {
     display: "flex",

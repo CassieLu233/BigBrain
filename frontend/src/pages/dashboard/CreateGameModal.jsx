@@ -15,7 +15,7 @@ import logoImg from "../../assets/bigbrain.svg";
  * CreateGameModal
  * Props:
  *  - visible: boolean
- *  - onCreate:  (data: { games: { image, title, description, owner, createdTime } }) => void
+ *  - onCreate:  (data: { games: { image, title, description, owner, updateTime } }) => void
  *  - onCancel: () => void
  */
 export const CreateGameModal = ({ visible, onCreate, onCancel }) => {
@@ -45,7 +45,7 @@ export const CreateGameModal = ({ visible, onCreate, onCancel }) => {
     try {
       const values = await form.validateFields();
       const owner = window.localStorage.getItem("email") || "anonymity";
-      const createdTime = new Date().toISOString();
+      const updateTime = new Date().toISOString();
       let imageBase64 = "";
       if (uploadFileList[0]) {
         // uploadFileList[0].thumbUrl is base64 type
@@ -62,7 +62,8 @@ export const CreateGameModal = ({ visible, onCreate, onCancel }) => {
         title: values.title,
         description: values.description || "No Description",
         owner: owner,
-        createdTime: createdTime,
+        updateTime: updateTime,
+        questions: [],
       };
       onCreate(newGameData);
       form.resetFields();
