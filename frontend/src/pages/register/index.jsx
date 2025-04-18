@@ -19,9 +19,10 @@ export const Register = () => {
     const { name, email, password } = values;
     const data = { email, password, name };
     try {
-      await post("/admin/auth/register", data);
-      message.success("Registration successful! Please log in.");
-      navigate("/login");
+      const result = await post("/admin/auth/register", data);
+      message.success("Registration successful! Go to Dashboard");
+      window.localStorage.setItem("token", result.token);
+      navigate("/dashboard");
     } catch (err) {
       message.error(err.message);
     }
