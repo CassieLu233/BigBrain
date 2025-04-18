@@ -22,14 +22,10 @@ export const dashboardStyles = {
   },
   content: {
     flex: 1,
+    display: "flex",
+    flexDirection: "column",
     padding: 24,
     background: "#fafafa",
-  },
-  emptyContent: {
-    height: "100%",
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
   },
   logo: {
     display: "flex",
@@ -70,9 +66,6 @@ export const dashboardStyles = {
     fontSize: 12,
     color: "#555",
     marginLeft: 4,
-  },
-  card: {
-    width: 300,
   },
   logoutLabel: {
     color: "#000",

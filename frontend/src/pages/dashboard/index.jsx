@@ -5,25 +5,14 @@
 // Course: COMP6080
 // Created: 2025-04-18
 // ==============================================================================
-import { useState, useRef } from "react";
-import {
-  Layout,
-  Button,
-  Avatar,
-  Dropdown,
-  Card,
-  Modal,
-  Form,
-  Input,
-  Empty,
-  Row,
-  Col,
-  message,
-} from "antd";
+import { useState } from "react";
+import { Layout, Button, Avatar, Dropdown, message } from "antd";
 import { PlusOutlined, LogoutOutlined, DownOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router";
 import logoImg from "../../assets/bigbrain.svg";
 import { dashboardStyles as styles } from "./dashboardStyle.js";
+import { CreateGameModal } from "./CreateGameModal.jsx";
+import { GameCardList } from "./GameCardList.jsx";
 
 export const Dashboard = () => {
   const navigate = useNavigate();
@@ -32,9 +21,6 @@ export const Dashboard = () => {
   // Controls the display and hide of the "Create Game" pop-up window.
   const [modalVisible, setModalVisible] = useState(false);
   // AntD form instance, used to collect and verify "New Game" form data
-  const [form] = Form.useForm();
-  // Refer to the user avatar and username container to measure its width.
-  const userContainerRef = useRef(null);
 
   // Get the displayed username (local part of the email address) and avatar
   const currentUserEmail = window.localStorage.getItem("email") || "";
@@ -72,22 +58,9 @@ export const Dashboard = () => {
   ];
 
   // Create-game modal OK handler
-  const handleCreateGame = () => {
-    form
-      .validateFields()
-      .then((values) => {
-        setGames((prev) => [
-          ...prev,
-          {
-            id: Date.now(),
-            title: values.title,
-            description: values.description,
-          },
-        ]);
-        setModalVisible(false);
-        form.resetFields();
-      })
-      .catch(() => {});
+  const handleCreateGame = ({ title, description }) => {
+    setGames((prev) => [...prev, { id: Date.now(), title, description }]);
+    setModalVisible(false);
   };
 
   return (
@@ -119,7 +92,7 @@ export const Dashboard = () => {
             trigger={["click"]}
             dropdownMatchSelectWidth={true}
           >
-            <div ref={userContainerRef} style={styles.userContainer}>
+            <div style={styles.userContainer}>
               <Avatar style={styles.avatar}>{avatarLetter || "A"}</Avatar>
               <span style={styles.username}>{emailName || "Admin"}</span>
               <DownOutlined style={styles.dropdownIcon} />
@@ -130,43 +103,12 @@ export const Dashboard = () => {
 
       {/* Main content */}
       <Layout.Content style={styles.content}>
-        {games.length === 0 ? (
-          <div style={styles.emptyContent}>
-            <Empty description="No games created yet" />
-          </div>
-        ) : (
-          <Row gutter={[16, 16]}>
-            {games.map((game) => (
-              <Col key={game.id}>
-                <Card title={game.title} style={styles.card}>
-                  {game.description}
-                </Card>
-              </Col>
-            ))}
-          </Row>
-        )}
-
-        {/* Create Game Modal */}
-        <Modal
-          title="Create New Game"
-          open={modalVisible}
-          onOk={handleCreateGame}
+        <GameCardList games={games} />
+        <CreateGameModal
+          visible={modalVisible}
+          onCreate={handleCreateGame}
           onCancel={() => setModalVisible(false)}
-          destroyOnClose
-        >
-          <Form form={form} layout="vertical" preserve={false}>
-            <Form.Item
-              name="title"
-              label="Game Title"
-              rules={[{ required: true, message: "Please enter a title" }]}
-            >
-              <Input />
-            </Form.Item>
-            <Form.Item name="description" label="Description">
-              <Input.TextArea rows={4} />
-            </Form.Item>
-          </Form>
-        </Modal>
+        />
       </Layout.Content>
     </Layout>
   );
