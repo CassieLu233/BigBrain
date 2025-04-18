@@ -1,12 +1,11 @@
 //=============================================================================
-// File: loginStyle.js
-// Purpose: Provide styles for login page
+// File: registerStyle.js
+// Purpose: Provide styles for register page
 // Author: Qian Lu (z5506082@ad.unsw.edu.au)
 // Course: COMP6080
 // Created: 2025-04-18
 // ==============================================================================
-
-export const loginStyles = {
+export const registerStyles = {
   container: {
     height: "100vh",
     display: "flex",
@@ -15,7 +14,7 @@ export const loginStyles = {
     fontSize: "20px",
   },
   card: {
-    width: 320,
+    width: 360,
     textAlign: "center",
     padding: "24px",
     boxShadow: "0 4px 12px rgba(0,0,0,0.15)",
@@ -51,12 +50,12 @@ export const loginStyles = {
   button: {
     fontSize: "16px",
   },
-  registerWrapper: {
+  loginWrapper: {
     display: "block",
     textAlign: "right",
     marginTop: 8,
   },
-  registerTitle: {
+  loginTitle: {
     textDecoration: "underline",
     cursor: "pointer",
     fontSize: 16,
