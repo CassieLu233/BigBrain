@@ -5,7 +5,7 @@
 // Course: COMP6080
 // Created: 2025-04-18
 // ==============================================================================
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Layout, Button, Avatar, Dropdown, message } from "antd";
 import { PlusOutlined, LogoutOutlined, DownOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router";
@@ -13,10 +13,12 @@ import logoImg from "../../assets/bigbrain.svg";
 import { dashboardStyles as styles } from "./dashboardStyle.js";
 import { CreateGameModal } from "./CreateGameModal.jsx";
 import { GameCardList } from "./GameCardList.jsx";
+import { put, get } from "../../utils/request.js";
+import { isLogin } from "../../utils/auth.js";
 
 export const Dashboard = () => {
   const navigate = useNavigate();
-  // Game list status, initially empty array
+  // Game list status
   const [games, setGames] = useState([]);
   // Controls the display and hide of the "Create Game" pop-up window.
   const [modalVisible, setModalVisible] = useState(false);
@@ -27,12 +29,52 @@ export const Dashboard = () => {
   const emailName = currentUserEmail.split("@")[0];
   const avatarLetter = emailName.charAt(0).toUpperCase();
 
+  useEffect(() => {
+    const loginStatus = isLogin();
+    if (loginStatus) {
+      fetchGames();
+    } else {
+      message.warning("No user login, redirect to login page!", 0.5, () => {
+        navigate("/login");
+      });
+    }
+  }, []);
+
+  // Fetch games from backend
+  const fetchGames = async () => {
+    try {
+      const data = await get("/admin/games");
+      if (data && Array.isArray(data.games)) {
+        setGames(data.games);
+        console.log(data.games);
+      }
+    } catch (err) {
+      message.error(err.message);
+    }
+  };
+
   // Logout handler
   const handleLogout = () => {
     window.localStorage.removeItem("token");
     window.localStorage.removeItem("email");
     message.success("Log Out successful! Go to Login Page");
     navigate("/login");
+  };
+
+  // Create-game modal OK handler
+  const handleCreateGame = async (newGameData) => {
+    console.log("new game data is:", newGameData);
+    const data = { games: [...games, newGameData] };
+    try {
+      const result = await put("/admin/games", data);
+      if (result) {
+        message.success("Create a game successfully");
+        fetchGames();
+      }
+    } catch (err) {
+      message.error(err.message);
+    }
+    setModalVisible(false);
   };
 
   // Dropdown menu for user
@@ -56,12 +98,6 @@ export const Dashboard = () => {
       onClick: handleLogout,
     },
   ];
-
-  // Create-game modal OK handler
-  const handleCreateGame = ({ title, description }) => {
-    setGames((prev) => [...prev, { id: Date.now(), title, description }]);
-    setModalVisible(false);
-  };
 
   return (
     <Layout style={styles.container}>

@@ -23,12 +23,7 @@ export const fileToDataUrl = (file) => {
   return new Promise((resolve, reject) => {
     reader.onerror = () => reject(new Error("Failed to read file."));
     reader.onload = () => resolve(reader.result);
-    // For SVG, we can read as text
-    if (file.type === "image/svg+xml") {
-      reader.readAsText(file);
-    } else {
-      reader.readAsDataURL(file);
-    }
+    reader.readAsDataURL(file);
   });
 };
 
@@ -38,28 +33,20 @@ export const fileToDataUrl = (file) => {
  * @returns {Blob} - Blob representing the decoded image data
  */
 export const dataUrlToBlob = (dataUrl) => {
-  const [header, data] = dataUrl.split(",");
-  const isSvg = header.includes("image/svg+xml");
-  const mimeMatch = header.match(/data:(.*?)(;base64|;utf8)/);
+  const [header, base64Data] = dataUrl.split(",");
+  const mimeMatch = header.match(/data:(.*?);base64/);
   if (!mimeMatch) {
-    throw new Error("Invalid data URL.");
+    throw new Error("Invalid Base64 data URL");
   }
   const mime = mimeMatch[1];
-  let blob;
-  if (isSvg) {
-    const svgText = decodeURIComponent(data);
-    blob = new Blob([svgText], { type: mime });
-  } else {
-    const isBase64 = header.includes(";base64");
-    const byteString = isBase64 ? atob(data) : decodeURIComponent(data);
-    const len = byteString.length;
-    const buffer = new Uint8Array(len);
-    for (let i = 0; i < len; i++) {
-      buffer[i] = byteString.charCodeAt(i);
-    }
-    blob = new Blob([buffer], { type: mime });
+  // atob to Base64
+  const binaryString = atob(base64Data);
+  const len = binaryString.length;
+  const buffer = new Uint8Array(len);
+  for (let i = 0; i < len; i++) {
+    buffer[i] = binaryString.charCodeAt(i);
   }
-  return blob;
+  return new Blob([buffer], { type: mime });
 };
 
 /**
