@@ -22,6 +22,7 @@ export const Register = () => {
       const result = await post("/admin/auth/register", data);
       message.success("Registration successful! Go to Dashboard");
       window.localStorage.setItem("token", result.token);
+      window.localStorage.setItem("email", data.email);
       navigate("/dashboard");
     } catch (err) {
       message.error(err.message);

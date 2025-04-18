@@ -20,6 +20,7 @@ export const Login = () => {
     try {
       const data = await post("/admin/auth/login", values);
       window.localStorage.setItem("token", data.token);
+      window.localStorage.setItem("email", values.email);
       navigate("/dashboard");
     } catch (err) {
       message.error(err.message);
