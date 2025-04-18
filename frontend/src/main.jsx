@@ -4,6 +4,7 @@ import { Login } from "./pages/login";
 import { Register } from "./pages/register";
 import { Dashboard } from "./pages/dashboard";
 import { GamePage } from "./pages/game";
+import { GlobalStyle } from "./global-setting/GlobalStyle";
 
 const router = createBrowserRouter([
   {
@@ -27,6 +28,7 @@ const router = createBrowserRouter([
 
 createRoot(document.getElementById("root")).render(
   <>
+    <GlobalStyle />
     <RouterProvider router={router} />
   </>
 );
