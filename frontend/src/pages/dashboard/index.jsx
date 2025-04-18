@@ -1,10 +1,12 @@
-import { Button, Row, Avatar, Card } from "antd";
+import { Button, Row, Avatar, Card, message } from "antd";
 import { Link, useNavigate } from "react-router";
 import {
   EditOutlined,
   EllipsisOutlined,
   SettingOutlined,
 } from "@ant-design/icons";
+import { useEffect } from "react";
+import { isLogin } from "../../utils/auth";
 
 export const Dashboard = () => {
   const navigate = useNavigate();
@@ -17,6 +19,21 @@ export const Dashboard = () => {
     // ToDo check the validity of form
     navigate("/register");
   };
+
+  useEffect(() => {
+    const loginStatus = isLogin();
+    if (!loginStatus) {
+      // not logged in, go to login page
+      message.warning(
+        "No user login was detected, the login page is loaded for you",
+        0.5,
+        () => {
+          navigate("/login");
+        }
+      );
+    }
+  }, []);
+  // Initialize to determine whether to log in
   return (
     <>
       <h1>Dashboard Page</h1>

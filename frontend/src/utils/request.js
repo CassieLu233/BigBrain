@@ -20,22 +20,20 @@ const defaultOptions = {
  * Returns: Promise resolving to parsed JSON data;
  *           throws Error if the response contains an `error` field.
  */
-export const get = (url) => {
-  return fetch(`${BASE_HOST}${url}`, {
+export const get = async (url) => {
+  const res = await fetch(`${BASE_HOST}${url}`, {
     ...defaultOptions,
     headers: {
       ...defaultOptions.headers,
       // inject token from localStorage
       Authorization: `Bearer ${window.localStorage.getItem("token")}`,
     },
-  })
-    .then((res) => res.json())
-    .then((data) => {
-      if (data.error) {
-        throw new Error(data.error);
-      }
-      return data;
-    });
+  });
+  const data = await res.json();
+  if (data.error) {
+    throw new Error(data.error);
+  }
+  return data;
 };
 
 /**
@@ -44,8 +42,8 @@ export const get = (url) => {
  * Returns: Promise resolving to parsed JSON data;
  *           throws Error if the response contains an `error` field.
  */
-export const post = (url, data) => {
-  return fetch(`${BASE_HOST}${url}`, {
+export const post = async (url, data) => {
+  const res = await fetch(`${BASE_HOST}${url}`, {
     ...defaultOptions,
     method: "POST",
     headers: {
@@ -54,24 +52,22 @@ export const post = (url, data) => {
       Authorization: `Bearer ${window.localStorage.getItem("token")}`,
     },
     body: JSON.stringify(data),
-  })
-    .then((res) => res.json())
-    .then((data) => {
-      if (data.error) {
-        throw new Error(data.error);
-      }
-      return data;
-    });
+  });
+  const result = await res.json();
+  if (result.error) {
+    throw new Error(result.error);
+  }
+  return result;
 };
 
 /**
  * Sends a PUT request to the backend.
- * - url: API backend path (e.g. "/admin/auth/register")
+ * - url: API backend path (e.g. "/admin/games")
  * Returns: Promise resolving to parsed JSON data;
  *           throws Error if the response contains an `error` field.
  */
-export const put = (url, data) => {
-  return fetch(`${BASE_HOST}${url}`, {
+export const put = async (url, data) => {
+  const res = await fetch(`${BASE_HOST}${url}`, {
     ...defaultOptions,
     method: "PUT",
     headers: {
@@ -80,12 +76,10 @@ export const put = (url, data) => {
       Authorization: `Bearer ${window.localStorage.getItem("token")}`,
     },
     body: JSON.stringify(data),
-  })
-    .then((res) => res.json())
-    .then((data) => {
-      if (data.error) {
-        throw new Error(data.error);
-      }
-      return data;
-    });
+  });
+  const result = await res.json();
+  if (result.error) {
+    throw new Error(result.error);
+  }
+  return result;
 };
