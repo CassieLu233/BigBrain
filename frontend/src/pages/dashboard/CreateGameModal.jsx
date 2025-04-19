@@ -89,7 +89,7 @@ export const CreateGameModal = ({ visible, onCreate, onCancel }) => {
       }}
       destroyOnClose
     >
-      <Form form={form} layout="vertical" preserve={false}>
+      <Form form={form} layout="vertical" preserve={false} onFinish={handleOk}>
         <Form.Item label="Thumbnail (JPEG/PNG/SVG)">
           <Upload
             listType="picture-card"
@@ -124,6 +124,7 @@ export const CreateGameModal = ({ visible, onCreate, onCancel }) => {
         <Form.Item name="description" label="Description">
           <Input.TextArea rows={4} placeholder="Description" />
         </Form.Item>
+        <button type="submit" style={{ display: "none" }} />
       </Form>
     </Modal>
   );

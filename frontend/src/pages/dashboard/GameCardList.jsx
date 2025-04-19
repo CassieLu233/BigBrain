@@ -13,7 +13,7 @@ import { GameCard } from "./GameCard.jsx";
  * Props:
  *  - games: Array<{ id, title, description }>
  */
-export const GameCardList = ({ games }) => {
+export const GameCardList = ({ games, onDelete }) => {
   if (games.length === 0) {
     return (
       <div
@@ -33,7 +33,7 @@ export const GameCardList = ({ games }) => {
     <Row gutter={[16, 16]}>
       {games.map((game) => (
         <Col key={game.id}>
-          <GameCard game={game} />
+          <GameCard game={game} onDelete={onDelete} />
         </Col>
       ))}
     </Row>

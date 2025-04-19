@@ -1,0 +1,1 @@
+- There are secondary confirmations when deleting items to prevent mistaken deletion and improve user experience

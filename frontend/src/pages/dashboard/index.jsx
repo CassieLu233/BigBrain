@@ -5,7 +5,7 @@
 // Course: COMP6080
 // Created: 2025-04-18
 // ==============================================================================
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { Layout, Button, Avatar, Dropdown, message } from "antd";
 import { PlusOutlined, LogoutOutlined, DownOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router";
@@ -18,6 +18,7 @@ import { isLogin } from "../../utils/auth.js";
 
 export const Dashboard = () => {
   const navigate = useNavigate();
+  const createBtnRef = useRef(null);
   // Game list status
   const [games, setGames] = useState([]);
   // Controls the display and hide of the "Create Game" pop-up window.
@@ -46,7 +47,6 @@ export const Dashboard = () => {
       const data = await get("/admin/games");
       if (data && Array.isArray(data.games)) {
         setGames(data.games);
-        console.log(data.games);
       }
     } catch (err) {
       message.error(err.message);
@@ -62,9 +62,8 @@ export const Dashboard = () => {
   };
 
   // Create-game modal OK handler
-  const handleCreateGame = async (newGameData) => {
-    console.log("new game data is:", newGameData);
-    const data = { games: [...games, newGameData] };
+  const handleCreateGame = async (newGames) => {
+    const data = { games: [...games, newGames] };
     try {
       const result = await put("/admin/games", data);
       if (result) {
@@ -75,6 +74,23 @@ export const Dashboard = () => {
       message.error(err.message);
     }
     setModalVisible(false);
+    createBtnRef.current?.blur();
+  };
+
+  // Delete Game
+  const handleDeleteGame = async (gameId) => {
+    console.log("current game id is: ", gameId);
+    const newGames = games.filter((game) => game.id !== gameId);
+    const data = { games: newGames };
+    try {
+      const result = await put("/admin/games", data);
+      if (result) {
+        message.success("Delete the game successfully");
+        fetchGames();
+      }
+    } catch (err) {
+      message.error(err.message);
+    }
   };
 
   // Dropdown menu for user
@@ -112,10 +128,12 @@ export const Dashboard = () => {
         {/* Right: create button + user avatar/name + dropdown */}
         <div style={styles.actions}>
           <Button
+            ref={createBtnRef}
             type="primary"
             icon={<PlusOutlined />}
             style={styles.createGameButton}
             onClick={() => setModalVisible(true)}
+            onMouseDown={(e) => e.preventDefault()}
           >
             Create Game
           </Button>
@@ -139,11 +157,14 @@ export const Dashboard = () => {
 
       {/* Main content */}
       <Layout.Content style={styles.content}>
-        <GameCardList games={games} />
+        <GameCardList games={games} onDelete={handleDeleteGame} />
         <CreateGameModal
           visible={modalVisible}
           onCreate={handleCreateGame}
-          onCancel={() => setModalVisible(false)}
+          onCancel={() => {
+            setModalVisible(false);
+            createBtnRef.current?.blur();
+          }}
         />
       </Layout.Content>
     </Layout>
