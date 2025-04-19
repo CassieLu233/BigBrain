@@ -62,20 +62,20 @@ export const Dashboard = () => {
   };
 
   // Create-game modal OK handler
-  const handleCreateGame = async (newGames) => {
+  const handleCreateGame = async (newGame) => {
     // If user does not upload image, get a default image
-    if (newGames.image === "") {
+    if (newGame.image === "") {
       console.log("default img.......");
       const defaultFile = logoImg;
       const response = await fetch(defaultFile);
       const svgBlob = await response.blob();
       const defaultFileBase64 = await fileToDataUrl(svgBlob);
-      newGames.image = defaultFileBase64;
+      newGame.image = defaultFileBase64;
     }
-    if (newGames.description === "") {
-      newGames.description = "No Description";
+    if (newGame.description === "") {
+      newGame.description = "No Description";
     }
-    const data = { games: [...games, newGames] };
+    const data = { games: [...games, newGame] };
     try {
       const result = await put("/admin/games", data);
       if (result) {

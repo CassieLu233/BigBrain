@@ -19,14 +19,16 @@ import { dashboardStyles as styles } from "../dashboard/dashboardStyle.js";
 import { CreateGameModal } from "../dashboard/CreateGameModal";
 import { QuestionCardList } from "./QuestionCardList.jsx";
 import { CustomCard } from "./CustomCard.jsx";
+import { CreateQuestionModal } from "./CreateQuestionModal.jsx";
 
 export const GamePage = () => {
   const { Text } = Typography;
   const [currentGame, setCurrentGame] = useState({ questions: [] });
   const navigate = useNavigate();
   const editBtnRef = useRef(null);
-  // Controls the display and hide of the "Create Game" pop-up window.
+  const addQuestionBtnRef = useRef(null);
   const [modalVisible, setModalVisible] = useState(false);
+  const [questionModalVisible, setQuestionModalVisible] = useState(false);
 
   const { game_id } = useParams();
 
@@ -45,11 +47,9 @@ export const GamePage = () => {
 
   const getCurrentGame = async () => {
     try {
-      const allGames = await fetchGames();
+      const games = await fetchGames();
       // get the current game
-      const currentGame = allGames.find(
-        (game) => game.id === parseInt(game_id)
-      );
+      const currentGame = games.find((game) => game.id === parseInt(game_id));
       if (currentGame) {
         console.log("current game data are:", currentGame);
         setCurrentGame(currentGame);
@@ -64,22 +64,31 @@ export const GamePage = () => {
     getCurrentGame();
   }, [game_id]);
 
-  // Create-game modal OK handler
-  const handleEditGame = async (newGames) => {
-    // if value is "", no change backend data
-    if (newGames.image === "") {
-      newGames.image = currentGame.image;
-    }
-    if (newGames.title === "") {
-      newGames.title = currentGame.title;
-    }
-    if (newGames.description === "") {
-      newGames.description = currentGame.description;
-    }
-    newGames.id = currentGame.id;
+  // Edit game modal OK handler
+  const handleEditGame = async (newGame) => {
+    // If value is "", no change backend data
+    console.log("==========new game return:", newGame);
+    const updataedGame = {
+      ...currentGame,
+      id: currentGame.id,
+      image: newGame.image === "" ? currentGame.image : newGame.image,
+      title: newGame.title === "" ? currentGame.title : newGame.title,
+      description:
+        newGame.description === ""
+          ? currentGame.description
+          : newGame.description,
+      updateTime: newGame.updateTime,
+    };
+
+    console.log("=======updated data is:", updataedGame);
+    // Fetch all games
     const games = await fetchGames();
-    const data = { games: [...games, newGames] };
+    // Replace modified data
+    const filtered = games.filter((game) => game.id !== newGame.id);
+    const updatedGames = [...filtered, updataedGame];
+    const data = { games: updatedGames };
     try {
+      // Put data to backend
       const result = await put("/admin/games", data);
       if (result) {
         message.success("Edit the game successfully");
@@ -88,20 +97,68 @@ export const GamePage = () => {
     } catch (err) {
       message.error(err.message);
     }
+    // Close update game modal
     setModalVisible(false);
     editBtnRef.current?.blur();
   };
 
-  // Delete Game
-  const handleDeleteQuestion = async (gameId) => {
-    console.log("current game id is: ", gameId);
+  const handleAddQuestion = async ({ title, type }) => {
+    // Update questions of current game
+    const newQuestion = {
+      id: Date.now(),
+      title: title,
+      type: type,
+      // A new page to add answers
+      answers: [],
+    };
+    const newGame = {
+      ...currentGame,
+      questions: [...(currentGame.questions || []), newQuestion],
+    };
+
+    // Fetch all games
     const games = await fetchGames();
-    const newGames = games.filter((game) => game.id !== gameId);
-    const data = { games: newGames };
+    // Replace modified data
+    const filtered = games.filter((game) => game.id !== newGame.id);
+    const updatedGames = [...filtered, newGame];
+
+    const data = { games: updatedGames };
     try {
       const result = await put("/admin/games", data);
       if (result) {
-        message.success("Delete the game successfully");
+        message.success("Add a question successfully");
+        getCurrentGame();
+      }
+    } catch (err) {
+      message.error(err.message);
+    }
+    setQuestionModalVisible(false);
+    addQuestionBtnRef.current?.blur();
+  };
+
+  // Delete Game
+  const handleDeleteQuestion = async (questionId) => {
+    console.log("current question id is: ", questionId);
+    const questions = currentGame.questions;
+    const newQuestions = questions.filter(
+      (question) => question.id !== questionId
+    );
+    const newGame = {
+      ...currentGame,
+      questions: newQuestions,
+    };
+
+    // Fetch all games
+    const games = await fetchGames();
+    // Replace modified data
+    const filtered = games.filter((game) => game.id !== currentGame.id);
+    const updatedGames = [...filtered, newGame];
+
+    const data = { games: updatedGames };
+    try {
+      const result = await put("/admin/games", data);
+      if (result) {
+        message.success("Delete the question successfully");
         getCurrentGame();
       }
     } catch (err) {
@@ -150,11 +207,11 @@ export const GamePage = () => {
             Edit Game
           </Button>
           <Button
-            ref={editBtnRef}
+            ref={addQuestionBtnRef}
             type="primary"
             icon={<PlusOutlined />}
             style={{ marginRight: 16 }}
-            onClick={() => setModalVisible(true)}
+            onClick={() => setQuestionModalVisible(true)}
             onMouseDown={(e) => e.preventDefault()}
           >
             Create Question
@@ -173,7 +230,7 @@ export const GamePage = () => {
         >
           Game Information
         </Divider>
-        <CustomCard style={{ width: "500vw" }} game={currentGame}></CustomCard>
+        <CustomCard style={{ width: "100vw" }} game={currentGame}></CustomCard>
         <Divider
           style={{
             margin: "0 0 16px",
@@ -194,6 +251,14 @@ export const GamePage = () => {
           onCancel={() => {
             setModalVisible(false);
             editBtnRef.current?.blur();
+          }}
+        />
+        <CreateQuestionModal
+          visible={questionModalVisible}
+          onCreate={handleAddQuestion}
+          onCancel={() => {
+            setQuestionModalVisible(false);
+            addQuestionBtnRef.current?.blur();
           }}
         />
       </Layout.Content>

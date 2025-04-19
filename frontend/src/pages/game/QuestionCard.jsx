@@ -55,7 +55,7 @@ export const QuestionCard = ({ question, onDelete }) => {
         }
         description={
           <div>
-            <Text strong>{question.type}</Text>
+            <Text>{`Question Type: ${question.type}`}</Text>
           </div>
         }
       />

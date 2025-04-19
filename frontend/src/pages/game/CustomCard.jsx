@@ -16,7 +16,13 @@ export const CustomCard = ({ game }) => {
         <img
           src={game.image}
           alt="cover"
-          style={{ width: 150, objectFit: "cover", backgroundColor: "#d0edf7" }}
+          style={{
+            minWidth: 120,
+            maxWidth: 250,
+            minHeight: 120,
+            objectFit: "cover",
+            backgroundColor: "#d0edf7",
+          }}
         />
 
         {/* vertical divider */}
@@ -28,8 +34,11 @@ export const CustomCard = ({ game }) => {
 
         {/* right text */}
         <div style={{ flex: 1 }}>
-          <Title level={4} style={{ marginLeft: 0, color: "#2cafdc" }}>
+          <Title level={4} style={{ margin: 0, color: "#2cafdc" }}>
             {game.title}
+          </Title>
+          <Title level={5} style={{ margin: 0 }}>
+            {`Questions number: ${game.questions.length}`}
           </Title>
           <Text type="secondary" style={{ fontSize: 16 }}>
             {game.description}
