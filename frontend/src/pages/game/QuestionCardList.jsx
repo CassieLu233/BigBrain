@@ -14,7 +14,7 @@ import { QuestionCard } from "./QuestionCard.jsx";
  *  - questions: Array<{ id, title, description }>
  */
 export const QuestionCardList = ({ questions, onDelete }) => {
-  if (!questions) {
+  if (questions.length === 0) {
     return (
       <div
         style={{
@@ -28,7 +28,6 @@ export const QuestionCardList = ({ questions, onDelete }) => {
       </div>
     );
   }
-
   return (
     <Row gutter={[16, 16]}>
       {questions.map((question) => (

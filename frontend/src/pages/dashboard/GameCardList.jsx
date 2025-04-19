@@ -14,7 +14,7 @@ import { GameCard } from "./GameCard.jsx";
  *  - games: Array<{ id, title, description }>
  */
 export const GameCardList = ({ games, onDelete }) => {
-  if (!games) {
+  if (games.length === 0) {
     return (
       <div
         style={{

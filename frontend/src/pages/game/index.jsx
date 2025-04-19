@@ -8,7 +8,7 @@
 
 import { useEffect, useState, useRef } from "react";
 import { useParams, useNavigate } from "react-router";
-import { Layout, Button, message, Typography } from "antd";
+import { Layout, Button, message, Typography, Divider } from "antd";
 import {
   ArrowLeftOutlined,
   EditOutlined,
@@ -18,10 +18,11 @@ import { get, put } from "../../utils/request";
 import { dashboardStyles as styles } from "../dashboard/dashboardStyle.js";
 import { CreateGameModal } from "../dashboard/CreateGameModal";
 import { QuestionCardList } from "./QuestionCardList.jsx";
+import { CustomCard } from "./CustomCard.jsx";
 
 export const GamePage = () => {
   const { Text } = Typography;
-  const [currentGame, setCurrentGame] = useState([]);
+  const [currentGame, setCurrentGame] = useState({ questions: [] });
   const navigate = useNavigate();
   const editBtnRef = useRef(null);
   // Controls the display and hide of the "Create Game" pop-up window.
@@ -112,7 +113,7 @@ export const GamePage = () => {
     <Layout style={styles.container}>
       {/* Navbar */}
       <Layout.Header style={styles.header}>
-        {/* Left */}
+        {/* Left: back to dashboard btn and game title*/}
         <Button
           type="default"
           icon={<ArrowLeftOutlined />}
@@ -126,7 +127,7 @@ export const GamePage = () => {
           {currentGame.title}
         </Text>
 
-        {/* Right: create button + user avatar/name + dropdown */}
+        {/* Right: edit game btn and create question btn */}
         <div style={styles.actions}>
           <Button
             ref={editBtnRef}
@@ -163,6 +164,25 @@ export const GamePage = () => {
 
       {/* Main content */}
       <Layout.Content style={styles.content}>
+        <Divider
+          style={{
+            margin: "0 0 16px",
+            borderColor: "#e1e1e1",
+            color: "#969696",
+          }}
+        >
+          Game Information
+        </Divider>
+        <CustomCard style={{ width: "500vw" }} game={currentGame}></CustomCard>
+        <Divider
+          style={{
+            margin: "0 0 16px",
+            borderColor: "#e1e1e1",
+            color: "#969696",
+          }}
+        >
+          Game Questions
+        </Divider>
         <QuestionCardList
           questions={currentGame.questions}
           onDelete={handleDeleteQuestion}
