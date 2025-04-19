@@ -6,7 +6,7 @@
 // Created: 2025-04-18
 // ==============================================================================
 import { EditOutlined, DeleteOutlined } from "@ant-design/icons";
-import { Avatar, Card, Typography, Popconfirm } from "antd";
+import { Avatar, Card, Typography, Popconfirm, Divider } from "antd";
 import { useNavigate } from "react-router";
 /**
  * GameCard
@@ -16,9 +16,18 @@ import { useNavigate } from "react-router";
  */
 
 export const GameCard = ({ game, onDelete }) => {
-  const { Meta } = Card;
-  const { Text, Paragraph } = Typography;
+  const { Text, Title } = Typography;
   const navigate = useNavigate();
+
+  const autoWrapStyle = {
+    maxHeight: 160,
+    whiteSpace: "normal",
+    wordBreak: "break-word",
+    overflow: "hidden",
+  };
+  const showToolTipStyle = {
+    textOverflow: "ellipsis",
+  };
 
   return (
     <Card
@@ -54,34 +63,58 @@ export const GameCard = ({ game, onDelete }) => {
         </Popconfirm>,
       ]}
     >
-      <Meta
-        avatar={
-          <Avatar style={{ backgroundColor: "#1395c2", fontSize: 20 }}>
-            {game.owner[0].toUpperCase()}
-          </Avatar>
-        }
-        title={
-          <Text style={{ fontSize: 20, fontWeight: 600, color: "#2cafdc" }}>
-            {game.title}
-          </Text>
-        }
-        description={
-          <div>
-            <Text strong>Question number: {game.questions.length}</Text>
-            <Paragraph
-              style={{
-                margin: "4px 0 0",
-                whiteSpace: "pre-wrap",
-                lineHeight: 1.5,
-                color: "#666",
-                fontSize: 14,
-              }}
-            >
-              {game.description}
-            </Paragraph>
-          </div>
-        }
-      />
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+        }}
+      >
+        <Avatar
+          style={{
+            backgroundColor: "#1395c2",
+            fontSize: 20,
+          }}
+        >
+          {game.owner[0].toUpperCase()}
+        </Avatar>
+        <Text
+          style={{
+            ...autoWrapStyle,
+            ...showToolTipStyle,
+            flex: 1,
+            fontSize: 20,
+            fontWeight: 600,
+            color: "#2cafdc",
+          }}
+          ellipsis={{ tooltip: game.title }}
+        >
+          {game.title}
+        </Text>
+      </div>
+      <Divider
+        style={{
+          margin: "0 0 10px",
+          borderColor: "#e1e1e1",
+          color: "#969696",
+        }}
+      ></Divider>
+      <div style={{ flex: 1 }}>
+        <Title level={5} style={{ ...autoWrapStyle, margin: 0 }}>
+          {`Questions number: ${game.questions.length}`}
+        </Title>
+        <Text
+          type="secondary"
+          style={{
+            ...autoWrapStyle,
+            ...showToolTipStyle,
+            fontSize: 16,
+          }}
+          ellipsis={{ tooltip: game.description }}
+        >
+          {game.description}
+        </Text>
+      </div>
     </Card>
   );
 };

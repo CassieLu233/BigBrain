@@ -180,7 +180,17 @@ export const GamePage = () => {
         >
           Back to Dashboard
         </Button>
-        <Text style={{ fontSize: 24, fontWeight: 700, color: "#1677ff" }}>
+        <Text
+          style={{
+            fontSize: 24,
+            fontWeight: 700,
+            color: "#1677ff",
+            whiteSpace: "nowrap",
+            wordBreak: "break-word",
+            overflow: "hidden",
+          }}
+          ellipsis={{ tooltip: currentGame.title }}
+        >
           {currentGame.title}
         </Text>
 

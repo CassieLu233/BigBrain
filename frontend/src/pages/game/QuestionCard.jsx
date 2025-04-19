@@ -6,7 +6,7 @@
 // Created: 2025-04-19
 // ==============================================================================
 import { EditOutlined, DeleteOutlined } from "@ant-design/icons";
-import { Card, Typography, Popconfirm } from "antd";
+import { Card, Typography, Popconfirm, Divider } from "antd";
 import { useNavigate } from "react-router";
 /**
  * QuestionCard
@@ -16,14 +16,23 @@ import { useNavigate } from "react-router";
  */
 
 export const QuestionCard = ({ question, onDelete }) => {
-  const { Meta } = Card;
   const { Text } = Typography;
   const navigate = useNavigate();
+
+  const autoWrapStyle = {
+    maxHeight: 160,
+    whiteSpace: "normal",
+    wordBreak: "break-word",
+    overflow: "hidden",
+  };
+  const showToolTipStyle = {
+    textOverflow: "ellipsis",
+  };
 
   return (
     <Card
       hoverable
-      style={{ width: 300 }}
+      style={{ width: 300, backgroundColor: "#498ae6", borderWidth: 2 }}
       actions={[
         <EditOutlined
           key="edit"
@@ -47,18 +56,35 @@ export const QuestionCard = ({ question, onDelete }) => {
         </Popconfirm>,
       ]}
     >
-      <Meta
-        title={
-          <Text style={{ fontSize: 20, fontWeight: 600, color: "#2cafdc" }}>
-            {question.title}
-          </Text>
-        }
-        description={
-          <div>
-            <Text>{`Question Type: ${question.type}`}</Text>
-          </div>
-        }
-      />
+      <div>
+        <Text
+          style={{
+            ...autoWrapStyle,
+            showToolTipStyle,
+            fontSize: 20,
+            fontWeight: 600,
+            color: "#fff",
+          }}
+          ellipsis={{ tooltip: question.title }}
+        >
+          {question.title}
+        </Text>
+      </div>
+
+      <Divider
+        style={{
+          borderColor: "#e1e1e1",
+          color: "#969696",
+          marginTop: 6,
+          marginBottom: 6,
+        }}
+      ></Divider>
+      <div>
+        <Text
+          strong
+          style={{ color: "#fff" }}
+        >{`Question Type: ${question.type}`}</Text>
+      </div>
     </Card>
   );
 };
