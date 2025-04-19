@@ -7,6 +7,7 @@
 // ==============================================================================
 import { EditOutlined, DeleteOutlined } from "@ant-design/icons";
 import { Avatar, Card, Typography, Popconfirm } from "antd";
+import { useNavigate } from "react-router";
 /**
  * GameCard
  * Props:
@@ -17,6 +18,7 @@ import { Avatar, Card, Typography, Popconfirm } from "antd";
 export const GameCard = ({ game, onDelete }) => {
   const { Meta } = Card;
   const { Text, Paragraph } = Typography;
+  const navigate = useNavigate();
 
   return (
     <Card
@@ -30,7 +32,13 @@ export const GameCard = ({ game, onDelete }) => {
         />
       }
       actions={[
-        <EditOutlined key="edit" style={{ color: "#1395c2", fontSize: 20 }} />,
+        <EditOutlined
+          key="edit"
+          style={{ color: "#1395c2", fontSize: 20 }}
+          onClick={() => {
+            navigate(`/game/${game.id}`);
+          }}
+        />,
         <Popconfirm
           key="delete"
           title="Delete the task"

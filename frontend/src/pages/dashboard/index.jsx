@@ -23,7 +23,6 @@ export const Dashboard = () => {
   const [games, setGames] = useState([]);
   // Controls the display and hide of the "Create Game" pop-up window.
   const [modalVisible, setModalVisible] = useState(false);
-  // AntD form instance, used to collect and verify "New Game" form data
 
   // Get the displayed username (local part of the email address) and avatar
   const currentUserEmail = window.localStorage.getItem("email") || "";
