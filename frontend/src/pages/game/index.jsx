@@ -1,3 +1,11 @@
+//=============================================================================
+// File: game/index.jsx
+// Purpose: The main page of a single game
+// Author: Qian Lu (z5506082@ad.unsw.edu.au)
+// Course: COMP6080
+// Created: 2025-04-18
+// ==============================================================================
+
 import { useEffect, useState, useRef } from "react";
 import { useParams, useNavigate } from "react-router";
 import { Layout, Button, message, Typography } from "antd";
@@ -9,11 +17,10 @@ import {
 import { get, put } from "../../utils/request";
 import { dashboardStyles as styles } from "../dashboard/dashboardStyle.js";
 import { CreateGameModal } from "../dashboard/CreateGameModal";
-import { GameCardList } from "../dashboard/GameCardList";
+import { QuestionCardList } from "./QuestionCardList.jsx";
 
 export const GamePage = () => {
   const { Text } = Typography;
-  const [games, setGames] = useState([]);
   const [currentGame, setCurrentGame] = useState([]);
   const navigate = useNavigate();
   const editBtnRef = useRef(null);
@@ -22,35 +29,60 @@ export const GamePage = () => {
 
   const { game_id } = useParams();
 
-  const fetchCurrentGame = async () => {
+  // Fetch games from backend
+  const fetchGames = async () => {
     try {
       const data = await get("/admin/games");
-      if (data) {
-        setGames(data.games);
-        // get the current game
-        const currentGame = data.games.find(
-          (game) => game.id === parseInt(game_id)
-        );
-        if (currentGame) {
-          setCurrentGame(currentGame);
-        }
+      if (data && Array.isArray(data.games)) {
+        console.log("data.games are:", data.games);
+        return data.games;
+      }
+    } catch (err) {
+      message.error(err.message);
+    }
+  };
+
+  const getCurrentGame = async () => {
+    try {
+      const allGames = await fetchGames();
+      // get the current game
+      const currentGame = allGames.find(
+        (game) => game.id === parseInt(game_id)
+      );
+      if (currentGame) {
+        console.log("current game data are:", currentGame);
+        setCurrentGame(currentGame);
+      } else {
+        message.warning("Game not found");
       }
     } catch (err) {
       message.error(err.message);
     }
   };
   useEffect(() => {
-    fetchCurrentGame();
+    getCurrentGame();
   }, [game_id]);
 
   // Create-game modal OK handler
   const handleEditGame = async (newGames) => {
+    // if value is "", no change backend data
+    if (newGames.image === "") {
+      newGames.image = currentGame.image;
+    }
+    if (newGames.title === "") {
+      newGames.title = currentGame.title;
+    }
+    if (newGames.description === "") {
+      newGames.description = currentGame.description;
+    }
+    newGames.id = currentGame.id;
+    const games = await fetchGames();
     const data = { games: [...games, newGames] };
     try {
       const result = await put("/admin/games", data);
       if (result) {
-        message.success("Create a game successfully");
-        fetchCurrentGame();
+        message.success("Edit the game successfully");
+        getCurrentGame();
       }
     } catch (err) {
       message.error(err.message);
@@ -62,13 +94,14 @@ export const GamePage = () => {
   // Delete Game
   const handleDeleteQuestion = async (gameId) => {
     console.log("current game id is: ", gameId);
+    const games = await fetchGames();
     const newGames = games.filter((game) => game.id !== gameId);
     const data = { games: newGames };
     try {
       const result = await put("/admin/games", data);
       if (result) {
         message.success("Delete the game successfully");
-        fetchCurrentGame();
+        getCurrentGame();
       }
     } catch (err) {
       message.error(err.message);
@@ -130,11 +163,12 @@ export const GamePage = () => {
 
       {/* Main content */}
       <Layout.Content style={styles.content}>
-        <GameCardList
-          games={currentGame.questions}
+        <QuestionCardList
+          questions={currentGame.questions}
           onDelete={handleDeleteQuestion}
         />
         <CreateGameModal
+          title={`Update Game Information`}
           visible={modalVisible}
           onCreate={handleEditGame}
           onCancel={() => {

@@ -15,6 +15,7 @@ import { CreateGameModal } from "./CreateGameModal.jsx";
 import { GameCardList } from "./GameCardList.jsx";
 import { put, get } from "../../utils/request.js";
 import { isLogin } from "../../utils/auth.js";
+import { fileToDataUrl } from "../../utils/imageUtils.js";
 
 export const Dashboard = () => {
   const navigate = useNavigate();
@@ -62,6 +63,18 @@ export const Dashboard = () => {
 
   // Create-game modal OK handler
   const handleCreateGame = async (newGames) => {
+    // If user does not upload image, get a default image
+    if (newGames.image === "") {
+      console.log("default img.......");
+      const defaultFile = logoImg;
+      const response = await fetch(defaultFile);
+      const svgBlob = await response.blob();
+      const defaultFileBase64 = await fileToDataUrl(svgBlob);
+      newGames.image = defaultFileBase64;
+    }
+    if (newGames.description === "") {
+      newGames.description = "No Description";
+    }
     const data = { games: [...games, newGames] };
     try {
       const result = await put("/admin/games", data);

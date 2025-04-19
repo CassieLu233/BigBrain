@@ -1,20 +1,20 @@
 //=============================================================================
-// File: dashboard/GameCardList.jsx
-// Purpose: Render a grid of game cards (or empty state) using GameCard component
+// File: question/QuestionCardList.jsx
+// Purpose: Render a grid of question cards (or empty state) using QuestionCard component
 // Author: Qian Lu (z5506082@ad.unsw.edu.au)
 // Course: COMP6080
-// Created: 2025-04-18
+// Created: 2025-04-19
 // ==============================================================================
 import { Empty, Row, Col } from "antd";
-import { GameCard } from "./GameCard.jsx";
+import { QuestionCard } from "./QuestionCard.jsx";
 
 /**
- * GameCardList
+ * QuestionCardList
  * Props:
- *  - games: Array<{ id, title, description }>
+ *  - questions: Array<{ id, title, description }>
  */
-export const GameCardList = ({ games, onDelete }) => {
-  if (!games) {
+export const QuestionCardList = ({ questions, onDelete }) => {
+  if (!questions) {
     return (
       <div
         style={{
@@ -24,16 +24,16 @@ export const GameCardList = ({ games, onDelete }) => {
           alignItems: "center",
         }}
       >
-        <Empty description="No games created yet" />
+        <Empty description="No question created yet" />
       </div>
     );
   }
 
   return (
     <Row gutter={[16, 16]}>
-      {games.map((game) => (
-        <Col key={game.id}>
-          <GameCard game={game} onDelete={onDelete} />
+      {questions.map((question) => (
+        <Col key={question.id}>
+          <QuestionCard question={question} onDelete={onDelete} />
         </Col>
       ))}
     </Row>

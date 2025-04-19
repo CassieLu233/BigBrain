@@ -9,7 +9,6 @@ import { useState } from "react";
 import { Modal, Form, Input, Upload, message } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
 import { fileToDataUrl } from "../../utils/imageUtils.js";
-import logoImg from "../../assets/bigbrain.svg";
 
 /**
  * CreateGameModal
@@ -18,7 +17,7 @@ import logoImg from "../../assets/bigbrain.svg";
  *  - onCreate:  (data: { games: { image, title, description, owner, updateTime } }) => void
  *  - onCancel: () => void
  */
-export const CreateGameModal = ({ visible, onCreate, onCancel }) => {
+export const CreateGameModal = ({ title, visible, onCreate, onCancel }) => {
   const [form] = Form.useForm();
   const [uploadFileList, setUploadFileList] = useState([]);
 
@@ -50,17 +49,11 @@ export const CreateGameModal = ({ visible, onCreate, onCancel }) => {
       if (uploadFileList[0]) {
         // uploadFileList[0].thumbUrl is base64 type
         imageBase64 = uploadFileList[0].thumbUrl;
-      } else {
-        const defaultFile = logoImg;
-        const response = await fetch(defaultFile);
-        const svgBlob = await response.blob();
-        const defaultFileBase64 = await fileToDataUrl(svgBlob);
-        imageBase64 = defaultFileBase64;
       }
       const newGameData = {
         image: imageBase64,
-        title: values.title,
-        description: values.description || "No Description",
+        title: values.title || "",
+        description: values.description || "",
         owner: owner,
         updateTime: updateTime,
         questions: [],
@@ -79,7 +72,7 @@ export const CreateGameModal = ({ visible, onCreate, onCancel }) => {
 
   return (
     <Modal
-      title="Create New Game"
+      title={title || "Create New Game"}
       open={visible}
       onOk={handleOk}
       onCancel={() => {
@@ -116,7 +109,9 @@ export const CreateGameModal = ({ visible, onCreate, onCancel }) => {
         <Form.Item
           name="title"
           label="Game Title"
-          rules={[{ required: true, message: "Please enter a title" }]}
+          rules={[
+            { required: title ? false : true, message: "Please enter a title" },
+          ]}
         >
           <Input placeholder="Title" />
         </Form.Item>
