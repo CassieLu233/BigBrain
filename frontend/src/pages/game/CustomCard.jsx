@@ -20,7 +20,13 @@ export const CustomCard = ({ game }) => {
       }}
       style={{ minwidth: "200px", backgroundColor: "#edf4fe" }}
     >
-      <div style={{ display: "flex", alignItems: "flex-start" }}>
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+      >
         {/* left image */}
         <img
           src={game.image}
@@ -38,7 +44,7 @@ export const CustomCard = ({ game }) => {
         <Divider
           orientation="center"
           type="vertical"
-          style={{ height: 150, marginLeft: 16, marginRight: 16 }}
+          style={{ height: 150, marginLeft: 0, marginRight: 24 }}
         />
 
         {/* right text */}
