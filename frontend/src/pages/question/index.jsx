@@ -41,6 +41,85 @@ export const QuestionPage = () => {
     { text: "", isCorrect: false },
   ];
 
+  // Get the effective form answers
+  const effectiveAnswers =
+    form.getFieldValue("answers")?.length > 0
+      ? form.getFieldValue("answers")
+      : initialAnswer;
+
+  // Handle image before upload
+  const beforeUpload = async (file) => {
+    try {
+      const url = await fileToDataUrl(file);
+      file.url = url;
+      setUploadList([file]);
+    } catch (err) {
+      message.error(err.message);
+    }
+    // prevent default upload
+    return false;
+  };
+
+  const handleRemoveThumbnail = () => {
+    currentQuestion.image = "";
+    setUploadList([]);
+  };
+
+  // Submit handler
+  const handleFinish = async (values) => {
+    try {
+      // Build updatedAnswer answers
+      let answers;
+      if (values.type === "Judgement") {
+        // Judgement only has two answers
+        answers = [
+          {
+            text: "True",
+            isCorrect: values.judgementAnswer === true,
+          },
+          {
+            text: "False",
+            isCorrect: values.judgementAnswer === false,
+          },
+        ];
+      } else {
+        answers = (values.answers || []).map((ans) => ({
+          text: ans.text,
+          isCorrect: !!ans.isCorrect,
+        }));
+      }
+
+      const updatedQuestion = {
+        ...values,
+        id: Number(question_id),
+        duration: values.duration,
+        points: values.points,
+        image: uploadList[0]?.url || currentQuestion.image || "",
+        answers: answers,
+      };
+      const result = await updateCurrentQuestion(
+        game_id,
+        question_id,
+        updatedQuestion
+      );
+      if (result) {
+        message.success(
+          "Editing the problem successfully, now return to the game page"
+        );
+        form.resetFields();
+        navigate(`/game/${game_id}`);
+      }
+    } catch (err) {
+      message.error(err.message);
+    }
+  };
+
+  const handleBackToGame = () => {
+    form.resetFields();
+    setUploadList([]);
+    navigate(`/game/${game_id}`);
+  };
+
   const initForm = async () => {
     try {
       const currentQuestion = await getCurrentQuestion(game_id, question_id);
