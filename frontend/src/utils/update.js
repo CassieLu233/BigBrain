@@ -3,17 +3,19 @@
 // Purpose: Processing functions related to update data to backend
 // Author: Qian Lu (z5506082@ad.unsw.edu.au)
 // Course: COMP6080
-// Created: 2025-04-17
+// Created: 2025-04-21
 // ==============================================================================
 import { message } from "antd";
 import { get, put } from "./request";
 
-// Fetch games from backend
+/**
+ * Fetches all games from the backend.
+ * @returns {Promise<Array<Object>>|undefined} - Resolves to an array of game objects, or undefined on error.
+ */
 export const fetchGames = async () => {
   try {
     const data = await get("/admin/games");
     if (data && Array.isArray(data.games)) {
-      // console.log("games are:", data.games);
       return data.games;
     }
   } catch (err) {
@@ -21,13 +23,17 @@ export const fetchGames = async () => {
   }
 };
 
+/**
+ * Retrieves a specific game by its ID.
+ * @param {string|number} gameId - The ID of the game to retrieve.
+ * @returns {Promise<Object>|undefined} - Resolves to the game object, or undefined if not found or on error.
+ */
 export const getCurrentGame = async (gameId) => {
   try {
     const games = await fetchGames();
     // get the current game
     const currentGame = games.find((game) => game.id === parseInt(gameId));
     if (currentGame) {
-      // console.log("current game is:", currentGame);
       return currentGame;
     } else {
       message.warning("Game not found");
@@ -37,6 +43,12 @@ export const getCurrentGame = async (gameId) => {
   }
 };
 
+/**
+ * Retrieves a specific question from a given game.
+ * @param {string|number} gameId - The ID of the game containing the question.
+ * @param {string|number} questionId - The ID of the question to retrieve.
+ * @returns {Promise<Object>|undefined} - Resolves to the question object, or undefined if not found or on error.
+ */
 export const getCurrentQuestion = async (gameId, questionId) => {
   try {
     const currentGame = await getCurrentGame(gameId);
@@ -54,6 +66,11 @@ export const getCurrentQuestion = async (gameId, questionId) => {
   }
 };
 
+/**
+ * Sends the updated games list to the backend.
+ * @param {Array<Object>} updatedGames - The array of updated game objects.
+ * @returns {Promise<boolean|undefined>} - Resolves to true if successful, or undefined on error.
+ */
 export const updateGames = async (updatedGames) => {
   try {
     const result = await put("/admin/games", { games: updatedGames });
@@ -67,6 +84,13 @@ export const updateGames = async (updatedGames) => {
   }
 };
 
+/**
+ * Updates or deletes a specific question within a game on the backend.
+ * @param {string|number} currentGameId - The ID of the game containing the question.
+ * @param {string|number} currentQuestionId - The ID of the question to update or delete.
+ * @param {Object|Array} updatedQuestion - The updated question object, or an empty array to delete the question.
+ * @returns {Promise<boolean|undefined>} - Resolves to true if successful, or undefined on error.
+ */
 export const updateCurrentQuestion = async (
   currentGameId,
   currentQuestionId,
