@@ -11,7 +11,7 @@ import { useNavigate } from "react-router";
 /**
  * GameCard
  * Props:
- *  - game: { id: number, title: string, description: string }
+ *  - game: { id: string, title: string, description: string }
  *  - onDelete: function that delete game
  */
 

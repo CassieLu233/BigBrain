@@ -14,17 +14,22 @@ import {
   EditOutlined,
   PlusOutlined,
 } from "@ant-design/icons";
-import { get, put } from "../../utils/request";
 import { dashboardStyles as styles } from "../dashboard/dashboardStyle.js";
 import { CreateGameModal } from "../dashboard/CreateGameModal";
 import { QuestionCardList } from "./QuestionCardList.jsx";
 import { CustomCard } from "./CustomCard.jsx";
 import { CreateQuestionModal } from "./CreateQuestionModal.jsx";
+import {
+  fetchGames,
+  getCurrentGame,
+  updateCurrentQuestion,
+  updateGames,
+} from "../../utils/update.js";
 
 export const GamePage = () => {
+  const navigate = useNavigate();
   const { Text } = Typography;
   const [currentGame, setCurrentGame] = useState({ questions: [] });
-  const navigate = useNavigate();
   const editBtnRef = useRef(null);
   const addQuestionBtnRef = useRef(null);
   const [modalVisible, setModalVisible] = useState(false);
@@ -32,43 +37,24 @@ export const GamePage = () => {
 
   const { game_id } = useParams();
 
-  // Fetch games from backend
-  const fetchGames = async () => {
+  const initialGamePage = async () => {
     try {
-      const data = await get("/admin/games");
-      if (data && Array.isArray(data.games)) {
-        console.log("data.games are:", data.games);
-        return data.games;
-      }
-    } catch (err) {
-      message.error(err.message);
-    }
-  };
-
-  const getCurrentGame = async () => {
-    try {
-      const games = await fetchGames();
-      // get the current game
-      const currentGame = games.find((game) => game.id === parseInt(game_id));
+      const currentGame = await getCurrentGame(game_id);
       if (currentGame) {
-        console.log("current game data are:", currentGame);
         setCurrentGame(currentGame);
-      } else {
-        message.warning("Game not found");
       }
     } catch (err) {
       message.error(err.message);
     }
   };
   useEffect(() => {
-    getCurrentGame();
+    initialGamePage();
   }, [game_id]);
 
   // Edit game modal OK handler
   const handleEditGame = async (newGame) => {
     // If value is "", no change backend data
-    console.log("==========new game return:", newGame);
-    const updataedGame = {
+    const updatedGame = {
       ...currentGame,
       id: currentGame.id,
       image: newGame.image === "" ? currentGame.image : newGame.image,
@@ -80,22 +66,19 @@ export const GamePage = () => {
       updateTime: newGame.updateTime,
     };
 
-    console.log("=======updated data is:", updataedGame);
     // Fetch all games
     const games = await fetchGames();
+
     // Replace modified data
     const filtered = games.filter((game) => game.id !== newGame.id);
-    const updatedGames = [...filtered, updataedGame];
-    const data = { games: updatedGames };
-    try {
-      // Put data to backend
-      const result = await put("/admin/games", data);
-      if (result) {
-        message.success("Edit the game successfully");
-        getCurrentGame();
-      }
-    } catch (err) {
-      message.error(err.message);
+    const updatedGames = [...filtered, updatedGame];
+
+    // Update games
+    const result = await updateGames(updatedGames);
+    if (result) {
+      message.success("Edit the game successfully");
+      const curGame = await getCurrentGame(game_id);
+      setCurrentGame(curGame);
     }
     // Close update game modal
     setModalVisible(false);
@@ -108,6 +91,8 @@ export const GamePage = () => {
       id: Date.now(),
       title: title,
       type: type,
+      duration: 10,
+      points: 1,
       // A new page to add answers
       answers: [],
     };
@@ -122,44 +107,28 @@ export const GamePage = () => {
     const filtered = games.filter((game) => game.id !== newGame.id);
     const updatedGames = [...filtered, newGame];
 
-    const data = { games: updatedGames };
-    try {
-      const result = await put("/admin/games", data);
-      if (result) {
-        message.success("Add a question successfully");
-        getCurrentGame();
-      }
-    } catch (err) {
-      message.error(err.message);
+    const result = await updateGames(updatedGames);
+    if (result) {
+      message.success("Add a question successfully");
+      const curGame = await getCurrentGame(game_id);
+      setCurrentGame(curGame);
     }
     setQuestionModalVisible(false);
     addQuestionBtnRef.current?.blur();
   };
 
-  // Delete Game
+  const handleEditQuestion = async (questionId) => {
+    navigate(`/game/${game_id}/question/${questionId}`);
+  };
+
+  // Delete question
   const handleDeleteQuestion = async (questionId) => {
-    console.log("current question id is: ", questionId);
-    const questions = currentGame.questions;
-    const newQuestions = questions.filter(
-      (question) => question.id !== questionId
-    );
-    const newGame = {
-      ...currentGame,
-      questions: newQuestions,
-    };
-
-    // Fetch all games
-    const games = await fetchGames();
-    // Replace modified data
-    const filtered = games.filter((game) => game.id !== currentGame.id);
-    const updatedGames = [...filtered, newGame];
-
-    const data = { games: updatedGames };
     try {
-      const result = await put("/admin/games", data);
+      const result = await updateCurrentQuestion(game_id, questionId, []);
       if (result) {
         message.success("Delete the question successfully");
-        getCurrentGame();
+        const curGame = await getCurrentGame(game_id);
+        setCurrentGame(curGame);
       }
     } catch (err) {
       message.error(err.message);
@@ -253,6 +222,7 @@ export const GamePage = () => {
         <QuestionCardList
           questions={currentGame.questions}
           onDelete={handleDeleteQuestion}
+          onEdit={handleEditQuestion}
         />
         <CreateGameModal
           title={`Update Game Information`}

@@ -13,7 +13,7 @@ import { QuestionCard } from "./QuestionCard.jsx";
  * Props:
  *  - questions: Array<{ id, title, description }>
  */
-export const QuestionCardList = ({ questions, onDelete }) => {
+export const QuestionCardList = ({ questions, onDelete, onEdit }) => {
   if (questions.length === 0) {
     return (
       <div
@@ -32,7 +32,11 @@ export const QuestionCardList = ({ questions, onDelete }) => {
     <Row gutter={[16, 16]}>
       {questions.map((question) => (
         <Col key={question.id}>
-          <QuestionCard question={question} onDelete={onDelete} />
+          <QuestionCard
+            question={question}
+            onDelete={onDelete}
+            onEdit={onEdit}
+          />
         </Col>
       ))}
     </Row>

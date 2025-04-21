@@ -5,6 +5,7 @@ import { Register } from "./pages/register";
 import { Dashboard } from "./pages/dashboard";
 import { GamePage } from "./pages/game";
 import { GlobalStyle } from "./global-setting/GlobalStyle";
+import { QuestionPage } from "../../../question";
 
 const router = createBrowserRouter([
   {
@@ -23,7 +24,14 @@ const router = createBrowserRouter([
     path: "/dashboard",
     element: <Dashboard />,
   },
-  { path: "/game/:game_id", element: <GamePage /> },
+  {
+    path: "/game/:game_id",
+    element: <GamePage />,
+  },
+  {
+    path: "/game/:game_id/question/:question_id",
+    element: <QuestionPage />,
+  },
 ]);
 
 createRoot(document.getElementById("root")).render(

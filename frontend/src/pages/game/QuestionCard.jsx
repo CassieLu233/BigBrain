@@ -7,17 +7,15 @@
 // ==============================================================================
 import { EditOutlined, DeleteOutlined } from "@ant-design/icons";
 import { Card, Typography, Popconfirm, Divider } from "antd";
-import { useNavigate } from "react-router";
 /**
  * QuestionCard
  * Props:
- *  - question: { id: number, title: string, description: string }
+ *  - question: { id: string, title: string, description: string , ...}
  *  - onDelete: function that delete question
  */
 
-export const QuestionCard = ({ question, onDelete }) => {
+export const QuestionCard = ({ question, onDelete, onEdit }) => {
   const { Text } = Typography;
-  const navigate = useNavigate();
 
   const autoWrapStyle = {
     maxHeight: 160,
@@ -38,7 +36,7 @@ export const QuestionCard = ({ question, onDelete }) => {
           key="edit"
           style={{ color: "#1395c2", fontSize: 20 }}
           onClick={() => {
-            navigate(`/dashboard`);
+            onEdit(question.id);
           }}
         />,
         <Popconfirm
@@ -80,10 +78,19 @@ export const QuestionCard = ({ question, onDelete }) => {
         }}
       ></Divider>
       <div>
+        <Text strong style={{ color: "#fff" }}>{`Type: ${question.type}`}</Text>
+      </div>
+      <div>
         <Text
           strong
           style={{ color: "#fff" }}
-        >{`Question Type: ${question.type}`}</Text>
+        >{`Score: ${question.points}`}</Text>
+      </div>
+      <div>
+        <Text
+          strong
+          style={{ color: "#fff" }}
+        >{`Limited time: ${question.duration} s`}</Text>
       </div>
     </Card>
   );

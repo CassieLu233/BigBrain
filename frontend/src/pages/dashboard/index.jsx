@@ -13,9 +13,9 @@ import logoImg from "../../assets/bigbrain.svg";
 import { dashboardStyles as styles } from "./dashboardStyle.js";
 import { CreateGameModal } from "./CreateGameModal.jsx";
 import { GameCardList } from "./GameCardList.jsx";
-import { put, get } from "../../utils/request.js";
 import { isLogin } from "../../utils/auth.js";
 import { fileToDataUrl } from "../../utils/imageUtils.js";
+import { fetchGames, updateGames } from "../../utils/update.js";
 
 export const Dashboard = () => {
   const navigate = useNavigate();
@@ -30,26 +30,15 @@ export const Dashboard = () => {
   const emailName = currentUserEmail.split("@")[0];
   const avatarLetter = emailName.charAt(0).toUpperCase();
 
-  useEffect(() => {
+  const initialdashBoard = async () => {
     const loginStatus = isLogin();
     if (loginStatus) {
-      fetchGames();
+      const games = await fetchGames();
+      setGames(games);
     } else {
       message.warning("No user login, redirect to login page!", 0.5, () => {
         navigate("/login");
       });
-    }
-  }, []);
-
-  // Fetch games from backend
-  const fetchGames = async () => {
-    try {
-      const data = await get("/admin/games");
-      if (data && Array.isArray(data.games)) {
-        setGames(data.games);
-      }
-    } catch (err) {
-      message.error(err.message);
     }
   };
 
@@ -75,12 +64,13 @@ export const Dashboard = () => {
     if (newGame.description === "") {
       newGame.description = "No Description";
     }
-    const data = { games: [...games, newGame] };
+    const newGames = [...games, newGame];
     try {
-      const result = await put("/admin/games", data);
+      const result = await updateGames(newGames);
       if (result) {
         message.success("Create a game successfully");
-        fetchGames();
+        const games = await fetchGames();
+        setGames(games);
       }
     } catch (err) {
       message.error(err.message);
@@ -93,12 +83,12 @@ export const Dashboard = () => {
   const handleDeleteGame = async (gameId) => {
     console.log("current game id is: ", gameId);
     const newGames = games.filter((game) => game.id !== gameId);
-    const data = { games: newGames };
     try {
-      const result = await put("/admin/games", data);
+      const result = await updateGames(newGames);
       if (result) {
         message.success("Delete the game successfully");
-        fetchGames();
+        const games = await fetchGames();
+        setGames(games);
       }
     } catch (err) {
       message.error(err.message);
@@ -126,6 +116,10 @@ export const Dashboard = () => {
       onClick: handleLogout,
     },
   ];
+
+  useEffect(() => {
+    initialdashBoard();
+  }, []);
 
   return (
     <Layout style={styles.container}>

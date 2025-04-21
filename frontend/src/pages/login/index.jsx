@@ -21,6 +21,7 @@ export const Login = () => {
       const data = await post("/admin/auth/login", values);
       window.localStorage.setItem("token", data.token);
       window.localStorage.setItem("email", values.email);
+      message.success("Log In successful! Go to Dashboard");
       navigate("/dashboard");
     } catch (err) {
       message.error(err.message);
