@@ -185,5 +185,152 @@ export const QuestionPage = () => {
     initForm();
   }, [question_id]);
 
-  return <Layout style={styles.container}></Layout>;
+  return (
+    <Layout style={styles.container}>
+      {/* Navbar */}
+      <Layout.Header style={styles.header}>
+        {/* Left: Back to game btn and question title*/}
+        <Button
+          type="default"
+          icon={<ArrowLeftOutlined />}
+          onClick={handleBackToGame}
+        >
+          Back to Game
+        </Button>
+        <Text
+          style={{
+            fontSize: 24,
+            fontWeight: 700,
+            color: "#1677ff",
+            whiteSpace: "nowrap",
+            wordBreak: "break-word",
+            overflow: "hidden",
+          }}
+          ellipsis={{ tooltip: currentQuestion.title }}
+        >
+          {currentQuestion.title}
+        </Text>
+
+        {/* Right: used to cente the question title*/}
+        <div style={styles.actions}></div>
+      </Layout.Header>
+
+      {/* Main content */}
+      <Layout.Content style={styles.content}>
+        <Divider
+          style={{
+            margin: "0 0 16px",
+            borderColor: "#e1e1e1",
+            color: "#969696",
+          }}
+        >
+          Question Information
+        </Divider>
+        <Form
+          form={form}
+          layout="vertical"
+          style={{ width: "100%" }}
+          onFinish={handleFinish}
+        >
+          <Form.Item
+            name="title"
+            label="Question"
+            rules={[{ required: true, message: "Enter question text" }]}
+          >
+            <Input />
+          </Form.Item>
+
+          <Form.Item
+            name="type"
+            label="Question Type"
+            rules={[{ required: true }]}
+          >
+            <Select
+              onChange={(value) => {
+                setQustionType(value);
+                form.setFieldsValue({
+                  answers: effectiveAnswers,
+                });
+              }}
+            >
+              <Select.Option value="Single Choice">Single Choice</Select.Option>
+              <Select.Option value="Multiple Choice">
+                Multiple Choice
+              </Select.Option>
+              <Select.Option value="Judgement">Judgement</Select.Option>
+            </Select>
+          </Form.Item>
+
+          <Space align="baseline">
+            <Form.Item
+              name="duration"
+              label="Time Limit (s)"
+              rules={[{ required: true, type: "number", min: 1 }]}
+            >
+              <InputNumber />
+            </Form.Item>
+            <Form.Item
+              name="points"
+              label="Points"
+              rules={[{ required: true, type: "number", min: 0 }]}
+            >
+              <InputNumber />
+            </Form.Item>
+          </Space>
+
+          <Form.Item name="videoUrl" label="YouTube URL (Option)">
+            <Input placeholder="Optional video link" />
+          </Form.Item>
+
+          <Form.Item label="Image (Option)">
+            <Upload
+              listType="picture-card"
+              fileList={uploadList.map((file) => ({
+                uid: file.uid || file.name,
+                name: file.name,
+                status: "done",
+                url: file.url,
+              }))}
+              beforeUpload={beforeUpload}
+              onRemove={handleRemoveThumbnail}
+              showUploadList={{ showPreviewIcon: false, showRemoveIcon: true }}
+            >
+              {uploadList.length === 0 && <PlusOutlined />}
+            </Upload>
+          </Form.Item>
+          <Divider
+            style={{
+              margin: "0 0 16px",
+              borderColor: "#e1e1e1",
+              color: "#969696",
+            }}
+          >
+            Edit Answers
+          </Divider>
+          {/* Judgement */}
+          {questionType === "Judgement" ? (
+            <Form.Item
+              name="judgementAnswer"
+              label="Answer"
+              rules={[
+                { required: true, message: "Please choose True or False" },
+              ]}
+            >
+              <Radio.Group style={{ display: "flex", gap: 16 }}>
+                <Radio value={true}>True</Radio>
+                <Radio value={false}>False</Radio>
+              </Radio.Group>
+            </Form.Item>
+          ) : (
+          )}
+
+          <Form.Item style={{ textAlign: "center" }}>
+            <Button type="primary" htmlType="submit">
+              Save Question
+            </Button>
+          </Form.Item>
+        </Form>
+      </Layout.Content>
+    </Layout>
+  );
 };
