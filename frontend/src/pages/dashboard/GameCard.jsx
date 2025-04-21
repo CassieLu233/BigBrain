@@ -5,8 +5,13 @@
 // Course: COMP6080
 // Created: 2025-04-18
 // ==============================================================================
-import { EditOutlined, DeleteOutlined } from "@ant-design/icons";
-import { Avatar, Card, Typography, Popconfirm, Divider } from "antd";
+import {
+  EditOutlined,
+  DeleteOutlined,
+  PlayCircleOutlined,
+  StopOutlined,
+} from "@ant-design/icons";
+import { Avatar, Card, Typography, Popconfirm, Divider, Tooltip } from "antd";
 import { useNavigate } from "react-router";
 /**
  * GameCard
@@ -15,7 +20,7 @@ import { useNavigate } from "react-router";
  *  - onDelete: function that delete game
  */
 
-export const GameCard = ({ game, onDelete }) => {
+export const GameCard = ({ game, onDelete, onStart, onEnd }) => {
   const { Text, Title } = Typography;
   const navigate = useNavigate();
 
@@ -41,26 +46,53 @@ export const GameCard = ({ game, onDelete }) => {
         />
       }
       actions={[
-        <EditOutlined
-          key="edit"
-          style={{ color: "#1395c2", fontSize: 20 }}
-          onClick={() => {
-            navigate(`/game/${game.id}`);
-          }}
-        />,
-        <Popconfirm
-          key="delete"
-          title="Delete the task"
-          description="Are you sure to delete this game?"
-          okText="Yes"
-          cancelText="No"
-          onConfirm={() => {
-            onDelete(game.id);
-          }}
-          onCancel={() => {}}
-        >
-          <DeleteOutlined style={{ color: "#c54949", fontSize: 20 }} />
-        </Popconfirm>,
+        game.active ? (
+          <Tooltip key="endGame" title="End the game">
+            <Popconfirm
+              title="End the task"
+              description="Are you sure to end this game?"
+              okText="Yes"
+              cancelText="No"
+              onConfirm={() => {
+                onEnd(game.id);
+              }}
+              onCancel={() => {}}
+            >
+              <StopOutlined style={{ color: "red", fontSize: 20 }} />
+            </Popconfirm>
+          </Tooltip>
+        ) : (
+          <Tooltip key="startGame" title="Start the game">
+            <PlayCircleOutlined
+              style={{ color: "#56ae56", fontSize: 20 }}
+              onClick={() => {
+                onStart(game.id);
+              }}
+            />
+          </Tooltip>
+        ),
+        <Tooltip key="edit" title="Edit the game">
+          <EditOutlined
+            style={{ color: "#1395c2", fontSize: 20 }}
+            onClick={() => {
+              navigate(`/game/${game.id}`);
+            }}
+          />
+        </Tooltip>,
+        <Tooltip key="delete" title="Delete the game">
+          <Popconfirm
+            title="Delete the task"
+            description="Are you sure to delete this game?"
+            okText="Yes"
+            cancelText="No"
+            onConfirm={() => {
+              onDelete(game.id);
+            }}
+            onCancel={() => {}}
+          >
+            <DeleteOutlined style={{ color: "#c54949", fontSize: 20 }} />
+          </Popconfirm>
+        </Tooltip>,
       ]}
     >
       <div

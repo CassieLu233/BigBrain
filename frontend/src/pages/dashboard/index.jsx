@@ -15,16 +15,24 @@ import { CreateGameModal } from "./CreateGameModal.jsx";
 import { GameCardList } from "./GameCardList.jsx";
 import { isLogin } from "../../utils/auth.js";
 import { fileToDataUrl } from "../../utils/imageUtils.js";
-import { fetchGames, updateGames } from "../../utils/update.js";
+import {
+  fetchGames,
+  updateGameActive,
+  updateGames,
+} from "../../utils/update.js";
+import { post } from "../../utils/request.js";
+import { CreateSessionModal } from "../session/CreateSessionModal.jsx";
+import { EndSessionModal } from "../session/EndSessionModal.jsx";
 
 export const Dashboard = () => {
   const navigate = useNavigate();
   const createBtnRef = useRef(null);
-  // Game list status
   const [games, setGames] = useState([]);
+  const [currentSessionId, setCurrentSessionId] = useState("");
   // Controls the display and hide of the "Create Game" pop-up window.
   const [modalVisible, setModalVisible] = useState(false);
-
+  const [sessionModalVisible, setSessionModalVisible] = useState(false);
+  const [endSessionModalVisible, setEndSessionModalVisible] = useState(false);
   // Get the displayed username (local part of the email address) and avatar
   const currentUserEmail = window.localStorage.getItem("email") || "";
   const emailName = currentUserEmail.split("@")[0];
@@ -77,6 +85,76 @@ export const Dashboard = () => {
     }
     setModalVisible(false);
     createBtnRef.current?.blur();
+  };
+
+  // Start a game handler
+  const handleStartGame = async (gameId) => {
+    console.log("current game id is:", gameId);
+    try {
+      // Get the session from backend
+      const response = await post(`/admin/game/${gameId}/mutate`, {
+        mutationType: "START",
+      });
+
+      // If start game sucessfully, popup game session
+      const data = response.data;
+      if (data.status === "started" && data.sessionId) {
+        // Refresh game page
+        const result = await updateGameActive(gameId, true);
+        if (result) {
+          const games = await fetchGames();
+          setGames(games);
+        }
+
+        message.success("The game session has started");
+        setCurrentSessionId(data.sessionId);
+        setSessionModalVisible(true);
+        console.log("==========start session data is:", data);
+      } else {
+        message.error("Failed to start the game");
+      }
+    } catch (err) {
+      message.error(err.message);
+    }
+  };
+
+  // Copy game link to clipboard
+  const copyGameLink = async () => {
+    if (!currentSessionId) return;
+    const link = `${window.location.origin}/play/${currentSessionId}`;
+    try {
+      const result = await navigator.clipboard.writeText(link);
+      if (result) {
+        message.success("Game link has been copied to the clipboard");
+      }
+    } catch (err) {
+      message.error("Copy failed: " + err.message);
+    }
+  };
+
+  // End a game handler
+  const handleEndGame = async (gameId) => {
+    try {
+      const response = await post(`/admin/game/${gameId}/mutate`, {
+        mutationType: "END",
+      });
+      const data = response.data;
+
+      // Refresh game page
+      const result = await updateGameActive(gameId, false);
+      if (result) {
+        const games = await fetchGames();
+        setGames(games);
+      }
+      console.log("==========end session data is:", data);
+      if (data?.status === "ended") {
+        setEndSessionModalVisible(true);
+      } else {
+        message.error("Failed to stop the game session");
+      }
+    } catch (err) {
+      message.error(err.message);
+    }
   };
 
   // Delete Game
@@ -163,7 +241,12 @@ export const Dashboard = () => {
 
       {/* Main content */}
       <Layout.Content style={styles.content}>
-        <GameCardList games={games} onDelete={handleDeleteGame} />
+        <GameCardList
+          games={games}
+          onDelete={handleDeleteGame}
+          onStart={handleStartGame}
+          onEnd={handleEndGame}
+        />
         <CreateGameModal
           visible={modalVisible}
           onCreate={handleCreateGame}
@@ -171,6 +254,18 @@ export const Dashboard = () => {
             setModalVisible(false);
             createBtnRef.current?.blur();
           }}
+        />
+        <CreateSessionModal
+          visible={sessionModalVisible}
+          sessionId={currentSessionId}
+          onCancel={() => setSessionModalVisible(false)}
+          onClick={copyGameLink}
+          destroyOnClose
+        />
+        <EndSessionModal
+          visible={endSessionModalVisible}
+          onCancel={() => setEndSessionModalVisible(false)}
+          onClick={() => navigate(`/session/${currentSessionId}`)}
         />
       </Layout.Content>
     </Layout>
