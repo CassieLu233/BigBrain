@@ -322,6 +322,111 @@ export const QuestionPage = () => {
               </Radio.Group>
             </Form.Item>
           ) : (
+            /* Single or Multiple Choice */
+            <Form.List
+              name="answers"
+              rules={[
+                {
+                  validator: async (_, answers) => {
+                    const type = form.getFieldValue("type");
+                    if (type === "Judgement") return Promise.resolve();
+                    if (!answers || !answers.some((a) => a.isCorrect)) {
+                      return Promise.reject(
+                        new Error("Please choose at least one correct answer!")
+                      );
+                    }
+                    return Promise.resolve();
+                  },
+                },
+              ]}
+            >
+              {(fields, { add, remove }, { errors }) => (
+                <>
+                  {fields.map((field, idx) => {
+                    const { key, name } = field;
+                    return (
+                      <div
+                        key={key}
+                        style={{
+                          display: "flex",
+                          alignItems: "center",
+                          width: "100%",
+                          marginBottom: 16,
+                        }}
+                      >
+                        {/* Option Text */}
+                        <Form.Item
+                          name={[name, "text"]}
+                          rules={[
+                            {
+                              required: true,
+                              message: "Please enter option text",
+                            },
+                          ]}
+                          style={{ flex: 1, minWidth: 10, margin: 0 }}
+                        >
+                          <Input placeholder={`Option ${idx + 1}`} />
+                        </Form.Item>
+
+                        {/* Option：Single vs Multiple */}
+                        {questionType === "Single Choice" ? (
+                          <Radio.Group
+                            value={form.getFieldValue("singleIndex")}
+                            onChange={(e) => {
+                              const selectedIndex = e.target.value;
+                              const answers = effectiveAnswers;
+                              const updatedAnswer = answers.map((ans, i) => ({
+                                ...ans,
+                                isCorrect: i === selectedIndex,
+                              }));
+                              form.setFieldsValue({
+                                answers: updatedAnswer,
+                                singleIndex: selectedIndex,
+                              });
+                            }}
+                            style={{ margin: "0 16px", flex: "0 0 auto" }}
+                          >
+                            <Radio value={idx}>Correct</Radio>
+                          </Radio.Group>
+                        ) : (
+                          <Form.Item
+                            name={[name, "isCorrect"]}
+                            valuePropName="checked"
+                            style={{ margin: "0 16px", flex: "0 0 auto" }}
+                          >
+                            <Checkbox>Correct</Checkbox>
+                          </Form.Item>
+                        )}
+
+                        {/* Delete button */}
+                        {fields.length > 2 && (
+                          <Button danger onClick={() => remove(field.name)}>
+                            Remove
+                          </Button>
+                        )}
+                      </div>
+                    );
+                  })}
+
+                  {/* Add answer button */}
+                  {fields.length < 6 && (
+                    <Form.Item key="add-answer">
+                      <Button
+                        type="dashed"
+                        onClick={() => add({ text: "", isCorrect: false })}
+                        block
+                      >
+                        Add Answer
+                      </Button>
+                    </Form.Item>
+                  )}
+                  {/* Render error information from Form.List */}
+                  <div style={{ color: "red", marginBottom: 16 }}>
+                    <Form.ErrorList errors={errors} />
+                  </div>
+                </>
+              )}
+            </Form.List>
           )}
 
           <Form.Item style={{ textAlign: "center" }}>
