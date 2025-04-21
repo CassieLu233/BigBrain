@@ -85,6 +85,35 @@ export const updateGames = async (updatedGames) => {
 };
 
 /**
+ * Updates a single game's "active" status flag.
+ * @param {string|number} gameId - The ID of the game to update.
+ * @param {boolean} activeStatus - The new active status.
+ * @returns {Promise<boolean|undefined>} - Resolves to true if successful, or undefined on error.
+ */
+export const updateGameActive = async (gameId, activeStatus) => {
+  const games = await fetchGames();
+  const filteredGames = games.filter((game) => game.id !== parseInt(gameId));
+
+  // Update current game's avtive status
+  const currentGame = await getCurrentGame(gameId);
+  currentGame.active = activeStatus;
+
+  const updatedGames = [...filteredGames, currentGame];
+
+  // Put data to backend
+  try {
+    const result = await put("/admin/games", { games: updatedGames });
+    if (result) {
+      return true;
+    } else {
+      throw new Error("Update game active status failed");
+    }
+  } catch (err) {
+    message.error(err.message);
+  }
+};
+
+/**
  * Updates or deletes a specific question within a game on the backend.
  * @param {string|number} currentGameId - The ID of the game containing the question.
  * @param {string|number} currentQuestionId - The ID of the question to update or delete.
