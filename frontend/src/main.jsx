@@ -5,7 +5,7 @@ import { Register } from "./pages/register";
 import { Dashboard } from "./pages/dashboard";
 import { GamePage } from "./pages/game";
 import { GlobalStyle } from "./global-setting/GlobalStyle";
-import { QuestionPage } from "../../../question";
+import { QuestionPage } from "./pages/question";
 
 const router = createBrowserRouter([
   {

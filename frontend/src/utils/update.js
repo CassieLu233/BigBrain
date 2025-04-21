@@ -13,7 +13,7 @@ export const fetchGames = async () => {
   try {
     const data = await get("/admin/games");
     if (data && Array.isArray(data.games)) {
-      console.log("games are:", data.games);
+      // console.log("games are:", data.games);
       return data.games;
     }
   } catch (err) {
@@ -27,7 +27,7 @@ export const getCurrentGame = async (gameId) => {
     // get the current game
     const currentGame = games.find((game) => game.id === parseInt(gameId));
     if (currentGame) {
-      console.log("current game is:", currentGame);
+      // console.log("current game is:", currentGame);
       return currentGame;
     } else {
       message.warning("Game not found");
@@ -44,7 +44,7 @@ export const getCurrentQuestion = async (gameId, questionId) => {
       (question) => question.id === parseInt(questionId)
     );
     if (currentQuestion) {
-      console.log("current question is:", currentQuestion);
+      // console.log("current question is:", currentQuestion);
       return currentQuestion;
     } else {
       message.warning("Question not found");
@@ -78,8 +78,10 @@ export const updateCurrentQuestion = async (
 
   // Update questions
   const filteredQuestions = currentGame.questions.filter(
-    (question) => question.id !== currentQuestionId
+    (question) => question.id !== parseInt(currentQuestionId)
   );
+
+  // if updatedQuestion is [], delete the question
   let updatedQuestions = [];
   if (updatedQuestion.length === 0) {
     updatedQuestions = filteredQuestions;
@@ -91,7 +93,9 @@ export const updateCurrentQuestion = async (
   currentGame.questions = updatedQuestions;
 
   // Update games
-  const filteredGames = games.filter((game) => game.id !== currentGameId);
+  const filteredGames = games.filter(
+    (game) => game.id !== parseInt(currentGameId)
+  );
   const updatedGames = [...filteredGames, currentGame];
 
   // Put data to backend
