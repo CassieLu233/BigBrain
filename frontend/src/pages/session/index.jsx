@@ -3,7 +3,7 @@
 // Author: Qian Lu (z5506082@ad.unsw.edu.au)
 // Course: COMP6080
 // Created: 2025-04-22
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useCallback, useRef } from "react";
 import { useParams, useSearchParams, useNavigate } from "react-router";
 import {
   Layout,
@@ -42,15 +42,18 @@ export const SessionPage = () => {
 
   // Calculate the progress bar percentage
   const questions_total = statusResults.questions.length || 0;
-  const percent = Math.min(
-    Math.round((statusResults.position / questions_total) * 100),
-    100
-  );
+  // Start with 1
+  const answered = statusResults.position + 1;
+  const percent = Math.min(Math.round((answered / questions_total) * 100), 100);
 
   // CurrentQuestion
-  const currentQuestion = statusResults.questions.find(
-    (q, index) => index + 1 === statusResults.position
-  );
+  const [currentQuestion, setCurrentQuestion] = useState(null);
+
+  // Record manual countDown
+  const [manualStart, setManualStart] = useState(null);
+
+  const [countDown, setCountDown] = useState(null);
+  const countdownRef = useRef(null);
 
   // fetch session status
   const fetchStatus = useCallback(async () => {
@@ -73,11 +76,9 @@ export const SessionPage = () => {
       });
       if (res.data?.status === "advanced") {
         console.log("advanced mutate data is:", res.data);
-        const updatedStatus = await updateGameActive(gameId, true);
-        if (updatedStatus) {
-          fetchStatus();
-          setCurrentSatus(res.data.status);
-        }
+        await fetchStatus();
+        setCurrentSatus(res.data.status);
+        setManualStart(Date.now());
       } else {
         message.error("Unable to move forward to the next question");
       }
@@ -88,7 +89,9 @@ export const SessionPage = () => {
 
   const handleStop = async () => {};
 
-  const handleReStart = async () => {};
+  const handleReStart = async () => {
+    setManualStart(Date.now());
+  };
 
   // End session
   const handleEnd = async () => {
@@ -98,11 +101,11 @@ export const SessionPage = () => {
       });
       if (res.data?.status === "ended") {
         console.log("end mutate data is:", res.data);
-        const updatedStatus = await updateGameActive(gameId, false);
-        if (updatedStatus) {
-          fetchStatus();
-          setCurrentSatus(res.data.status);
-        }
+        await updateGameActive(gameId, false);
+        await fetchStatus();
+        setCurrentSatus(res.data.status);
+        setCountDown(null);
+        clearInterval(countdownRef.current);
       } else {
         message.error("Unable to end the session");
       }
@@ -110,13 +113,55 @@ export const SessionPage = () => {
       message.error(err.message);
     }
   };
+  // Update count down
+  const updateCountDown = (endMs) => {
+    const secs = Math.max(0, Math.ceil((endMs - Date.now()) / 1000));
+    setCountDown(secs);
+    if (secs <= 0) clearInterval(countdownRef.current);
+  };
 
+  // initial page
   useEffect(() => {
     fetchStatus();
-    // Call fetchStatus once every 1000 ms
-    const iv = setInterval(fetchStatus, 1000);
-    return () => clearInterval(iv);
   }, [fetchStatus]);
+
+  useEffect(() => {
+    clearInterval(countdownRef.current);
+    setCountDown(null);
+
+    // Get the start time
+    let startMs =
+      manualStart ??
+      (statusResults.isoTimeLastQuestionStarted
+        ? new Date(statusResults.isoTimeLastQuestionStarted).getTime()
+        : null);
+
+    if (
+      startMs != null &&
+      statusResults.active &&
+      statusResults.position >= 0
+    ) {
+      // Get the current Question
+      const findedQuestion = statusResults.questions.find(
+        (_, idx) => idx === statusResults.position
+      );
+
+      setCurrentQuestion(findedQuestion);
+      const durationMs = (findedQuestion?.duration || 10) * 1000;
+      const endMs = startMs + durationMs;
+
+      updateCountDown(endMs);
+      countdownRef.current = setInterval(() => updateCountDown(endMs), 1000);
+    }
+
+    return () => clearInterval(countdownRef.current);
+  }, [
+    statusResults.active,
+    statusResults.isoTimeLastQuestionStarted,
+    statusResults.position,
+    statusResults.questions,
+    manualStart,
+  ]);
 
   return (
     <Layout style={{ minHeight: "100vh" }}>
@@ -145,7 +190,7 @@ export const SessionPage = () => {
           loading={loading}
           onClick={handleReStart}
         >
-          Restart Session
+          Restart Question
         </Button>
       </Layout.Header>
 
@@ -167,7 +212,8 @@ export const SessionPage = () => {
                 The game is in progress
               </Title>
               <Text>
-                Current Question ({statusResults.position}/{questions_total}):{" "}
+                Current Question ({statusResults.position + 1}/{questions_total}
+                ):{" "}
               </Text>
               <Text strong style={{ fontSize: 18 }}>
                 {currentQuestion?.title || "No question yet"}
@@ -175,7 +221,7 @@ export const SessionPage = () => {
               <Divider />
               <Text>Countdown: </Text>
               <Text strong style={{ fontSize: 18 }}>
-                {statusResults.isoTimeLastQuestionStarted || "--"} s
+                {countDown != null ? `${countDown} s` : "--"}
               </Text>
               <Divider />
               <Progress percent={percent} />
@@ -187,7 +233,7 @@ export const SessionPage = () => {
               <Divider />
               <Space>
                 <Button
-                  disabled={statusResults.position === questions_total}
+                  disabled={statusResults.position + 1 === questions_total}
                   onClick={handleAdvance}
                 >
                   Next Question
