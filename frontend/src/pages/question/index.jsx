@@ -41,12 +41,6 @@ export const QuestionPage = () => {
     { text: "", isCorrect: false },
   ];
 
-  // Get the effective form answers
-  const effectiveAnswers =
-    form.getFieldValue("answers")?.length > 0
-      ? form.getFieldValue("answers")
-      : initialAnswer;
-
   // Handle image before upload
   const beforeUpload = async (file) => {
     try {
@@ -249,7 +243,10 @@ export const QuestionPage = () => {
               onChange={(value) => {
                 setQustionType(value);
                 form.setFieldsValue({
-                  answers: effectiveAnswers,
+                  answers:
+                    form.getFieldValue("answers")?.length > 0
+                      ? form.getFieldValue("answers")
+                      : initialAnswer,
                 });
               }}
             >
@@ -374,7 +371,10 @@ export const QuestionPage = () => {
                             value={form.getFieldValue("singleIndex")}
                             onChange={(e) => {
                               const selectedIndex = e.target.value;
-                              const answers = effectiveAnswers;
+                              const answers =
+                                form.getFieldValue("answers")?.length > 0
+                                  ? form.getFieldValue("answers")
+                                  : initialAnswer;
                               const updatedAnswer = answers.map((ans, i) => ({
                                 ...ans,
                                 isCorrect: i === selectedIndex,
