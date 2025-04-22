@@ -149,7 +149,73 @@ export const SessionPage = () => {
         </Button>
       </Layout.Header>
 
-      <Layout.Content style={{ padding: 24 }}></Layout.Content>
+      <Layout.Content style={{ padding: 24 }}>
+        {statusResults.active || currentStatus !== "ended" ? (
+          <>
+            {/* Management session */}
+            <Card style={{ marginBottom: 24, backgroundColor: "#fff" }}>
+              <Title
+                level={3}
+                style={{
+                  marginBottom: 24,
+                  color: "#56ae56",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
+                The game is in progress
+              </Title>
+              <Text>
+                Current Question ({statusResults.position}/{questions_total}):{" "}
+              </Text>
+              <Text strong style={{ fontSize: 18 }}>
+                {currentQuestion?.title || "No question yet"}
+              </Text>
+              <Divider />
+              <Text>Countdown: </Text>
+              <Text strong style={{ fontSize: 18 }}>
+                {statusResults.isoTimeLastQuestionStarted || "--"} s
+              </Text>
+              <Divider />
+              <Progress percent={percent} />
+              <Divider />
+              <Text>Online player numbers: </Text>
+              <Text strong style={{ fontSize: 18 }}>
+                {statusResults.players?.length || 0}
+              </Text>
+              <Divider />
+              <Space>
+                <Button
+                  disabled={statusResults.position === questions_total}
+                  onClick={handleAdvance}
+                >
+                  Next Question
+                </Button>
+                <Button onClick={handleStop}>Stop Session</Button>
+                <Popconfirm
+                  title='End the task'
+                  description='Are you sure to end this session?'
+                  okText='Yes'
+                  cancelText='No'
+                  onConfirm={handleEnd}
+                  onCancel={() => {}}
+                >
+                  <Button danger>End Seession</Button>
+                </Popconfirm>
+              </Space>
+            </Card>
+          </>
+        ) : (
+          <>
+            {/* View the Outcome */}
+            <Card title='The game is over'>
+              <Title level={5}>View Results</Title>
+              <Text>The result page is to be implemented</Text>
+            </Card>
+          </>
+        )}
+      </Layout.Content>
     </Layout>
   );
 };
