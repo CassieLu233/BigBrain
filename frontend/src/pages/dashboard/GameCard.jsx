@@ -20,7 +20,13 @@ import { useNavigate } from "react-router";
  *  - onDelete: function that delete game
  */
 
-export const GameCard = ({ game, onDelete, onStart, onEnd }) => {
+export const GameCard = ({
+  game,
+  onDelete,
+  onStart,
+  onEnd,
+  onClickManagementSession,
+}) => {
   const { Text, Title } = Typography;
   const navigate = useNavigate();
 
@@ -40,19 +46,19 @@ export const GameCard = ({ game, onDelete, onStart, onEnd }) => {
       style={{ width: 300 }}
       cover={
         <img
-          alt="Cover Image"
+          alt='Cover Image'
           src={game.image}
           style={{ backgroundColor: "#d0edf7", height: 200 }}
         />
       }
       actions={[
         game.active ? (
-          <Tooltip key="endGame" title="End the game">
+          <Tooltip key='endGame' title='End the game'>
             <Popconfirm
-              title="End the task"
-              description="Are you sure to end this game?"
-              okText="Yes"
-              cancelText="No"
+              title='End the task'
+              description='Are you sure to end this game?'
+              okText='Yes'
+              cancelText='No'
               onConfirm={() => {
                 onEnd(game.id);
               }}
@@ -62,7 +68,7 @@ export const GameCard = ({ game, onDelete, onStart, onEnd }) => {
             </Popconfirm>
           </Tooltip>
         ) : (
-          <Tooltip key="startGame" title="Start the game">
+          <Tooltip key='startGame' title='Start the game'>
             <PlayCircleOutlined
               style={{ color: "#56ae56", fontSize: 20 }}
               onClick={() => {
@@ -71,7 +77,7 @@ export const GameCard = ({ game, onDelete, onStart, onEnd }) => {
             />
           </Tooltip>
         ),
-        <Tooltip key="edit" title="Edit the game">
+        <Tooltip key='edit' title='Edit the game'>
           <EditOutlined
             style={{ color: "#1395c2", fontSize: 20 }}
             onClick={() => {
@@ -79,12 +85,12 @@ export const GameCard = ({ game, onDelete, onStart, onEnd }) => {
             }}
           />
         </Tooltip>,
-        <Tooltip key="delete" title="Delete the game">
+        <Tooltip key='delete' title='Delete the game'>
           <Popconfirm
-            title="Delete the task"
-            description="Are you sure to delete this game?"
-            okText="Yes"
-            cancelText="No"
+            title='Delete the task'
+            description='Are you sure to delete this game?'
+            okText='Yes'
+            cancelText='No'
             onConfirm={() => {
               onDelete(game.id);
             }}
@@ -136,7 +142,7 @@ export const GameCard = ({ game, onDelete, onStart, onEnd }) => {
           {`Questions number: ${game.questions.length}`}
         </Title>
         <Text
-          type="secondary"
+          type='secondary'
           style={{
             ...autoWrapStyle,
             ...showToolTipStyle,

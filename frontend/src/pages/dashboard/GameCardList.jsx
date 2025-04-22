@@ -13,7 +13,13 @@ import { GameCard } from "./GameCard.jsx";
  * Props:
  *  - games: Array<{ id, title, description }>
  */
-export const GameCardList = ({ games, onDelete, onStart, onEnd }) => {
+export const GameCardList = ({
+  games,
+  onDelete,
+  onStart,
+  onEnd,
+  onClickManagementSession,
+}) => {
   if (games.length === 0) {
     return (
       <div
@@ -24,7 +30,7 @@ export const GameCardList = ({ games, onDelete, onStart, onEnd }) => {
           alignItems: "center",
         }}
       >
-        <Empty description="No games created yet" />
+        <Empty description='No games created yet' />
       </div>
     );
   }
@@ -38,6 +44,7 @@ export const GameCardList = ({ games, onDelete, onStart, onEnd }) => {
             onDelete={onDelete}
             onStart={onStart}
             onEnd={onEnd}
+            onClickManagementSession={onClickManagementSession}
           />
         </Col>
       ))}

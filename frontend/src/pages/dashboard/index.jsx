@@ -157,6 +157,10 @@ export const Dashboard = () => {
     }
   };
 
+  const handleClickManagementSession = async (gameId) => {
+    navigate(`/session/${currentSessionId}?game_id=${gameId}`);
+  };
+
   // Delete Game
   const handleDeleteGame = async (gameId) => {
     console.log("current game id is: ", gameId);
@@ -205,7 +209,7 @@ export const Dashboard = () => {
       <Layout.Header style={styles.header}>
         {/* Left: logo + title */}
         <div style={styles.logo}>
-          <img src={logoImg} alt="Logo Img" style={styles.logoImage} />
+          <img src={logoImg} alt='Logo Img' style={styles.logoImage} />
           <span style={styles.logoTitle}>BigBrain</span>
         </div>
 
@@ -213,7 +217,7 @@ export const Dashboard = () => {
         <div style={styles.actions}>
           <Button
             ref={createBtnRef}
-            type="primary"
+            type='primary'
             icon={<PlusOutlined />}
             style={styles.createGameButton}
             onClick={() => setModalVisible(true)}
@@ -246,6 +250,7 @@ export const Dashboard = () => {
           onDelete={handleDeleteGame}
           onStart={handleStartGame}
           onEnd={handleEndGame}
+          onClickManagementSession={handleClickManagementSession}
         />
         <CreateGameModal
           visible={modalVisible}
