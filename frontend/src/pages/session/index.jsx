@@ -55,6 +55,9 @@ export const SessionPage = () => {
   const [countDown, setCountDown] = useState(null);
   const countdownRef = useRef(null);
 
+  // Record paused status
+  const [isPaused, setIsPaused] = useState(false);
+
   // fetch session status
   const fetchStatus = useCallback(async () => {
     try {
@@ -79,6 +82,7 @@ export const SessionPage = () => {
         await fetchStatus();
         setCurrentSatus(res.data.status);
         setManualStart(Date.now());
+        setIsPaused(false);
       } else {
         message.error("Unable to move forward to the next question");
       }
@@ -87,10 +91,25 @@ export const SessionPage = () => {
     }
   };
 
-  const handleStop = async () => {};
+  // Pause count down
+  const handlePause = () => {
+    clearInterval(countdownRef.current);
+    setIsPaused(true);
+  };
+
+  // resume count down
+  const handleResume = () => {
+    if (countDown != null) {
+      const endMs = Date.now() + countDown * 1000;
+      updateCountDown(endMs);
+      countdownRef.current = setInterval(() => updateCountDown(endMs), 1000);
+      setIsPaused(false);
+    }
+  };
 
   const handleReStart = async () => {
     setManualStart(Date.now());
+    setIsPaused(false);
   };
 
   // End session
@@ -126,8 +145,9 @@ export const SessionPage = () => {
   }, [fetchStatus]);
 
   useEffect(() => {
+    // Every time "Start Point" or "Back-end Timestamp Change" or "Pause/Recover"
+    // Clear the old timer first
     clearInterval(countdownRef.current);
-    setCountDown(null);
 
     // Get the start time
     let startMs =
@@ -233,12 +253,20 @@ export const SessionPage = () => {
               <Divider />
               <Space>
                 <Button
+                  color='cyan'
+                  variant='solid'
                   disabled={statusResults.position + 1 === questions_total}
                   onClick={handleAdvance}
                 >
                   Next Question
                 </Button>
-                <Button onClick={handleStop}>Stop Session</Button>
+                <Button
+                  color='purple'
+                  variant='solid'
+                  onClick={isPaused ? handleResume : handlePause}
+                >
+                  {isPaused ? "Resume Session" : "Pause Session"}
+                </Button>
                 <Popconfirm
                   title='End the task'
                   description='Are you sure to end this session?'
@@ -247,7 +275,9 @@ export const SessionPage = () => {
                   onConfirm={handleEnd}
                   onCancel={() => {}}
                 >
-                  <Button danger>End Seession</Button>
+                  <Button color='danger' variant='solid'>
+                    End Seession
+                  </Button>
                 </Popconfirm>
               </Space>
             </Card>
