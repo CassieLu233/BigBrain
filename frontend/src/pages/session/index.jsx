@@ -206,7 +206,7 @@ export const SessionPage = () => {
         </Title>
         <Button
           icon={<ReloadOutlined />}
-          type='primary'
+          type="primary"
           loading={loading}
           onClick={handleReStart}
         >
@@ -253,29 +253,29 @@ export const SessionPage = () => {
               <Divider />
               <Space>
                 <Button
-                  color='cyan'
-                  variant='solid'
+                  color="cyan"
+                  variant="solid"
                   disabled={statusResults.position + 1 === questions_total}
                   onClick={handleAdvance}
                 >
                   Next Question
                 </Button>
                 <Button
-                  color='purple'
-                  variant='solid'
+                  color="purple"
+                  variant="solid"
                   onClick={isPaused ? handleResume : handlePause}
                 >
                   {isPaused ? "Resume Session" : "Pause Session"}
                 </Button>
                 <Popconfirm
-                  title='End the task'
-                  description='Are you sure to end this session?'
-                  okText='Yes'
-                  cancelText='No'
+                  title="End the task"
+                  description="Are you sure to end this session?"
+                  okText="Yes"
+                  cancelText="No"
                   onConfirm={handleEnd}
                   onCancel={() => {}}
                 >
-                  <Button color='danger' variant='solid'>
+                  <Button color="danger" variant="solid">
                     End Seession
                   </Button>
                 </Popconfirm>
@@ -285,7 +285,7 @@ export const SessionPage = () => {
         ) : (
           <>
             {/* View the Outcome */}
-            <Card title='The game is over'>
+            <Card title="The game is over">
               <Title level={5}>View Results</Title>
               <Text>The result page is to be implemented</Text>
             </Card>

@@ -54,6 +54,7 @@ export const Dashboard = () => {
   const handleLogout = () => {
     window.localStorage.removeItem("token");
     window.localStorage.removeItem("email");
+    window.localStorage.removeItem("sessionId");
     message.success("Log Out successful! Go to Login Page");
     navigate("/login");
   };
@@ -62,7 +63,6 @@ export const Dashboard = () => {
   const handleCreateGame = async (newGame) => {
     // If user does not upload image, get a default image
     if (newGame.image === "") {
-      console.log("default img.......");
       const defaultFile = logoImg;
       const response = await fetch(defaultFile);
       const svgBlob = await response.blob();
@@ -108,6 +108,9 @@ export const Dashboard = () => {
 
         message.success("The game session has started");
         setCurrentSessionId(data.sessionId);
+        // Remove old session id and add new session id
+        window.localStorage.removeItem("sessionId");
+        window.localStorage.setItem("sessionId", data.sessionId);
         setSessionModalVisible(true);
         console.log("==========start session data is:", data);
       } else {
@@ -158,7 +161,8 @@ export const Dashboard = () => {
   };
 
   const handleClickManagementSession = async (gameId) => {
-    navigate(`/session/${currentSessionId}?game_id=${gameId}`);
+    const sessionId = window.localStorage.getItem("sessionId");
+    navigate(`/session/${sessionId}?game_id=${gameId}`);
   };
 
   // Delete Game
@@ -209,7 +213,7 @@ export const Dashboard = () => {
       <Layout.Header style={styles.header}>
         {/* Left: logo + title */}
         <div style={styles.logo}>
-          <img src={logoImg} alt='Logo Img' style={styles.logoImage} />
+          <img src={logoImg} alt="Logo Img" style={styles.logoImage} />
           <span style={styles.logoTitle}>BigBrain</span>
         </div>
 
@@ -217,7 +221,7 @@ export const Dashboard = () => {
         <div style={styles.actions}>
           <Button
             ref={createBtnRef}
-            type='primary'
+            type="primary"
             icon={<PlusOutlined />}
             style={styles.createGameButton}
             onClick={() => setModalVisible(true)}
@@ -270,7 +274,10 @@ export const Dashboard = () => {
         <EndSessionModal
           visible={endSessionModalVisible}
           onCancel={() => setEndSessionModalVisible(false)}
-          onClick={() => navigate(`/session/${currentSessionId}`)}
+          onClick={() => {
+            const sessionId = window.localStorage.getItem("sessionId");
+            navigate(`/session/${sessionId}`);
+          }}
         />
       </Layout.Content>
     </Layout>
