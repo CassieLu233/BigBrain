@@ -152,6 +152,25 @@ export const GameCard = ({
         >
           {game.description}
         </Text>
+
+        {game.active && (
+          <Tooltip title='Management Session'>
+            <Title
+              level={5}
+              style={{
+                ...autoWrapStyle,
+                margin: 0,
+                color: "blue",
+                textDecoration: "underline",
+              }}
+              onClick={() => {
+                onClickManagementSession(game.id);
+              }}
+            >
+              Session in progress ...
+            </Title>
+          </Tooltip>
+        )}
       </div>
     </Card>
   );
