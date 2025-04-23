@@ -168,12 +168,12 @@ export const Dashboard = () => {
     const startedSessionGameId = window.localStorage.getItem(
       "startedSessionGameId"
     );
-    navigate(`/session/${sessionId}?game_id=${startedSessionGameId}`);
+    navigate(`/session/${sessionId}?gameId=${startedSessionGameId}`);
   };
 
   const handleClickManagementSession = async (gameId) => {
     const sessionId = window.localStorage.getItem("sessionId");
-    navigate(`/session/${sessionId}?game_id=${gameId}`);
+    navigate(`/session/${sessionId}?gameId=${gameId}`);
   };
 
   // Delete Game

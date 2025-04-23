@@ -1,8 +1,10 @@
-// File: session/SessionManager.jsx
-// Purpose: Manage sessions or view results, automatically switch according to active status
+//=============================================================================
+// File: session/index.jsx
+// Purpose: Render Manage sessions page or View results page
 // Author: Qian Lu (z5506082@ad.unsw.edu.au)
 // Course: COMP6080
 // Created: 2025-04-22
+//=============================================================================
 import { useEffect, useState, useCallback, useRef } from "react";
 import { useParams, useSearchParams, useNavigate } from "react-router";
 import { Layout, Button, Typography, message } from "antd";
@@ -16,9 +18,9 @@ const { Title } = Typography;
 
 export const SessionPage = () => {
   const navigate = useNavigate();
-  const { session_id } = useParams();
+  const { sessionId } = useParams();
   const [searchParams] = useSearchParams();
-  const gameId = searchParams.get("game_id");
+  const gameId = searchParams.get("gameId");
 
   const [statusResults, setStatusResults] = useState({
     active: true,
@@ -59,7 +61,7 @@ export const SessionPage = () => {
   // fetch session status
   const fetchStatus = useCallback(async () => {
     try {
-      const res = await get(`/admin/session/${session_id}/status`);
+      const res = await get(`/admin/session/${sessionId}/status`);
       if (res.results) {
         console.log("current status data is:", res.results);
         setStatusResults(res.results);
@@ -67,12 +69,12 @@ export const SessionPage = () => {
     } catch (err) {
       message.error(err.message);
     }
-  }, [session_id]);
+  }, [sessionId]);
 
   // Get answers results from backend
   const fetchResults = useCallback(async () => {
     try {
-      const res = await get(`/admin/session/${session_id}/results`);
+      const res = await get(`/admin/session/${sessionId}/results`);
       console.log("current answers results are ", res);
       if (res.results) {
         setResultsData(res.results);
@@ -80,7 +82,7 @@ export const SessionPage = () => {
     } catch (err) {
       message.error(err.message);
     }
-  }, [session_id]);
+  }, [sessionId]);
 
   // Handle next qustion
   const handleAdvance = async () => {
@@ -222,7 +224,7 @@ export const SessionPage = () => {
           Back to Dashboard
         </Button>
         <Title level={4} style={{ margin: 0, color: "#1677ff" }}>
-          Session ID: {session_id}
+          Session ID: {sessionId}
         </Title>
         <Button
           icon={<ReloadOutlined />}

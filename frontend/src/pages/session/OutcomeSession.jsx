@@ -1,8 +1,10 @@
+//=============================================================================
 // File: session/OutcomeSession.jsx
-// Purpose: Render session outcomes component (refactored)
+// Purpose: Render session outcome component
 // Author: Qian Lu (z5506082@ad.unsw.edu.au)
 // Course: COMP6080
 // Created: 2025-04-23
+// ==============================================================================
 import { useMemo } from "react";
 import { Card, Table, Typography, Divider } from "antd";
 import {

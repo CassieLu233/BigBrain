@@ -27,19 +27,19 @@ const router = createBrowserRouter([
     element: <Dashboard />,
   },
   {
-    path: "/game/:game_id",
+    path: "/game/:gameId",
     element: <GamePage />,
   },
   {
-    path: "/game/:game_id/question/:question_id",
+    path: "/game/:gameId/question/:questionId",
     element: <QuestionPage />,
   },
   {
-    path: "/session/:session_id",
+    path: "/session/:sessionId",
     element: <SessionPage />,
   },
   {
-    path: "/play/:seesion_id",
+    path: "/play/:sessionId",
     element: <PlayPage />,
   },
 ]);

@@ -31,7 +31,7 @@ import { getCurrentQuestion, updateCurrentQuestion } from "../../utils/update";
 export const QuestionPage = () => {
   const navigate = useNavigate();
   const { Text } = Typography;
-  const { game_id, question_id } = useParams();
+  const { gameId, questionId } = useParams();
   const [form] = Form.useForm();
   const [currentQuestion, setCurrentQustion] = useState([]);
   const [questionType, setQustionType] = useState("");
@@ -85,15 +85,15 @@ export const QuestionPage = () => {
 
       const updatedQuestion = {
         ...values,
-        id: Number(question_id),
+        id: Number(questionId),
         duration: values.duration,
         points: values.points,
         image: uploadList[0]?.url || currentQuestion.image || "",
         answers: answers,
       };
       const result = await updateCurrentQuestion(
-        game_id,
-        question_id,
+        gameId,
+        questionId,
         updatedQuestion
       );
       if (result) {
@@ -101,7 +101,7 @@ export const QuestionPage = () => {
           "Editing the problem successfully, now return to the game page"
         );
         form.resetFields();
-        navigate(`/game/${game_id}`);
+        navigate(`/game/${gameId}`);
       }
     } catch (err) {
       message.error(err.message);
@@ -111,12 +111,12 @@ export const QuestionPage = () => {
   const handleBackToGame = () => {
     form.resetFields();
     setUploadList([]);
-    navigate(`/game/${game_id}`);
+    navigate(`/game/${gameId}`);
   };
 
   const initForm = async () => {
     try {
-      const currentQuestion = await getCurrentQuestion(game_id, question_id);
+      const currentQuestion = await getCurrentQuestion(gameId, questionId);
       if (currentQuestion) {
         setCurrentQustion(currentQuestion);
         setQustionType(currentQuestion.type);
@@ -177,7 +177,7 @@ export const QuestionPage = () => {
 
   useEffect(() => {
     initForm();
-  }, [question_id]);
+  }, [questionId]);
 
   return (
     <Layout style={styles.container}>

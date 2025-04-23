@@ -35,11 +35,11 @@ export const GamePage = () => {
   const [modalVisible, setModalVisible] = useState(false);
   const [questionModalVisible, setQuestionModalVisible] = useState(false);
 
-  const { game_id } = useParams();
+  const { gameId } = useParams();
 
   const initialGamePage = async () => {
     try {
-      const currentGame = await getCurrentGame(game_id);
+      const currentGame = await getCurrentGame(gameId);
       if (currentGame) {
         setCurrentGame(currentGame);
       }
@@ -49,7 +49,7 @@ export const GamePage = () => {
   };
   useEffect(() => {
     initialGamePage();
-  }, [game_id]);
+  }, [gameId]);
 
   // Edit game modal OK handler
   const handleEditGame = async (newGame) => {
@@ -77,7 +77,7 @@ export const GamePage = () => {
     const result = await updateGames(updatedGames);
     if (result) {
       message.success("Edit the game successfully");
-      const curGame = await getCurrentGame(game_id);
+      const curGame = await getCurrentGame(gameId);
       setCurrentGame(curGame);
     }
     // Close update game modal
@@ -110,7 +110,7 @@ export const GamePage = () => {
     const result = await updateGames(updatedGames);
     if (result) {
       message.success("Add a question successfully");
-      const curGame = await getCurrentGame(game_id);
+      const curGame = await getCurrentGame(gameId);
       setCurrentGame(curGame);
     }
     setQuestionModalVisible(false);
@@ -118,16 +118,16 @@ export const GamePage = () => {
   };
 
   const handleEditQuestion = async (questionId) => {
-    navigate(`/game/${game_id}/question/${questionId}`);
+    navigate(`/game/${gameId}/question/${questionId}`);
   };
 
   // Delete question
   const handleDeleteQuestion = async (questionId) => {
     try {
-      const result = await updateCurrentQuestion(game_id, questionId, []);
+      const result = await updateCurrentQuestion(gameId, questionId, []);
       if (result) {
         message.success("Delete the question successfully");
-        const curGame = await getCurrentGame(game_id);
+        const curGame = await getCurrentGame(gameId);
         setCurrentGame(curGame);
       }
     } catch (err) {
