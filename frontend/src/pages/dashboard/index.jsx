@@ -126,7 +126,10 @@ export const Dashboard = () => {
   // Copy game link to clipboard
   const copyGameLink = async () => {
     if (!currentSessionId) return;
-    const link = `${window.location.origin}/play/${currentSessionId}`;
+    const startedSessionGameId = window.localStorage.getItem(
+      "startedSessionGameId"
+    );
+    const link = `${window.location.origin}/play/${currentSessionId}?gameId=${startedSessionGameId}`;
     try {
       const result = await navigator.clipboard.writeText(link);
       if (result) {
