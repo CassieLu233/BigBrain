@@ -5,22 +5,14 @@
 // Created: 2025-04-22
 import { useEffect, useState, useCallback, useRef } from "react";
 import { useParams, useSearchParams, useNavigate } from "react-router";
-import {
-  Layout,
-  Button,
-  Card,
-  Typography,
-  Divider,
-  Progress,
-  Space,
-  message,
-  Popconfirm,
-} from "antd";
+import { Layout, Button, Typography, message } from "antd";
 import { ArrowLeftOutlined, ReloadOutlined } from "@ant-design/icons";
 import { get, post } from "../../utils/request";
 import { updateGameActive } from "../../utils/update";
+import { ManagementSession } from "./ManagementSession";
+import { OutcomeSession } from "./OutcomeSession";
 
-const { Title, Text } = Typography;
+const { Title } = Typography;
 
 export const SessionPage = () => {
   const navigate = useNavigate();
@@ -36,7 +28,10 @@ export const SessionPage = () => {
     players: [],
     questions: [],
   });
-  const [currentStatus, setCurrentSatus] = useState(null);
+
+  // Current session status
+  const initialCurrentStatus = window.localStorage.getItem("sessionStatus");
+  const [currentStatus, setCurrentSatus] = useState(initialCurrentStatus);
 
   const [loading] = useState(false);
 
@@ -81,6 +76,7 @@ export const SessionPage = () => {
         console.log("advanced mutate data is:", res.data);
         await fetchStatus();
         setCurrentSatus(res.data.status);
+        window.localStorage.setItem("sessionStatus", res.data);
         setManualStart(Date.now());
         setIsPaused(false);
       } else {
@@ -107,7 +103,7 @@ export const SessionPage = () => {
     }
   };
 
-  const handleReStart = async () => {
+  const handleRestart = async () => {
     setManualStart(Date.now());
     setIsPaused(false);
   };
@@ -123,6 +119,7 @@ export const SessionPage = () => {
         await updateGameActive(gameId, false);
         await fetchStatus();
         setCurrentSatus(res.data.status);
+        window.localStorage.setItem("sessionStatus", res.data);
         setCountDown(null);
         clearInterval(countdownRef.current);
       } else {
@@ -183,6 +180,18 @@ export const SessionPage = () => {
     manualStart,
   ]);
 
+  const managementSessionParams = {
+    statusResults,
+    currentQuestion,
+    countDown,
+    percent,
+    isPaused,
+    onAdvance: handleAdvance,
+    onPause: handlePause,
+    onResume: handleResume,
+    onEnd: handleEnd,
+  };
+
   return (
     <Layout style={{ minHeight: "100vh" }}>
       {/* navigation */}
@@ -208,88 +217,18 @@ export const SessionPage = () => {
           icon={<ReloadOutlined />}
           type="primary"
           loading={loading}
-          onClick={handleReStart}
+          disabled={currentStatus === "ended"}
+          onClick={handleRestart}
         >
           Restart Question
         </Button>
       </Layout.Header>
 
       <Layout.Content style={{ padding: 24 }}>
-        {statusResults.active || currentStatus !== "ended" ? (
-          <>
-            {/* Management session */}
-            <Card style={{ marginBottom: 24, backgroundColor: "#fff" }}>
-              <Title
-                level={3}
-                style={{
-                  marginBottom: 24,
-                  color: "#56ae56",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                }}
-              >
-                The game is in progress
-              </Title>
-              <Text>
-                Current Question ({statusResults.position + 1}/{questions_total}
-                ):{" "}
-              </Text>
-              <Text strong style={{ fontSize: 18 }}>
-                {currentQuestion?.title || "No question yet"}
-              </Text>
-              <Divider />
-              <Text>Countdown: </Text>
-              <Text strong style={{ fontSize: 18 }}>
-                {countDown != null ? `${countDown} s` : "--"}
-              </Text>
-              <Divider />
-              <Progress percent={percent} />
-              <Divider />
-              <Text>Online player numbers: </Text>
-              <Text strong style={{ fontSize: 18 }}>
-                {statusResults.players?.length || 0}
-              </Text>
-              <Divider />
-              <Space>
-                <Button
-                  color="cyan"
-                  variant="solid"
-                  disabled={statusResults.position + 1 === questions_total}
-                  onClick={handleAdvance}
-                >
-                  Next Question
-                </Button>
-                <Button
-                  color="purple"
-                  variant="solid"
-                  onClick={isPaused ? handleResume : handlePause}
-                >
-                  {isPaused ? "Resume Session" : "Pause Session"}
-                </Button>
-                <Popconfirm
-                  title="End the task"
-                  description="Are you sure to end this session?"
-                  okText="Yes"
-                  cancelText="No"
-                  onConfirm={handleEnd}
-                  onCancel={() => {}}
-                >
-                  <Button color="danger" variant="solid">
-                    End Seession
-                  </Button>
-                </Popconfirm>
-              </Space>
-            </Card>
-          </>
+        {currentStatus !== "ended" ? (
+          <ManagementSession {...managementSessionParams} />
         ) : (
-          <>
-            {/* View the Outcome */}
-            <Card title="The game is over">
-              <Title level={5}>View Results</Title>
-              <Text>The result page is to be implemented</Text>
-            </Card>
-          </>
+          <OutcomeSession />
         )}
       </Layout.Content>
     </Layout>

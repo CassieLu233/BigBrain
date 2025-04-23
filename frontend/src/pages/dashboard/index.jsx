@@ -55,6 +55,8 @@ export const Dashboard = () => {
     window.localStorage.removeItem("token");
     window.localStorage.removeItem("email");
     window.localStorage.removeItem("sessionId");
+    window.localStorage.removeItem("sessionStatus");
+    window.localStorage.removeItem("startedSessionGameId");
     message.success("Log Out successful! Go to Login Page");
     navigate("/login");
   };
@@ -108,9 +110,9 @@ export const Dashboard = () => {
 
         message.success("The game session has started");
         setCurrentSessionId(data.sessionId);
-        // Remove old session id and add new session id
-        window.localStorage.removeItem("sessionId");
         window.localStorage.setItem("sessionId", data.sessionId);
+        window.localStorage.setItem("sessionStatus", data.status);
+        window.localStorage.setItem("startedSessionGameId", gameId);
         setSessionModalVisible(true);
         console.log("==========start session data is:", data);
       } else {
@@ -152,12 +154,21 @@ export const Dashboard = () => {
       console.log("==========end session data is:", data);
       if (data?.status === "ended") {
         setEndSessionModalVisible(true);
+        window.localStorage.setItem("sessionStatus", data.status);
       } else {
         message.error("Failed to stop the game session");
       }
     } catch (err) {
       message.error(err.message);
     }
+  };
+
+  const handleViewResult = async () => {
+    const sessionId = window.localStorage.getItem("sessionId");
+    const startedSessionGameId = window.localStorage.getItem(
+      "startedSessionGameId"
+    );
+    navigate(`/session/${sessionId}?game_id=${startedSessionGameId}`);
   };
 
   const handleClickManagementSession = async (gameId) => {
@@ -274,10 +285,7 @@ export const Dashboard = () => {
         <EndSessionModal
           visible={endSessionModalVisible}
           onCancel={() => setEndSessionModalVisible(false)}
-          onClick={() => {
-            const sessionId = window.localStorage.getItem("sessionId");
-            navigate(`/session/${sessionId}`);
-          }}
+          onClick={handleViewResult}
         />
       </Layout.Content>
     </Layout>
