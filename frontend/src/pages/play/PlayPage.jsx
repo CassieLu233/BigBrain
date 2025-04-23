@@ -7,13 +7,20 @@
 //=============================================================================
 
 import { useEffect, useState, useCallback, useRef } from "react";
-import { Typography, message, Radio, Checkbox, Divider, Card } from "antd";
-import { get, put } from "../../utils/request";
+import {
+  Typography,
+  message,
+  Radio,
+  Checkbox,
+  Divider,
+  Card,
+  Spin,
+} from "antd";
 import { useNavigate } from "react-router";
-
-const { Text } = Typography;
+import { get, put } from "../../utils/request";
 
 export const PlayPage = ({ sessionId, playerId }) => {
+  const { Text, Title } = Typography;
   const navigate = useNavigate();
   const [started, setStarted] = useState(false);
 
@@ -304,6 +311,22 @@ export const PlayPage = ({ sessionId, playerId }) => {
             </Card>
           )}
         </Card>
+      </div>
+    );
+  } else {
+    // Not started or loading
+    return (
+      <div
+        style={{
+          height: "100vh",
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <Spin size="large" style={{ marginBottom: 16 }} />
+        <Title level={3}>Please wait</Title>
       </div>
     );
   }

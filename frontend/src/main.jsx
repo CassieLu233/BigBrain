@@ -8,6 +8,7 @@ import { GlobalStyle } from "./global-setting/GlobalStyle";
 import { QuestionPage } from "./pages/question";
 import { SessionPage } from "./pages/session";
 import { PlayRoute } from "./pages/play";
+import { ResultsPage } from "./pages/play/ResultsPage.jsx";
 
 const router = createBrowserRouter([
   {
@@ -41,6 +42,10 @@ const router = createBrowserRouter([
   {
     path: "/play/:sessionId",
     element: <PlayRoute />,
+  },
+  {
+    path: "/play/:sessionId/results",
+    element: <ResultsPage />,
   },
 ]);
 

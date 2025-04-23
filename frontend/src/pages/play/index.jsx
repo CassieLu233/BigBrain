@@ -13,10 +13,10 @@ import { PlayPage } from "./PlayPage.jsx";
 export const PlayRoute = () => {
   const { sessionId } = useParams();
   const [searchParams] = useSearchParams();
-  //const gameId = searchParams.get("gameId");
+  const gameId = searchParams.get("gameId");
   const playerId = searchParams.get("playerId");
 
   return playerId
-    ? <PlayPage  playerId={playerId} />
+    ? <PlayPage  playerId={playerId} sessionId={sessionId} gameId={gameId} />
     : <JoinPage sessionId={sessionId} />;
 };
