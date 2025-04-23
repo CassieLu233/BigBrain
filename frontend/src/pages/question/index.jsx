@@ -83,6 +83,14 @@ export const QuestionPage = () => {
         }));
       }
 
+      // Create correctAnswers
+      let correctAnswers = [];
+      answers.forEach((answer, index) => {
+        if (answer.isCorrect) {
+          correctAnswers.push(index);
+        }
+      });
+
       const updatedQuestion = {
         ...values,
         id: Number(questionId),
@@ -90,6 +98,7 @@ export const QuestionPage = () => {
         points: values.points,
         image: uploadList[0]?.url || currentQuestion.image || "",
         answers: answers,
+        correctAnswers: correctAnswers,
       };
       const result = await updateCurrentQuestion(
         gameId,
