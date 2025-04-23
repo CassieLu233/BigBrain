@@ -19,7 +19,7 @@ import {
 import { useNavigate } from "react-router";
 import { get, put } from "../../utils/request";
 
-export const PlayPage = ({ sessionId, playerId }) => {
+export const PlayPage = ({ sessionId, playerId, gameId }) => {
   const { Text, Title } = Typography;
   const navigate = useNavigate();
   const [started, setStarted] = useState(false);
@@ -123,7 +123,10 @@ export const PlayPage = ({ sessionId, playerId }) => {
       }
       // End session signal
       if (e.key === `endSessionTime`) {
-        navigate(`/play/${sessionId}/results?playerId=${playerId}`);
+        console.log("PlayPage gameId is", gameId);
+        navigate(
+          `/play/${sessionId}/results?playerId=${playerId}&gameId=${gameId}`
+        );
       }
     };
     window.addEventListener("storage", onStorage);

@@ -13,8 +13,8 @@ import { Card, Form, Input, Button, message, Typography } from "antd";
 import logoImg from "../../assets/bigbrain.svg";
 import { post } from "../../utils/request";
 
-export const JoinPage = ({sessionId}) => {
-  const {Text} = Typography;
+export const JoinPage = ({ sessionId, gameId }) => {
+  const { Text } = Typography;
   const navigate = useNavigate();
   const [submitting, setSubmitting] = useState(false);
 
@@ -23,10 +23,12 @@ export const JoinPage = ({sessionId}) => {
     try {
       const res = await post(`/play/join/${sessionId}`, { name });
       // { playerId: Number }
-      if(res.playerId){
+      if (res.playerId) {
         message.success("Joined successfully!");
-        navigate(`/play/${sessionId}?playerId=${res.playerId}`);
-      }else{
+        navigate(
+          `/play/${sessionId}?playerId=${res.playerId}&gameId=${gameId}`
+        );
+      } else {
         message.error("Participation failed, please contact the administrator");
       }
     } catch (err) {
@@ -46,12 +48,10 @@ export const JoinPage = ({sessionId}) => {
         background: "#fafafa",
       }}
     >
-      <Card
-        style={{ width: 300, textAlign: "center"}}
-      >
-        <div style={{marginBottom:16}}>
+      <Card style={{ width: 300, textAlign: "center" }}>
+        <div style={{ marginBottom: 16 }}>
           <img src={logoImg} alt="BigBrain" style={{ width: 50, height: 50 }} />
-          <Text strong style={{ margin: 0, fontSize:45, color:"#1677ff"}}>
+          <Text strong style={{ margin: 0, fontSize: 45, color: "#1677ff" }}>
             BigBrain
           </Text>
         </div>
@@ -66,12 +66,7 @@ export const JoinPage = ({sessionId}) => {
           </Form.Item>
 
           <Form.Item>
-            <Button
-              type="primary"
-              htmlType="submit"
-              block
-              loading={submitting}
-            >
+            <Button type="primary" htmlType="submit" block loading={submitting}>
               Join Game
             </Button>
           </Form.Item>

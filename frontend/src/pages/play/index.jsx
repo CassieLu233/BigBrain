@@ -6,8 +6,8 @@
 // Created: 2025-04-23
 //=============================================================================
 
-import { useParams,useSearchParams } from "react-router";
-import {JoinPage } from "./JoinPage.jsx"
+import { useParams, useSearchParams } from "react-router";
+import { JoinPage } from "./JoinPage.jsx";
 import { PlayPage } from "./PlayPage.jsx";
 
 export const PlayRoute = () => {
@@ -16,7 +16,11 @@ export const PlayRoute = () => {
   const gameId = searchParams.get("gameId");
   const playerId = searchParams.get("playerId");
 
-  return playerId
-    ? <PlayPage  playerId={playerId} sessionId={sessionId} gameId={gameId} />
-    : <JoinPage sessionId={sessionId} />;
+  console.log("playroute gameId is:", gameId);
+
+  return playerId ? (
+    <PlayPage playerId={playerId} sessionId={sessionId} gameId={gameId} />
+  ) : (
+    <JoinPage sessionId={sessionId} gameId={gameId} />
+  );
 };
