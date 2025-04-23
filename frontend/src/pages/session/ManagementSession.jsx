@@ -21,10 +21,7 @@ export const ManagementSession = ({
   currentQuestion,
   countDown,
   percent,
-  isPaused,
   onAdvance,
-  onPause,
-  onResume,
   onEnd,
 }) => {
   const { Title, Text } = Typography;
@@ -73,24 +70,17 @@ export const ManagementSession = ({
         style={{
           display: "flex",
           alignItems: "center",
-          justifyContent: "space-between",
+          justifyContent: "flex-end",
+          gap:30
         }}
       >
         <Button
-          color="cyan"
+          color="primary"
           variant="solid"
           disabled={answeredPosition === totalQuestions}
           onClick={onAdvance}
         >
           Next Question
-        </Button>
-
-        <Button
-          color="purple"
-          variant="solid"
-          onClick={isPaused ? onResume : onPause}
-        >
-          {isPaused ? "Resume Session" : "Pause Session"}
         </Button>
 
         <Popconfirm

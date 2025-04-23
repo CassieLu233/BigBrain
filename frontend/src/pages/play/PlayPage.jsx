@@ -10,7 +10,7 @@ import { useEffect, useState } from "react";
 import { Spin, Typography, message } from "antd";
 import { get } from "../../utils/request";
 
-export const PlayPage = ({sessionId, gameId, playerId}) => {
+export const PlayPage = ({ playerId}) => {
   const [started, setStarted] = useState(false);
   const [loading, setLoading] = useState(true);
 
