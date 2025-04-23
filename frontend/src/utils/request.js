@@ -26,7 +26,7 @@ export const get = async (url) => {
     headers: {
       ...defaultOptions.headers,
       // inject token from localStorage
-      Authorization: `Bearer ${window.localStorage.getItem("token")}`,
+      Authorization: `Bearer ${localStorage.getItem("token")}`,
     },
   });
   const data = await res.json();
@@ -49,7 +49,7 @@ export const post = async (url, data) => {
     headers: {
       ...defaultOptions.headers,
       // inject token from localStorage
-      Authorization: `Bearer ${window.localStorage.getItem("token")}`,
+      Authorization: `Bearer ${localStorage.getItem("token")}`,
     },
     body: JSON.stringify(data),
   });
@@ -73,7 +73,7 @@ export const put = async (url, data) => {
     headers: {
       ...defaultOptions.headers,
       // inject token from localStorage
-      Authorization: `Bearer ${window.localStorage.getItem("token")}`,
+      Authorization: `Bearer ${localStorage.getItem("token")}`,
     },
     body: JSON.stringify(data),
   });

@@ -43,7 +43,7 @@ export const CreateGameModal = ({ title, visible, onCreate, onCancel }) => {
   const handleOk = async () => {
     try {
       const values = await form.validateFields();
-      const owner = window.localStorage.getItem("email") || "anonymity";
+      const owner = localStorage.getItem("email") || "anonymity";
       const updateTime = new Date().toISOString();
       let imageBase64 = "";
       if (uploadFileList[0]) {

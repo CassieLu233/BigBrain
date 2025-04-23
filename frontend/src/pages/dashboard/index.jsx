@@ -34,7 +34,7 @@ export const Dashboard = () => {
   const [sessionModalVisible, setSessionModalVisible] = useState(false);
   const [endSessionModalVisible, setEndSessionModalVisible] = useState(false);
   // Get the displayed username (local part of the email address) and avatar
-  const currentUserEmail = window.localStorage.getItem("email") || "";
+  const currentUserEmail = localStorage.getItem("email") || "";
   const emailName = currentUserEmail.split("@")[0];
   const avatarLetter = emailName.charAt(0).toUpperCase();
 
@@ -52,11 +52,13 @@ export const Dashboard = () => {
 
   // Logout handler
   const handleLogout = () => {
-    window.localStorage.removeItem("token");
-    window.localStorage.removeItem("email");
-    window.localStorage.removeItem("sessionId");
-    window.localStorage.removeItem("sessionStatus");
-    window.localStorage.removeItem("startedSessionGameId");
+    localStorage.removeItem("token");
+    localStorage.removeItem("email");
+    localStorage.removeItem("sessionId");
+    localStorage.removeItem("sessionStatus");
+    localStorage.removeItem("startedSessionGameId");
+    localStorage.removeItem("newQuestionTime");
+    localStorage.removeItem("endSessionTime");
     message.success("Log Out successful! Go to Login Page");
     navigate("/login");
   };
@@ -110,9 +112,9 @@ export const Dashboard = () => {
 
         message.success("The game session has started");
         setCurrentSessionId(data.sessionId);
-        window.localStorage.setItem("sessionId", data.sessionId);
-        window.localStorage.setItem("sessionStatus", data.status);
-        window.localStorage.setItem("startedSessionGameId", gameId);
+        localStorage.setItem("sessionId", data.sessionId);
+        localStorage.setItem("sessionStatus", data.status);
+        localStorage.setItem("startedSessionGameId", gameId);
         setSessionModalVisible(true);
         console.log("==========start session data is:", data);
       } else {
@@ -126,7 +128,7 @@ export const Dashboard = () => {
   // Copy game link to clipboard
   const copyGameLink = async () => {
     if (!currentSessionId) return;
-    const startedSessionGameId = window.localStorage.getItem(
+    const startedSessionGameId = localStorage.getItem(
       "startedSessionGameId"
     );
     const link = `${window.location.origin}/play/${currentSessionId}?gameId=${startedSessionGameId}`;
@@ -157,7 +159,8 @@ export const Dashboard = () => {
       console.log("==========end session data is:", data);
       if (data?.status === "ended") {
         setEndSessionModalVisible(true);
-        window.localStorage.setItem("sessionStatus", data.status);
+        localStorage.setItem("sessionStatus", data.status);
+        localStorage.setItem("endSessionTime", Date.now().toString());
       } else {
         message.error("Failed to stop the game session");
       }
@@ -167,15 +170,15 @@ export const Dashboard = () => {
   };
 
   const handleViewResult = async () => {
-    const sessionId = window.localStorage.getItem("sessionId");
-    const startedSessionGameId = window.localStorage.getItem(
+    const sessionId = localStorage.getItem("sessionId");
+    const startedSessionGameId = localStorage.getItem(
       "startedSessionGameId"
     );
     navigate(`/session/${sessionId}?gameId=${startedSessionGameId}`);
   };
 
   const handleClickManagementSession = async (gameId) => {
-    const sessionId = window.localStorage.getItem("sessionId");
+    const sessionId = localStorage.getItem("sessionId");
     navigate(`/session/${sessionId}?gameId=${gameId}`);
   };
 

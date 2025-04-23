@@ -32,7 +32,7 @@ export const SessionPage = () => {
   });
 
   // Current session status
-  const initialCurrentStatus = window.localStorage.getItem("sessionStatus");
+  const initialCurrentStatus = localStorage.getItem("sessionStatus");
   const [currentStatus, setCurrentSatus] = useState(initialCurrentStatus);
 
 
@@ -87,7 +87,8 @@ export const SessionPage = () => {
         console.log("advanced mutate data is:", res.data);
         await fetchStatus();
         setCurrentSatus(res.data.status);
-        window.localStorage.setItem("sessionStatus", res.data.status);
+        localStorage.setItem("sessionStatus", res.data.status);
+        localStorage.setItem("newQuestionTime", Date.now().toString());
       } else {
         message.error("Unable to move forward to the next question");
       }
@@ -107,7 +108,8 @@ export const SessionPage = () => {
         await updateGameActive(gameId, false);
         await fetchStatus();
         setCurrentSatus(res.data.status);
-        window.localStorage.setItem("sessionStatus", res.data.status);
+        localStorage.setItem("sessionStatus", res.data.status);
+        localStorage.setItem("endSessionTime", Date.now().toString());
         setCountDown(null);
         clearInterval(countdownRef.current);
       } else {
