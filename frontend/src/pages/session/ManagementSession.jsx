@@ -1,11 +1,11 @@
 //=============================================================================
 // File: session/ManagementSesson.jsx
-// Purpose: Render a grid of game cards (or empty state) using GameCard component
+// Purpose: Render management session component
 // Author: Qian Lu (z5506082@ad.unsw.edu.au)
 // Course: COMP6080
 // Created: 2025-04-23
 // ==============================================================================
-// src/pages/session/ManagementSession.jsx
+
 import {
   Card,
   Typography,
@@ -43,7 +43,7 @@ export const ManagementSession = ({
           justifyContent: "center",
         }}
       >
-        The game is in progress
+        The Game Is In Progress
       </Title>
 
       <Text>

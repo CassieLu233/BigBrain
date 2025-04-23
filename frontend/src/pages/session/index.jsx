@@ -53,6 +53,9 @@ export const SessionPage = () => {
   // Record paused status
   const [isPaused, setIsPaused] = useState(false);
 
+  // Record answers results
+  const [resultsData, setResultsData] = useState([]);
+
   // fetch session status
   const fetchStatus = useCallback(async () => {
     try {
@@ -60,6 +63,19 @@ export const SessionPage = () => {
       if (res.results) {
         console.log("current status data is:", res.results);
         setStatusResults(res.results);
+      }
+    } catch (err) {
+      message.error(err.message);
+    }
+  }, [session_id]);
+
+  // Get answers results from backend
+  const fetchResults = useCallback(async () => {
+    try {
+      const res = await get(`/admin/session/${session_id}/results`);
+      console.log("current answers results are ", res);
+      if (res.results) {
+        setResultsData(res.results);
       }
     } catch (err) {
       message.error(err.message);
@@ -76,7 +92,7 @@ export const SessionPage = () => {
         console.log("advanced mutate data is:", res.data);
         await fetchStatus();
         setCurrentSatus(res.data.status);
-        window.localStorage.setItem("sessionStatus", res.data);
+        window.localStorage.setItem("sessionStatus", res.data.status);
         setManualStart(Date.now());
         setIsPaused(false);
       } else {
@@ -119,7 +135,7 @@ export const SessionPage = () => {
         await updateGameActive(gameId, false);
         await fetchStatus();
         setCurrentSatus(res.data.status);
-        window.localStorage.setItem("sessionStatus", res.data);
+        window.localStorage.setItem("sessionStatus", res.data.status);
         setCountDown(null);
         clearInterval(countdownRef.current);
       } else {
@@ -180,17 +196,12 @@ export const SessionPage = () => {
     manualStart,
   ]);
 
-  const managementSessionParams = {
-    statusResults,
-    currentQuestion,
-    countDown,
-    percent,
-    isPaused,
-    onAdvance: handleAdvance,
-    onPause: handlePause,
-    onResume: handleResume,
-    onEnd: handleEnd,
-  };
+  // Loarding results when answer is over
+  useEffect(() => {
+    if (!statusResults.active && currentStatus === "ended") {
+      fetchResults();
+    }
+  }, [statusResults.active, currentStatus, fetchResults]);
 
   return (
     <Layout style={{ minHeight: "100vh" }}>
@@ -226,9 +237,23 @@ export const SessionPage = () => {
 
       <Layout.Content style={{ padding: 24 }}>
         {currentStatus !== "ended" ? (
-          <ManagementSession {...managementSessionParams} />
+          <ManagementSession
+            statusResults={statusResults}
+            currentQuestion={currentQuestion}
+            countDown={countDown}
+            percent={percent}
+            isPaused={isPaused}
+            onAdvance={handleAdvance}
+            onPause={handlePause}
+            onResume={handleResume}
+            onEnd={handleEnd}
+          />
         ) : (
-          <OutcomeSession />
+          <OutcomeSession
+            totalQuestions={statusResults.questions.length}
+            participants={statusResults.players.length}
+            resultsData={resultsData}
+          />
         )}
       </Layout.Content>
     </Layout>
