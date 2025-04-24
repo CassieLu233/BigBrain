@@ -1,16 +1,26 @@
 import { useEffect, useState, useCallback } from "react";
-import { Table, Card, Typography, Row, Col, Statistic, Space } from "antd";
+import {
+  Table,
+  Card,
+  Typography,
+  Row,
+  Col,
+  Statistic,
+  Space,
+  Tooltip,
+  Collapse,
+} from "antd";
 import {
   CheckCircleOutlined,
   ClockCircleOutlined,
   CloseCircleOutlined,
-  EyeOutlined,
   InfoCircleOutlined,
   TrophyOutlined,
+  EyeOutlined,
 } from "@ant-design/icons";
-import { get } from "../../utils/request";
 import { useSearchParams } from "react-router";
 import { getCurrentGame } from "../../utils/update";
+import { get } from "../../utils/request";
 
 const { Title, Text } = Typography;
 
@@ -95,6 +105,80 @@ export const ResultsPage = () => {
     },
   ];
 
+  // view detail data
+  const detailData = questionsHistory.map((question, i) => {
+    const playerAnswersIdx = results[i]?.answers || [];
+    const correctIdxs = question.correctAnswers;
+    return {
+      key: i,
+      question: question.title,
+      options: question.answers.map((opt, idx) => ({
+        idx,
+        text: opt.text,
+        isPlayer: playerAnswersIdx.includes(idx),
+        isCorrect: correctIdxs.includes(idx),
+      })),
+    };
+  });
+
+  const detailColumns = [
+    {
+      title: "Question",
+      dataIndex: "question",
+      key: "question",
+      render: (txt) => (
+        <Tooltip title={txt}>
+          <Text
+            ellipsis={{ tooltip: txt }}
+            style={{ maxWidth: 200, display: "block" }}
+          >
+            {txt}
+          </Text>
+        </Tooltip>
+      ),
+    },
+    {
+      title: "Option",
+      dataIndex: "options",
+      key: "options",
+      render: (opts) =>
+        opts.map((opt) => (
+          <Tooltip key={opt.idx} title={opt.text}>
+            <Text
+              strong={opt.isPlayer}
+              type={
+                opt.isPlayer
+                  ? opt.isCorrect
+                    ? "success"
+                    : "danger"
+                  : undefined
+              }
+              ellipsis={{ tooltip: opt.text }}
+              style={{ display: "block", maxWidth: 200 }}
+            >
+              {`Option ${opt.idx + 1}: ${opt.text}`}
+            </Text>
+          </Tooltip>
+        )),
+    },
+    {
+      title: "Correct Option(s)",
+      key: "correctOptions",
+      render: (_, record) => {
+        // record.options : [{ idx, text, isPlayer, isCorrect }, …]
+        const correctOnes = record.options
+          .filter((opt) => opt.isCorrect)
+          .map((opt) => `Option ${opt.idx + 1}`)
+          .join("\n");
+        return correctOnes.length ? (
+          <Text style={{ whiteSpace: "pre-line" }}>{correctOnes}</Text>
+        ) : (
+          <Text type="warning">None</Text>
+        );
+      },
+    },
+  ];
+
   // Fetch all answers from the player
   const fetchResults = useCallback(async () => {
     const res = await get(`/play/${playerId}/results`);
@@ -174,6 +258,30 @@ export const ResultsPage = () => {
           </li>
         </ul>
       </Card>
+
+      <Collapse
+        bordered={false}
+        style={{ marginTop: 24, background: "#fafafa" }}
+        items={[
+          {
+            key: "details",
+            label: (
+              <Space>
+                <EyeOutlined /> Detailed Answers
+              </Space>
+            ),
+            children: (
+              <Table
+                dataSource={detailData}
+                columns={detailColumns}
+                pagination={false}
+                bordered
+                size="small"
+              />
+            ),
+          },
+        ]}
+      />
     </div>
   );
 };
