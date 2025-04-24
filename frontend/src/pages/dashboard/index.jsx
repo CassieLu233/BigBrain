@@ -132,21 +132,6 @@ export const Dashboard = () => {
     }
   };
 
-  // Copy game link to clipboard
-  const copyGameLink = async () => {
-    if (!currentSessionId) return;
-    const startedSessionGameId = localStorage.getItem("startedSessionGameId");
-    const link = `${window.location.origin}/play/${currentSessionId}?gameId=${startedSessionGameId}`;
-    try {
-      const result = await navigator.clipboard.writeText(link);
-      if (result) {
-        message.success("Game link has been copied to the clipboard");
-      }
-    } catch (err) {
-      message.error("Copy failed: " + err.message);
-    }
-  };
-
   // End a game handler
   const handleEndGame = async (gameId) => {
     try {
@@ -288,7 +273,6 @@ export const Dashboard = () => {
           visible={sessionModalVisible}
           sessionId={currentSessionId}
           onCancel={() => setSessionModalVisible(false)}
-          onClick={copyGameLink}
           destroyOnClose
         />
         <EndSessionModal
