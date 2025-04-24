@@ -21,22 +21,48 @@ export const OutcomeSession = ({
   resultsData,
   totalQuestions,
   participants,
+  questions,
 }) => {
   const { Title, Text } = Typography;
 
   // Calculate rankings, top 5
   // Return {rank, name, score}
   const computeLeaderboard = () => {
-    return resultsData
-      .map((player) => ({
-        name: player.name,
-        score: player.answers.filter((a) => a.correct).length,
-      }))
-      .sort((a, b) => b.score - a.score)
-      .slice(0, 5)
-      .map((row, i) => ({ rank: i + 1, ...row }));
+    console.log("current questions:", questions);
+    return (
+      resultsData
+        .map((player) => {
+          // Compute the total score of the player
+          const totalScore = (player.answers || []).reduce((sum, ans, idx) => {
+            const question = questions[idx];
+            console.log("current question:", question);
+            if (!question) return sum;
+            const corrects = question.correctAnswers || [];
+            // Answers that the player has selected
+            const selected = Array.isArray(ans.answers)
+              ? ans.answers
+              : [ans.answers];
+            // Count correct selected answer
+            const hitCount = selected.filter((s) =>
+              corrects.includes(s)
+            ).length;
+            console.log("current selected:", selected, hitCount);
+            const fraction = corrects.length ? hitCount / corrects.length : 0;
+            return sum + fraction * (question.points || 1);
+          }, 0);
+          return {
+            name: player.name,
+            score: Math.round(totalScore * 100) / 100,
+          };
+        })
+        // Rank, takes top 5
+        .sort((a, b) => b.score - a.score)
+        .slice(0, 5)
+        .map((row, i) => ({ rank: i + 1, ...row }))
+    );
   };
-  const leaderboard = useMemo(computeLeaderboard, [resultsData]);
+
+  const leaderboard = useMemo(computeLeaderboard, [resultsData, questions]);
 
   // Compute the correctness of each question
   // Return {question: Q1, percent: 80}
@@ -80,8 +106,8 @@ export const OutcomeSession = ({
       const avg =
         diffTimes.length > 0
           ? Math.round(
-            diffTimes.reduce((sum, time) => sum + time, 0) / diffTimes.length
-          )
+              diffTimes.reduce((sum, time) => sum + time, 0) / diffTimes.length
+            )
           : 0;
       return { question: `Q${idx + 1}`, avgTime: avg };
     });
@@ -120,7 +146,6 @@ export const OutcomeSession = ({
           {participants}
         </Text>
       </div>
-
 
       {/* Score rank */}
       <Table

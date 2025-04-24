@@ -236,7 +236,7 @@ export const ResultsPage = () => {
           <Statistic
             title="Average Score"
             value={`${avgScore}`}
-            prefix={<CheckCircleOutlined style={{ color: "blue" }} />}
+            prefix={<InfoCircleOutlined style={{ color: "blue" }} />}
           />
         </Col>
         <Col span={8}>
@@ -250,7 +250,7 @@ export const ResultsPage = () => {
           <Statistic
             title="Average Response Time"
             value={`${avgTime}s`}
-            prefix={<ClockCircleOutlined style={{ color: "green" }} />}
+            prefix={<ClockCircleOutlined style={{ color: "red" }} />}
           />
         </Col>
       </Row>

@@ -35,7 +35,6 @@ export const SessionPage = () => {
   const initialCurrentStatus = localStorage.getItem("sessionStatus");
   const [currentStatus, setCurrentSatus] = useState(initialCurrentStatus);
 
-
   // Calculate the progress bar percentage
   const questions_total = statusResults.questions.length || 0;
   // Start with 1
@@ -136,7 +135,9 @@ export const SessionPage = () => {
     clearInterval(countdownRef.current);
 
     // Get the start time
-    let startMs =statusResults.isoTimeLastQuestionStarted? new Date(statusResults.isoTimeLastQuestionStarted).getTime(): null;
+    let startMs = statusResults.isoTimeLastQuestionStarted
+      ? new Date(statusResults.isoTimeLastQuestionStarted).getTime()
+      : null;
 
     if (
       startMs != null &&
@@ -176,11 +177,11 @@ export const SessionPage = () => {
       {/* navigation */}
       <Layout.Header
         style={{
-          display:"flex",
+          display: "flex",
           background: "#fff",
           padding: "0 24px",
-          alignItems:"center",
-          justifyContent:"space-between"
+          alignItems: "center",
+          justifyContent: "space-between",
         }}
       >
         <Button
@@ -189,7 +190,7 @@ export const SessionPage = () => {
         >
           Back to Dashboard
         </Button>
-        <Title level={4} style={{ marginLeft: 0, color: "#1677ff"}}>
+        <Title level={4} style={{ marginLeft: 0, color: "#1677ff" }}>
           Session ID: {sessionId}
         </Title>
       </Layout.Header>
@@ -209,6 +210,7 @@ export const SessionPage = () => {
             totalQuestions={statusResults.questions.length}
             participants={statusResults.players.length}
             resultsData={resultsData}
+            questions={statusResults.questions}
           />
         )}
       </Layout.Content>

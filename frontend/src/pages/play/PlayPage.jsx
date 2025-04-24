@@ -111,6 +111,7 @@ export const PlayPage = ({ sessionId, playerId, gameId }) => {
   const handleAnswerChange = async (newIdxs) => {
     setAnswered(false);
     setSelectedIdxs(newIdxs);
+    console.log("current newIdx:", newIdxs);
     try {
       const res = await put(`/play/${playerId}/answer`, { answers: newIdxs });
       if (res) {
