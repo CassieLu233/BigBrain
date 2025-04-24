@@ -34,19 +34,35 @@ export const ResultsPage = () => {
 
   // Create table data
   const dataSource = results.map((res, i) => {
-    const duration = questionsHistory[i]?.duration || 10;
+    const question = questionsHistory[i] || {};
+    const duration = question.duration || 10;
     const answeredAt = res.answeredAt
       ? (new Date(res.answeredAt) - new Date(res.questionStartedAt)) / 1000
       : duration;
+
+    // Compute point
+    const correctIdxs = question.correctAnswers || [];
+    const selectedIdxs = res.answers || [];
+    const correctCount = selectedIdxs.filter((idx) =>
+      correctIdxs.includes(idx)
+    ).length;
+    const totalCorrect = correctIdxs.length;
+    const rawScore =
+      totalCorrect > 0
+        ? (correctCount / totalCorrect) * (question.points || 1)
+        : 0;
+    const score = Math.round(rawScore * 100) / 100;
+
     return {
       key: i,
       question: `Question ${i + 1}`,
-      yourAnswer:
-        res.answers.length > 0
-          ? res.answers.map((idx) => `Option ${idx + 1}`).join("\n")
-          : "No Answer",
+      yourAnswer: selectedIdxs.length
+        ? selectedIdxs.map((idx) => `Option ${idx + 1}`).join("\n")
+        : "No Answer",
       correct: res.correct,
       time: Math.round(answeredAt),
+      score: score,
+      ratio: `(${correctCount}/${totalCorrect})`,
     };
   });
 
@@ -55,6 +71,8 @@ export const ResultsPage = () => {
   const avgRate = total ? Math.round((correctCount / total) * 10000) / 100 : 0;
   const totalTime = dataSource.reduce((sum, row) => sum + row.time, 0);
   const avgTime = total ? Math.round((totalTime / total) * 100) / 100 : 0;
+  const totalScore = dataSource.reduce((sum, row) => sum + row.score, 0);
+  const avgScore = total ? Math.round((totalScore / total) * 100) / 100 : 0;
   const maxDuration = Math.max(
     0,
     ...questionsHistory.map((question) => question.duration || 10)
@@ -91,6 +109,16 @@ export const ResultsPage = () => {
             <CloseCircleOutlined /> No
           </Text>
         ),
+    },
+    {
+      title: "Score",
+      dataIndex: "score",
+      key: "score",
+      render: (_, record) => (
+        <Text>
+          {record.score} {record.ratio}
+        </Text>
+      ),
     },
     {
       title: "Time (s)",
@@ -204,14 +232,21 @@ export const ResultsPage = () => {
       </Title>
 
       <Row gutter={16} style={{ marginBottom: 24 }}>
-        <Col span={12}>
+        <Col span={8}>
+          <Statistic
+            title="Average Score"
+            value={`${avgScore}`}
+            prefix={<CheckCircleOutlined style={{ color: "blue" }} />}
+          />
+        </Col>
+        <Col span={8}>
           <Statistic
             title="Average Correct Rate"
             value={`${avgRate}%`}
             prefix={<CheckCircleOutlined style={{ color: "green" }} />}
           />
         </Col>
-        <Col span={12}>
+        <Col span={8}>
           <Statistic
             title="Average Response Time"
             value={`${avgTime}s`}
@@ -255,6 +290,10 @@ export const ResultsPage = () => {
           <li>
             <Space style={{ fontWeight: 600 }}>Average Time</Space> = (Sum of
             All Questions) ÷ Total Number of Questions
+          </li>
+          <li>
+            <Space style={{ fontWeight: 600 }}>Average Score</Space> = (Sum of
+            All question scores) ÷ Total Number of Questions
           </li>
         </ul>
       </Card>

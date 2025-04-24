@@ -23,6 +23,7 @@ export const PlayPage = ({ sessionId, playerId, gameId }) => {
   const { Text, Title } = Typography;
   const navigate = useNavigate();
   const [started, setStarted] = useState(false);
+  const [answered, setAnswered] = useState(false);
 
   // All questions
   const [question, setQuestion] = useState(null);
@@ -65,6 +66,7 @@ export const PlayPage = ({ sessionId, playerId, gameId }) => {
   const fetchQuestion = useCallback(async () => {
     try {
       const res = await get(`/play/${playerId}/question`);
+      console.log("=================current question is:", res);
       const question = res.question;
       // If not update question, return
       if (started && question.id === lastQuestionId) return;
@@ -72,6 +74,7 @@ export const PlayPage = ({ sessionId, playerId, gameId }) => {
       setQuestion(question);
       setLastQuestionId(question.id);
       setSelectedIdxs([]);
+      setAnswered(false);
 
       // Renew fetch current answer status
       fetchedAnswerRef.current = false;
@@ -106,9 +109,13 @@ export const PlayPage = ({ sessionId, playerId, gameId }) => {
 
   // Submit answer
   const handleAnswerChange = async (newIdxs) => {
+    setAnswered(false);
     setSelectedIdxs(newIdxs);
     try {
-      await put(`/play/${playerId}/answer`, { answers: newIdxs });
+      const res = await put(`/play/${playerId}/answer`, { answers: newIdxs });
+      if (res) {
+        setAnswered(true);
+      }
     } catch (err) {
       message.error(err.message);
     }
@@ -277,6 +284,13 @@ export const PlayPage = ({ sessionId, playerId, gameId }) => {
             </Radio.Group>
           )}
 
+          {/* ...Render answered success*/}
+          {answered && (
+            <div>
+              <Text style={{ color: "green" }}>Submit Successfully</Text>
+            </div>
+          )}
+
           {/* ...Render correct answer... */}
           {countdown === 0 && (
             <Card
@@ -285,7 +299,7 @@ export const PlayPage = ({ sessionId, playerId, gameId }) => {
               title="Answers"
               style={{ marginTop: 16, textAlign: "left", color: "#1677ff" }}
             >
-              <Text>Your Choice:&nbsp;</Text>
+              <Text>Your Choice:</Text>
               {selectedIdxs.length === 0 ? (
                 <Text>–</Text>
               ) : (
@@ -304,13 +318,34 @@ export const PlayPage = ({ sessionId, playerId, gameId }) => {
                 })
               )}
               <br />
-              <Text>Correct Answer:&nbsp;</Text>
+              <Text>Correct Answer:</Text>
               <br />
               <Text type="success" strong>
                 {correctAnswerIdxs.length
                   ? correctAnswerIdxs.map((i) => `Option ${i + 1}`).join(", ")
                   : "No Answer"}
               </Text>
+              <br />
+              <Text>Points:&nbsp;</Text>
+              <br />
+              {selectedIdxs.length === 0 ? (
+                <Text>0 (0/{correctAnswerIdxs.length})</Text>
+              ) : (
+                (() => {
+                  const correctCount = selectedIdxs.filter((i) =>
+                    correctAnswerIdxs.includes(i)
+                  ).length;
+                  const total = correctAnswerIdxs.length;
+                  const score = Math.round(
+                    (correctCount / total) * question.points
+                  );
+                  return (
+                    <Text type="success" strong>
+                      {`${score} (${correctCount}/${total})`}
+                    </Text>
+                  );
+                })()
+              )}
             </Card>
           )}
         </Card>
