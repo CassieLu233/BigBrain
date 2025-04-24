@@ -6,7 +6,7 @@
 // Created: 2025-04-19
 // ==============================================================================
 import { Empty, Row, Col } from "antd";
-import { QuestionCard } from "../game/QuestionCard.jsx";
+import { QuestionCard } from "pages";
 
 /**
  * QuestionCardList

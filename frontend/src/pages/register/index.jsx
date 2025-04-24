@@ -8,8 +8,8 @@
 import { Card, Form, Input, Button, message } from "antd";
 import { UserOutlined, MailOutlined, LockOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router";
-import { post } from "../../utils/request";
-import { registerStyles as styles } from "./registerStyle.js";
+import { post } from "utils";
+import { registerStyles as styles } from "pages";
 import logoImg from "../../assets/bigbrain.svg";
 
 export const Register = () => {

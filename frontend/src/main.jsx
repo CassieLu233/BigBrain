@@ -1,14 +1,16 @@
 import { createRoot } from "react-dom/client";
 import { createBrowserRouter, RouterProvider, Navigate } from "react-router";
-import { Login } from "./pages/login";
-import { Register } from "./pages/register";
-import { Dashboard } from "./pages/dashboard";
-import { GamePage } from "./pages/game";
-import { GlobalStyle } from "./global-setting/GlobalStyle";
-import { QuestionPage } from "./pages/question";
 import { SessionPage } from "./pages/session";
-import { PlayRoute } from "./pages/play";
-import { ResultsPage } from "./pages/play/ResultsPage.jsx";
+import {
+  Login,
+  Register,
+  Dashboard,
+  GamePage,
+  QuestionPage,
+  PlayRoute,
+  ResultsPage,
+} from "pages";
+import { GlobalStyle } from "./global-setting/GlobalStyle";
 
 const router = createBrowserRouter([
   {

@@ -9,10 +9,8 @@ import { useEffect, useState, useCallback, useRef } from "react";
 import { useParams, useSearchParams, useNavigate } from "react-router";
 import { Layout, Button, Typography, message } from "antd";
 import { ArrowLeftOutlined } from "@ant-design/icons";
-import { get, post } from "../../utils/request";
-import { updateGameActive } from "../../utils/update";
-import { ManagementSession } from "./ManagementSession";
-import { OutcomeSession } from "./OutcomeSession";
+import { get, post, updateGameActive } from "utils";
+import { ManagementSession, OutcomeSession } from "pages";
 
 const { Title } = Typography;
 

@@ -1,5 +1,5 @@
 //=============================================================================
-// File: game/QuestionCard.jsx
+// File: question/QuestionCard.jsx
 // Purpose: Component for rendering a single question card
 // Author: Qian Lu (z5506082@ad.unsw.edu.au)
 // Course: COMP6080

@@ -1,3 +1,11 @@
+//=============================================================================
+// File: play/ResultsPage.jsx
+// Purpose: Render palyer answer results page component
+// Author: Qian Lu (z5506082@ad.unsw.edu.au)
+// Course: COMP6080
+// Created: 2025-04-23
+//=============================================================================
+
 import { useEffect, useState, useCallback } from "react";
 import {
   Table,
@@ -19,8 +27,7 @@ import {
   EyeOutlined,
 } from "@ant-design/icons";
 import { useSearchParams } from "react-router";
-import { getCurrentGame } from "../../utils/update";
-import { get } from "../../utils/request";
+import { getCurrentGame, get } from "utils";
 
 const { Title, Text } = Typography;
 

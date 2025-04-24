@@ -14,17 +14,19 @@ import {
   EditOutlined,
   PlusOutlined,
 } from "@ant-design/icons";
-import { dashboardStyles as styles } from "../dashboard/dashboardStyle.js";
-import { CreateGameModal } from "./CreateGameModal.jsx";
-import { QuestionCardList } from "../question/QuestionCardList.jsx";
-import { CustomCard } from "./CustomCard.jsx";
-import { CreateQuestionModal } from "../question/CreateQuestionModal.jsx";
+import {
+  dashboardStyles as styles,
+  CreateGameModal,
+  QuestionCardList,
+  CustomCard,
+  CreateQuestionModal,
+} from "pages";
 import {
   fetchGames,
   getCurrentGame,
   updateCurrentQuestion,
   updateGames,
-} from "../../utils/update.js";
+} from "utils";
 
 export const GamePage = () => {
   const navigate = useNavigate();

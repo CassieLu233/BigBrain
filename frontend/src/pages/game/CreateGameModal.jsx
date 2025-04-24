@@ -1,5 +1,5 @@
 //=============================================================================
-// File: dashboard/CreateGameModal.jsx
+// File: game/CreateGameModal.jsx
 // Purpose: Modal for creating a new game
 // Author: Qian Lu (z5506082@ad.unsw.edu.au)
 // Course: COMP6080
@@ -8,7 +8,7 @@
 import { useState } from "react";
 import { Modal, Form, Input, Upload, message, Segmented, Button } from "antd";
 import { PlusOutlined, UploadOutlined } from "@ant-design/icons";
-import { fileToDataUrl } from "../../utils/imageUtils.js";
+import { fileToDataUrl } from "utils";
 
 export const CreateGameModal = ({ title, visible, onCreate, onCancel }) => {
   const [mode, setMode] = useState("form");

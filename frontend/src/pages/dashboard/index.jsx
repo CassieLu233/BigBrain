@@ -10,19 +10,21 @@ import { Layout, Button, Avatar, Dropdown, message } from "antd";
 import { PlusOutlined, LogoutOutlined, DownOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router";
 import logoImg from "../../assets/bigbrain.svg";
-import { dashboardStyles as styles } from "./dashboardStyle.js";
-import { CreateGameModal } from "../game/CreateGameModal.jsx";
-import { GameCardList } from "../game/GameCardList.jsx";
-import { isLogin } from "../../utils/auth.js";
-import { fileToDataUrl } from "../../utils/imageUtils.js";
 import {
+  dashboardStyles as styles,
+  CreateGameModal,
+  GameCardList,
+  CreateSessionModal,
+  EndSessionModal,
+} from "pages";
+import {
+  isLogin,
+  post,
   fetchGames,
+  fileToDataUrl,
   updateGameActive,
   updateGames,
-} from "../../utils/update.js";
-import { post } from "../../utils/request.js";
-import { CreateSessionModal } from "../session/CreateSessionModal.jsx";
-import { EndSessionModal } from "../session/EndSessionModal.jsx";
+} from "utils";
 
 export const Dashboard = () => {
   const navigate = useNavigate();

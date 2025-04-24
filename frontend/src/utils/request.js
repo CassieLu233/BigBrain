@@ -1,5 +1,5 @@
 //=============================================================================
-// File: request.js
+// File: utils/request.js
 // Purpose: Processing functions related to backend API requests
 // Author: Qian Lu (z5506082@ad.unsw.edu.au)
 // Course: COMP6080

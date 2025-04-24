@@ -1,5 +1,5 @@
 //=============================================================================
-// File: dashboard/GameCard.jsx
+// File: game/GameCard.jsx
 // Purpose: Component for rendering a single game card
 // Author: Qian Lu (z5506082@ad.unsw.edu.au)
 // Course: COMP6080
@@ -46,19 +46,19 @@ export const GameCard = ({
       style={{ width: 300 }}
       cover={
         <img
-          alt='Cover Image'
+          alt="Cover Image"
           src={game.image}
           style={{ backgroundColor: "#d0edf7", height: 200 }}
         />
       }
       actions={[
         game.active ? (
-          <Tooltip key='endGame' title='End the game'>
+          <Tooltip key="endGame" title="End the game">
             <Popconfirm
-              title='End the task'
-              description='Are you sure to end this game?'
-              okText='Yes'
-              cancelText='No'
+              title="End the task"
+              description="Are you sure to end this game?"
+              okText="Yes"
+              cancelText="No"
               onConfirm={() => {
                 onEnd(game.id);
               }}
@@ -68,7 +68,7 @@ export const GameCard = ({
             </Popconfirm>
           </Tooltip>
         ) : (
-          <Tooltip key='startGame' title='Start the game'>
+          <Tooltip key="startGame" title="Start the game">
             <PlayCircleOutlined
               style={{ color: "#56ae56", fontSize: 20 }}
               onClick={() => {
@@ -77,7 +77,7 @@ export const GameCard = ({
             />
           </Tooltip>
         ),
-        <Tooltip key='edit' title='Edit the game'>
+        <Tooltip key="edit" title="Edit the game">
           <EditOutlined
             style={{ color: "#1395c2", fontSize: 20 }}
             onClick={() => {
@@ -85,12 +85,12 @@ export const GameCard = ({
             }}
           />
         </Tooltip>,
-        <Tooltip key='delete' title='Delete the game'>
+        <Tooltip key="delete" title="Delete the game">
           <Popconfirm
-            title='Delete the task'
-            description='Are you sure to delete this game?'
-            okText='Yes'
-            cancelText='No'
+            title="Delete the task"
+            description="Are you sure to delete this game?"
+            okText="Yes"
+            cancelText="No"
             onConfirm={() => {
               onDelete(game.id);
             }}
@@ -142,7 +142,7 @@ export const GameCard = ({
           {`Questions number: ${game.questions.length}`}
         </Title>
         <Text
-          type='secondary'
+          type="secondary"
           style={{
             ...autoWrapStyle,
             ...showToolTipStyle,
@@ -154,7 +154,7 @@ export const GameCard = ({
         </Text>
 
         {game.active && (
-          <Tooltip title='Management Session'>
+          <Tooltip title="Management Session">
             <Title
               level={5}
               style={{

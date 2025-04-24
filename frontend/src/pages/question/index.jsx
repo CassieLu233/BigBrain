@@ -24,9 +24,12 @@ import {
   Divider,
 } from "antd";
 import { ArrowLeftOutlined, PlusOutlined } from "@ant-design/icons";
-import { fileToDataUrl } from "../../utils/imageUtils";
-import { dashboardStyles as styles } from "../dashboard/dashboardStyle";
-import { getCurrentQuestion, updateCurrentQuestion } from "../../utils/update";
+import {
+  fileToDataUrl,
+  getCurrentQuestion,
+  updateCurrentQuestion,
+} from "utils";
+import { dashboardStyles as styles } from "pages";
 
 export const QuestionPage = () => {
   const navigate = useNavigate();

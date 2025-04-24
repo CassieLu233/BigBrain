@@ -1,5 +1,5 @@
 //=============================================================================
-// File: game/CreateQuestionModal.jsx
+// File: question/CreateQuestionModal.jsx
 // Purpose: Modal for adding a new question (text + type only)
 // Author: Qian Lu
 // Course: COMP6080

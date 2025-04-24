@@ -1,5 +1,5 @@
 //=============================================================================
-// File: auth.js
+// File: utils/auth.js
 // Purpose: Processing functions related to authentication
 // Author: Qian Lu (z5506082@ad.unsw.edu.au)
 // Course: COMP6080

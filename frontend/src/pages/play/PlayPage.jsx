@@ -17,7 +17,7 @@ import {
   Spin,
 } from "antd";
 import { useNavigate } from "react-router";
-import { get, put } from "../../utils/request";
+import { get, put } from "utils";
 
 export const PlayPage = ({ sessionId, playerId, gameId }) => {
   const { Text, Title } = Typography;
@@ -109,6 +109,7 @@ export const PlayPage = ({ sessionId, playerId, gameId }) => {
 
   // Submit answer
   const handleAnswerChange = async (newIdxs) => {
+    if (countdown === 0) return;
     setAnswered(false);
     setSelectedIdxs(newIdxs);
     console.log("current newIdx:", newIdxs);

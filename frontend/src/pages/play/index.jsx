@@ -1,5 +1,5 @@
 //=============================================================================
-// File: session/index.jsx
+// File: play/index.jsx
 // Purpose: Render JoinPage or PlayPage based on the playerId query parameters in the URL
 // Author: Qian Lu (z5506082@ad.unsw.edu.au)
 // Course: COMP6080
@@ -7,8 +7,7 @@
 //=============================================================================
 
 import { useParams, useSearchParams } from "react-router";
-import { JoinPage } from "./JoinPage.jsx";
-import { PlayPage } from "./PlayPage.jsx";
+import { JoinPage, PlayPage } from "pages";
 
 export const PlayRoute = () => {
   const { sessionId } = useParams();

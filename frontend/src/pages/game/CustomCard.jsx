@@ -1,3 +1,10 @@
+//=============================================================================
+// File: game/CustomCard.jsx
+// Purpose: Modal for custom styles
+// Author: Qian Lu (z5506082@ad.unsw.edu.au)
+// Course: COMP6080
+// Created: 2025-04-19
+// ==============================================================================
 import { Card, Divider, Typography } from "antd";
 const { Text, Title } = Typography;
 

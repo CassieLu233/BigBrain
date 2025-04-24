@@ -9,8 +9,8 @@
 import { Card, Form, Input, Button, message } from "antd";
 import { MailOutlined, LockOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router";
-import { post } from "../../utils/request";
-import { loginStyles as styles } from "./loginStyle";
+import { post } from "utils";
+import { loginStyles as styles } from "pages";
 import logoImg from "../../assets/bigbrain.svg";
 
 export const Login = () => {

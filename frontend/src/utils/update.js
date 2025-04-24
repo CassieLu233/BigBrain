@@ -1,5 +1,5 @@
 //=============================================================================
-// File: update.js
+// File: utils/update.js
 // Purpose: Processing functions related to update data to backend
 // Author: Qian Lu (z5506082@ad.unsw.edu.au)
 // Course: COMP6080

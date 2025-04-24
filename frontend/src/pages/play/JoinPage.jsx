@@ -1,5 +1,5 @@
 //=============================================================================
-// File: session/JoinPage.jsx
+// File: play/JoinPage.jsx
 // Purpose: Render player join page component
 // Author: Qian Lu (z5506082@ad.unsw.edu.au)
 // Course: COMP6080
@@ -11,7 +11,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router";
 import { Card, Form, Input, Button, message, Typography } from "antd";
 import logoImg from "../../assets/bigbrain.svg";
-import { post } from "../../utils/request";
+import { post } from "utils";
 
 export const JoinPage = ({ sessionId, gameId }) => {
   const { Text } = Typography;
