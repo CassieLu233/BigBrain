@@ -38,7 +38,90 @@ export const CreateGameModal = ({ title, visible, onCreate, onCancel }) => {
     setThumbList([]);
   };
 
-  const checkValidFile = (games) => {};
+  const checkValidFile = (games) => {
+    // The root must be a non-empty array
+    if (!Array.isArray(games) || games.length === 0) {
+      throw new Error("The JSON root should be a non-empty array of games");
+    }
+
+    games.forEach((game, gameIdx) => {
+      // Each game must have a title and a questions array
+      if (typeof game.title !== "string" || !Array.isArray(game.questions)) {
+        throw new Error(
+          `Game ${gameIdx + 1} is missing a title or questions array`
+        );
+      }
+      game.questions.forEach((question, questionIdx) => {
+        // Each question must have id/title/type/duration/points/answers/correctAnswers
+        if (typeof question.id !== "number") {
+          throw new Error(
+            `Game ${gameIdx + 1}, question ${
+              questionIdx + 1
+            } is missing id or has invalid type`
+          );
+        }
+        if (typeof question.title !== "string") {
+          throw new Error(
+            `Game ${gameIdx + 1}, question ${
+              questionIdx + 1
+            } is missing title or has invalid type`
+          );
+        }
+        if (
+          !["Single Choice", "Multiple Choice", "Judgement"].includes(
+            question.type
+          )
+        ) {
+          throw new Error(
+            `Game ${gameIdx + 1}, question ${
+              questionIdx + 1
+            } has an invalid type`
+          );
+        }
+        if (
+          typeof question.duration !== "number" ||
+          typeof question.points !== "number"
+        ) {
+          throw new Error(
+            `Game ${gameIdx + 1}, question ${
+              questionIdx + 1
+            } is missing duration/points or has invalid type`
+          );
+        }
+        if (question.image && typeof question.image !== "string") {
+          throw new Error(
+            `Game ${gameIdx + 1}, question ${
+              questionIdx + 1
+            } image must be a base64 string or URL`
+          );
+        }
+        if (question.videoUrl && typeof question.videoUrl !== "string") {
+          throw new Error(
+            `Game ${gameIdx + 1}, question ${
+              questionIdx + 1
+            } videoUrl must be a base64 string or URL`
+          );
+        }
+        if (!Array.isArray(question.answers) || question.answers.length < 2) {
+          throw new Error(
+            `Game ${gameIdx + 1}, question ${
+              questionIdx + 1
+            } must have at least two answers`
+          );
+        }
+        if (
+          !Array.isArray(question.correctAnswers) ||
+          question.correctAnswers.length === 0
+        ) {
+          throw new Error(
+            `Game ${gameIdx + 1}, question ${
+              questionIdx + 1
+            } is missing correctAnswers`
+          );
+        }
+      });
+    });
+  };
 
   // JSON/CSV Upload
   const handleBeforeUploadData = async (file) => {
