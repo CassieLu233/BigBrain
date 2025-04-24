@@ -7,25 +7,18 @@
 //=============================================================================
 
 import { useEffect, useState, useCallback, useRef } from "react";
-import {
-  Typography,
-  message,
-  Radio,
-  Checkbox,
-  Divider,
-  Card,
-  Spin,
-} from "antd";
+import { Typography, message, Radio, Checkbox, Divider, Card } from "antd";
 import { useNavigate } from "react-router";
 import { get, put } from "utils";
+import { MoleGame } from "pages";
 
 export const PlayPage = ({ sessionId, playerId, gameId }) => {
-  const { Text, Title } = Typography;
+  const { Text } = Typography;
   const navigate = useNavigate();
   const [started, setStarted] = useState(false);
   const [answered, setAnswered] = useState(false);
 
-  // All questions
+  // Record question
   const [question, setQuestion] = useState(null);
   const [lastQuestionId, setLastQuestionId] = useState(null);
   const [correctAnswerIdxs, setCorrectAnswerIdxs] = useState([]);
@@ -45,12 +38,12 @@ export const PlayPage = ({ sessionId, playerId, gameId }) => {
     textOverflow: "ellipsis",
   };
 
-  function getYouTubeId(url) {
+  const getYouTubeId = (url) => {
     const m = url.match(
       /(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))([\w-]{11})/
     );
     return m ? m[1] : null;
-  }
+  };
 
   // Fetch joined status from backend
   const fetchStatus = useCallback(async () => {
@@ -148,9 +141,8 @@ export const PlayPage = ({ sessionId, playerId, gameId }) => {
       // Record fetch current answer status
       fetchedAnswerRef.current = true;
       fetchCorrectAnswer();
-      setTimeout(fetchQuestion, 500);
     }
-  }, [countdown, fetchCorrectAnswer, fetchQuestion]);
+  }, [countdown, fetchCorrectAnswer]);
 
   // Wait started status
   useEffect(() => {
@@ -355,19 +347,6 @@ export const PlayPage = ({ sessionId, playerId, gameId }) => {
     );
   } else {
     // Not started or loading
-    return (
-      <div
-        style={{
-          height: "100vh",
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "center",
-          alignItems: "center",
-        }}
-      >
-        <Spin size="large" style={{ marginBottom: 16 }} />
-        <Title level={3}>Please wait</Title>
-      </div>
-    );
+    return <MoleGame />;
   }
 };
