@@ -11,8 +11,8 @@ import { PlusOutlined, LogoutOutlined, DownOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router";
 import logoImg from "../../assets/bigbrain.svg";
 import { dashboardStyles as styles } from "./dashboardStyle.js";
-import { CreateGameModal } from "./CreateGameModal.jsx";
-import { GameCardList } from "./GameCardList.jsx";
+import { CreateGameModal } from "../game/CreateGameModal.jsx";
+import { GameCardList } from "../game/GameCardList.jsx";
 import { isLogin } from "../../utils/auth.js";
 import { fileToDataUrl } from "../../utils/imageUtils.js";
 import {

@@ -6,7 +6,7 @@
 // Created: 2025-04-18
 // ==============================================================================
 import { Empty, Row, Col } from "antd";
-import { GameCard } from "./GameCard.jsx";
+import { GameCard } from "../dashboard/GameCard.jsx";
 
 /**
  * GameCardList
@@ -30,7 +30,7 @@ export const GameCardList = ({
           alignItems: "center",
         }}
       >
-        <Empty description='No games created yet' />
+        <Empty description="No games created yet" />
       </div>
     );
   }

@@ -15,10 +15,10 @@ import {
   PlusOutlined,
 } from "@ant-design/icons";
 import { dashboardStyles as styles } from "../dashboard/dashboardStyle.js";
-import { CreateGameModal } from "../dashboard/CreateGameModal";
-import { QuestionCardList } from "./QuestionCardList.jsx";
+import { CreateGameModal } from "./CreateGameModal.jsx";
+import { QuestionCardList } from "../question/QuestionCardList.jsx";
 import { CustomCard } from "./CustomCard.jsx";
-import { CreateQuestionModal } from "./CreateQuestionModal.jsx";
+import { CreateQuestionModal } from "../question/CreateQuestionModal.jsx";
 import {
   fetchGames,
   getCurrentGame,
