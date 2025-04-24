@@ -64,19 +64,24 @@ export const Dashboard = () => {
   };
 
   // Create-game modal OK handler
-  const handleCreateGame = async (newGame) => {
+  const handleCreateGame = async (newGameArr) => {
     // If user does not upload image, get a default image
-    if (newGame.image === "") {
-      const defaultFile = logoImg;
-      const response = await fetch(defaultFile);
-      const svgBlob = await response.blob();
-      const defaultFileBase64 = await fileToDataUrl(svgBlob);
-      newGame.image = defaultFileBase64;
-    }
-    if (newGame.description === "") {
-      newGame.description = "No Description";
-    }
-    const newGames = [...games, newGame];
+    const gamesWithCover = await Promise.all(
+      newGameArr.map(async (game) => {
+        if (!game.image) {
+          // Get default logo
+          const resp = await fetch(logoImg);
+          const blob = await resp.blob();
+          game.image = await fileToDataUrl(blob);
+        }
+        if (!game.description) {
+          game.description = "No Description";
+        }
+        return game;
+      })
+    );
+
+    const newGames = [...games, ...gamesWithCover];
     try {
       const result = await updateGames(newGames);
       if (result) {
@@ -128,9 +133,7 @@ export const Dashboard = () => {
   // Copy game link to clipboard
   const copyGameLink = async () => {
     if (!currentSessionId) return;
-    const startedSessionGameId = localStorage.getItem(
-      "startedSessionGameId"
-    );
+    const startedSessionGameId = localStorage.getItem("startedSessionGameId");
     const link = `${window.location.origin}/play/${currentSessionId}?gameId=${startedSessionGameId}`;
     try {
       const result = await navigator.clipboard.writeText(link);
@@ -171,9 +174,7 @@ export const Dashboard = () => {
 
   const handleViewResult = async () => {
     const sessionId = localStorage.getItem("sessionId");
-    const startedSessionGameId = localStorage.getItem(
-      "startedSessionGameId"
-    );
+    const startedSessionGameId = localStorage.getItem("startedSessionGameId");
     navigate(`/session/${sessionId}?gameId=${startedSessionGameId}`);
   };
 

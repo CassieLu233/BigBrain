@@ -6,28 +6,27 @@
 // Created: 2025-04-18
 // ==============================================================================
 import { useState } from "react";
-import { Modal, Form, Input, Upload, message } from "antd";
-import { PlusOutlined } from "@ant-design/icons";
+import { Modal, Form, Input, Upload, message, Segmented, Button } from "antd";
+import { PlusOutlined, UploadOutlined } from "@ant-design/icons";
 import { fileToDataUrl } from "../../utils/imageUtils.js";
 
-/**
- * CreateGameModal
- * Props:
- *  - visible: boolean
- *  - onCreate:  (data: { games: { image, title, description, owner, updateTime } }) => void
- *  - onCancel: () => void
- */
 export const CreateGameModal = ({ title, visible, onCreate, onCancel }) => {
+  const [mode, setMode] = useState("form");
+  const hasExternalTitle = Boolean(title);
   const [form] = Form.useForm();
-  const [uploadFileList, setUploadFileList] = useState([]);
+  const [thumbList, setThumbList] = useState([]);
+
+  // Record csv/json file
+  const [fileList, setFileList] = useState([]);
+  const [parsedGame, setParsedGame] = useState(null);
 
   // Processing function after the user selects the image
-  const handleBeforeUpload = async (file) => {
+  const handleBeforeUploadThumb = async (file) => {
     try {
       const dataUrl = await fileToDataUrl(file);
       // Uese base64 file to preview
       file.thumbUrl = dataUrl;
-      setUploadFileList([file]);
+      setThumbList([file]);
     } catch (err) {
       message.error(err.message);
     }
@@ -36,31 +35,77 @@ export const CreateGameModal = ({ title, visible, onCreate, onCancel }) => {
 
   // Delete thumbnail
   const handleRemoveThumbnail = () => {
-    setUploadFileList([]);
+    setThumbList([]);
+  };
+
+  const checkValidFile = (games) => {};
+
+  // JSON/CSV Upload
+  const handleBeforeUploadData = async (file) => {
+    // Only JSON is allowed
+    if (!file.name.match(/\.(json)$/i)) {
+      message.error("Please upload a JSON file");
+      return Upload.LIST_IGNORE;
+    }
+    try {
+      const text = await file.text();
+      const games = JSON.parse(text);
+      checkValidFile(games);
+      // Validation passed
+      setParsedGame(games);
+      setFileList([file]);
+      message.success(
+        "Game data loaded successfully; it will be created upon confirmation"
+      );
+    } catch (err) {
+      message.error("Failed to parse game JSON: " + err.message);
+    }
+    return false;
+  };
+
+  const handleRemoveData = () => {
+    setFileList([]);
+    setParsedGame(null);
+  };
+
+  const reset = () => {
+    form.resetFields();
+    setThumbList([]);
+    setFileList([]);
+    setParsedGame(null);
   };
 
   // handle submit event
   const handleOk = async () => {
+    // Check the existence of file
+    if (mode === "json" && parsedGame) {
+      onCreate(parsedGame);
+      reset();
+      return;
+    }
+
     try {
       const values = await form.validateFields();
       const owner = localStorage.getItem("email") || "anonymity";
       const updateTime = new Date().toISOString();
       let imageBase64 = "";
-      if (uploadFileList[0]) {
-        // uploadFileList[0].thumbUrl is base64 type
-        imageBase64 = uploadFileList[0].thumbUrl;
+      if (thumbList[0]) {
+        // thumbList[0].thumbUrl is base64 type
+        imageBase64 = thumbList[0].thumbUrl;
       }
-      const newGameData = {
-        image: imageBase64,
-        title: values.title || "",
-        description: values.description || "",
-        owner: owner,
-        updateTime: updateTime,
-        questions: [],
-      };
+      const newGameData = [
+        {
+          image: imageBase64,
+          title: values.title || "",
+          description: values.description || "",
+          owner: owner,
+          updateTime: updateTime,
+          questions: [],
+        },
+      ];
       onCreate(newGameData);
-      form.resetFields();
-      setUploadFileList([]);
+      reset();
+      setThumbList([]);
     } catch (err) {
       // When verification or conversion fails, AntD will display a form error
       // other errors are prompted
@@ -70,57 +115,105 @@ export const CreateGameModal = ({ title, visible, onCreate, onCancel }) => {
     }
   };
 
+  // Reset the state when switching modes
+  const handleModeChange = (value) => {
+    setMode(value);
+    reset();
+  };
+
   return (
     <Modal
       title={title || "Create New Game"}
       open={visible}
-      onOk={handleOk}
+      onOk={() => form.submit()}
       onCancel={() => {
-        form.resetFields();
-        setUploadFileList([]);
+        reset();
         onCancel();
+      }}
+      okButtonProps={{
+        disabled: !hasExternalTitle && mode === "json" && fileList.length === 0,
       }}
       destroyOnClose
     >
-      <Form form={form} layout="vertical" preserve={false} onFinish={handleOk}>
-        <Form.Item label="Thumbnail (JPEG/PNG/SVG)">
-          <Upload
-            listType="picture-card"
-            maxCount={1}
-            multiple={false}
-            fileList={uploadFileList.map((file) => ({
-              uid: file.uid || file.name,
-              name: file.name,
-              status: "done",
-              url: file.thumbUrl,
-            }))}
-            beforeUpload={handleBeforeUpload}
-            onRemove={handleRemoveThumbnail}
-            showUploadList={{
-              showPreviewIcon: false,
-              showDownloadIcon: false,
-              showRemoveIcon: true,
-            }}
-          >
-            {uploadFileList.length === 0 && <PlusOutlined />}
-          </Upload>
-        </Form.Item>
-
-        <Form.Item
-          name="title"
-          label="Game Title"
-          rules={[
-            { required: title ? false : true, message: "Please enter a title" },
+      {/* If there is no external title, the toggle button will appear */}
+      {!hasExternalTitle && (
+        <Segmented
+          options={[
+            { label: "Manual Input", value: "form" },
+            { label: "JSON Upload", value: "json" },
           ]}
-        >
-          <Input placeholder="Title" />
-        </Form.Item>
+          value={mode}
+          onChange={handleModeChange}
+          style={{ marginBottom: 16 }}
+        />
+      )}
 
-        <Form.Item name="description" label="Description">
-          <Input.TextArea rows={4} placeholder="Description" />
-        </Form.Item>
-        <button type="submit" style={{ display: "none" }} />
-      </Form>
+      {!hasExternalTitle && mode === "json" ? (
+        // JSON Upload
+        <Form layout="vertical" preserve={false} onFinish={handleOk}>
+          <Form.Item label="Upload Games JSON">
+            <Upload
+              accept=".json"
+              beforeUpload={handleBeforeUploadData}
+              onRemove={handleRemoveData}
+              fileList={fileList.map((f) => ({
+                uid: f.uid || f.name,
+                name: f.name,
+                status: "done",
+              }))}
+              showUploadList={{
+                showPreviewIcon: false,
+                showRemoveIcon: true,
+              }}
+            >
+              {fileList.length === 0 && (
+                <Button icon={<UploadOutlined />}>Select Json File</Button>
+              )}
+            </Upload>
+          </Form.Item>
+        </Form>
+      ) : (
+        // Manual Input
+        <Form
+          form={form}
+          layout="vertical"
+          preserve={false}
+          onFinish={handleOk}
+        >
+          <Form.Item label="Thumbnail (JPEG/PNG/SVG)">
+            <Upload
+              listType="picture-card"
+              maxCount={1}
+              beforeUpload={handleBeforeUploadThumb}
+              onRemove={handleRemoveThumbnail}
+              fileList={thumbList.map((f) => ({
+                uid: f.uid || f.name,
+                name: f.name,
+                status: "done",
+                url: f.thumbUrl,
+              }))}
+              showUploadList={{
+                showPreviewIcon: false,
+                showRemoveIcon: true,
+              }}
+            >
+              {thumbList.length === 0 && <PlusOutlined />}
+            </Upload>
+          </Form.Item>
+          <Form.Item
+            name="title"
+            label="Game Title"
+            rules={[{ required: true, message: "Please enter a title" }]}
+          >
+            <Input placeholder="Title" />
+          </Form.Item>
+          <Form.Item name="description" label="Description">
+            <Input.TextArea rows={3} placeholder="Description" />
+          </Form.Item>
+
+          <button type="submit" style={{ display: "none" }} />
+        </Form>
+      )}
     </Modal>
   );
 };

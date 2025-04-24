@@ -15,6 +15,8 @@ import {
   Tooltip,
   CartesianGrid,
   ResponsiveContainer,
+  BarChart,
+  Bar,
 } from "recharts";
 
 export const OutcomeSession = ({
@@ -106,8 +108,8 @@ export const OutcomeSession = ({
       const avg =
         diffTimes.length > 0
           ? Math.round(
-              diffTimes.reduce((sum, time) => sum + time, 0) / diffTimes.length
-            )
+            diffTimes.reduce((sum, time) => sum + time, 0) / diffTimes.length
+          )
           : 0;
       return { question: `Q${idx + 1}`, avgTime: avg };
     });
@@ -173,13 +175,14 @@ export const OutcomeSession = ({
       {/* Average answer time */}
       <Text strong>Average Answer Time (s)</Text>
       <ResponsiveContainer width="100%" height={200}>
-        <LineChart data={timeData}>
+        <BarChart data={timeData}>
           <CartesianGrid strokeDasharray="3 3" />
           <XAxis dataKey="question" />
           <YAxis unit="s" />
           <Tooltip />
-          <Line type="monotone" dataKey="avgTime" stroke="#82ca9d" />
-        </LineChart>
+          <Bar dataKey="avgTime" name="Avg Time" fill="#5ac25e" />
+        </BarChart>
+        +{" "}
       </ResponsiveContainer>
     </Card>
   );

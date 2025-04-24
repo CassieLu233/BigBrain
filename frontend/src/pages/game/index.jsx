@@ -52,8 +52,9 @@ export const GamePage = () => {
   }, [gameId]);
 
   // Edit game modal OK handler
-  const handleEditGame = async (newGame) => {
+  const handleEditGame = async (newGameArr) => {
     // If value is "", no change backend data
+    const newGame = newGameArr[0];
     const updatedGame = {
       ...currentGame,
       id: currentGame.id,
