@@ -56,7 +56,6 @@ export const getCurrentQuestion = async (gameId, questionId) => {
       (question) => question.id === parseInt(questionId)
     );
     if (currentQuestion) {
-      // console.log("current question is:", currentQuestion);
       return currentQuestion;
     } else {
       message.warning("Question not found");

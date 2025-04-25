@@ -100,7 +100,6 @@ export const Dashboard = () => {
 
   // Start a game handler
   const handleStartGame = async (gameId) => {
-    console.log("current game id is:", gameId);
     try {
       // Get the session from backend
       const response = await post(`/admin/game/${gameId}/mutate`, {
@@ -123,7 +122,6 @@ export const Dashboard = () => {
         localStorage.setItem("sessionStatus", data.status);
         localStorage.setItem("startedSessionGameId", gameId);
         setSessionModalVisible(true);
-        console.log("==========start session data is:", data);
       } else {
         message.error("Failed to start the game");
       }
@@ -146,7 +144,6 @@ export const Dashboard = () => {
         const games = await fetchGames();
         setGames(games);
       }
-      console.log("==========end session data is:", data);
       if (data?.status === "ended") {
         setEndSessionModalVisible(true);
         localStorage.setItem("sessionStatus", data.status);
@@ -172,7 +169,6 @@ export const Dashboard = () => {
 
   // Delete Game
   const handleDeleteGame = async (gameId) => {
-    console.log("current game id is: ", gameId);
     const newGames = games.filter((game) => game.id !== gameId);
     try {
       const result = await updateGames(newGames);

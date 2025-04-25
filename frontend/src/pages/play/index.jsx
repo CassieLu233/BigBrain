@@ -15,8 +15,6 @@ export const PlayRoute = () => {
   const gameId = searchParams.get("gameId");
   const playerId = searchParams.get("playerId");
 
-  console.log("playroute gameId is:", gameId);
-
   return playerId ? (
     <PlayPage playerId={playerId} sessionId={sessionId} gameId={gameId} />
   ) : (

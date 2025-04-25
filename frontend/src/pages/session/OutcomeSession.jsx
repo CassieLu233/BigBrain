@@ -30,14 +30,12 @@ export const OutcomeSession = ({
   // Calculate rankings, top 5
   // Return {rank, name, score}
   const computeLeaderboard = () => {
-    console.log("current questions:", questions);
     return (
       resultsData
         .map((player) => {
           // Compute the total score of the player
           const totalScore = (player.answers || []).reduce((sum, ans, idx) => {
             const question = questions[idx];
-            console.log("current question:", question);
             if (!question) return sum;
             const corrects = question.correctAnswers || [];
             // Answers that the player has selected
@@ -48,7 +46,6 @@ export const OutcomeSession = ({
             const hitCount = selected.filter((s) =>
               corrects.includes(s)
             ).length;
-            console.log("current selected:", selected, hitCount);
             const fraction = corrects.length ? hitCount / corrects.length : 0;
             return sum + fraction * (question.points || 1);
           }, 0);

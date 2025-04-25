@@ -53,7 +53,6 @@ export const SessionPage = () => {
     try {
       const res = await get(`/admin/session/${sessionId}/status`);
       if (res.results) {
-        console.log("current status data is:", res.results);
         setStatusResults(res.results);
       }
     } catch (err) {
@@ -65,7 +64,6 @@ export const SessionPage = () => {
   const fetchResults = useCallback(async () => {
     try {
       const res = await get(`/admin/session/${sessionId}/results`);
-      console.log("current answers results are ", res);
       if (res.results) {
         setResultsData(res.results);
       }
@@ -81,7 +79,6 @@ export const SessionPage = () => {
         mutationType: "ADVANCE",
       });
       if (res.data?.status === "advanced") {
-        console.log("advanced mutate data is:", res.data);
         await fetchStatus();
         setCurrentSatus(res.data.status);
         localStorage.setItem("sessionStatus", res.data.status);
@@ -101,7 +98,6 @@ export const SessionPage = () => {
         mutationType: "END",
       });
       if (res.data?.status === "ended") {
-        console.log("end mutate data is:", res.data);
         await updateGameActive(gameId, false);
         await fetchStatus();
         setCurrentSatus(res.data.status);

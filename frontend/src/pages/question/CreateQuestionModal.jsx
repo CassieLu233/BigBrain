@@ -14,7 +14,6 @@ export const CreateQuestionModal = ({ visible, onCreate, onCancel }) => {
     try {
       // values = { title: "...", type: "single" | "multiple" | "judgement" }
       const values = await form.validateFields();
-      console.log("create question modal return:", values);
       onCreate(values);
       form.resetFields();
     } catch (err) {

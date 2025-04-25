@@ -59,7 +59,6 @@ export const PlayPage = ({ sessionId, playerId, gameId }) => {
   const fetchQuestion = useCallback(async () => {
     try {
       const res = await get(`/play/${playerId}/question`);
-      console.log("=================current question is:", res);
       const question = res.question;
       // If not update question, return
       if (started && question.id === lastQuestionId) return;
@@ -105,7 +104,6 @@ export const PlayPage = ({ sessionId, playerId, gameId }) => {
     if (countdown === 0) return;
     setAnswered(false);
     setSelectedIdxs(newIdxs);
-    console.log("current newIdx:", newIdxs);
     try {
       const res = await put(`/play/${playerId}/answer`, { answers: newIdxs });
       if (res) {
@@ -125,7 +123,6 @@ export const PlayPage = ({ sessionId, playerId, gameId }) => {
       }
       // End session signal
       if (e.key === `endSessionTime`) {
-        console.log("PlayPage gameId is", gameId);
         navigate(
           `/play/${sessionId}/results?playerId=${playerId}&gameId=${gameId}`
         );
