@@ -4,33 +4,20 @@ This document describes the testing strategy, structure, and commands for the `B
 
 ---
 
-## Table of Contents
-
-- [TESTING.md](#testingmd)
-  - [Table of Contents](#table-of-contents)
-  - [Prerequisites](#prerequisites)
-  - [Running Tests](#running-tests)
-  - [Component Tests](#component-tests)
-    - [CreateSessionModal.cy.jsx](#createsessionmodalcyjsx)
-    - [CustomCard.cy.jsx](#customcardcyjsx)
-    - [QuestionCard.cy.jsx](#questioncardcyjsx)
-  - [End-to-End Test (Happy Path)](#end-to-end-test-happy-path)
-
----
-
 ## Prerequisites
 
-- Ensure you have Node.js v20.x installed (use `nvm use` in `frontend`).
 - Install dependencies in the `frontend` directory:
   ```bash
   cd frontend
   npm install
   ```
+- ```
+
+  ```
 - The backend server must be running at `http://localhost:5005`.
   ```bash
   cd backend
   npm install
-  npm start
   ```
 
 ## Running Tests
@@ -44,15 +31,13 @@ npm run test
 - Select **Component** tests to run `*.cy.jsx` component specs.
 - Select **E2E** tests to run `cypress/e2e/*.cy.jsx` specs.
 
-To run all tests headlessly:
-
-```bash
-npx cypress run
-```
-
 ---
 
 ## Component Tests
+
+```shell
+npm run test
+```
 
 Component tests mount individual React components in isolation using `cypress/react`. All specs live under `frontend/cypress/component/`.
 
@@ -82,6 +67,14 @@ Component tests mount individual React components in isolation using `cypress/re
 ---
 
 ## End-to-End Test (Happy Path)
+
+```shell
+cd backend
+npm start
+cd frontend
+npm run dev
+npm run test
+```
 
 Located at `frontend/cypress/e2e/happyPath.cy.jsx`. Simulates an administrator’s full workflow:
 
