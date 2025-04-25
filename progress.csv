@@ -15,4 +15,4 @@ section,completed
 2.6.1 YES
 2.6.2 YES
 
-FE_DEPLOYED_URL=<YOUR_DEPLOYED_URL>
+FE_DEPLOYED_URL=https://bigbrain-deploy-smoky.vercel.app/
