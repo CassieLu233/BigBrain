@@ -196,7 +196,10 @@ export const Dashboard = () => {
             (e.currentTarget.style.color = styles.logoutLabel.color)
           }
         >
-          <LogoutOutlined style={{ marginRight: 8, color: "inherit" }} />
+          <LogoutOutlined
+            data-cy="logoutButton"
+            style={{ marginRight: 8, color: "inherit" }}
+          />
           Log Out
         </div>
       ),
@@ -221,6 +224,7 @@ export const Dashboard = () => {
         {/* Right: create button + user avatar/name + dropdown */}
         <div style={styles.actions}>
           <Button
+            data-cy="createGameBtn"
             ref={createBtnRef}
             type="primary"
             icon={<PlusOutlined />}
@@ -240,7 +244,9 @@ export const Dashboard = () => {
             dropdownMatchSelectWidth={true}
           >
             <div style={styles.userContainer}>
-              <Avatar style={styles.avatar}>{avatarLetter || "A"}</Avatar>
+              <Avatar data-cy="userAvatar" style={styles.avatar}>
+                {avatarLetter || "A"}
+              </Avatar>
               <span style={styles.username}>{emailName || "Admin"}</span>
               <DownOutlined style={styles.dropdownIcon} />
             </div>

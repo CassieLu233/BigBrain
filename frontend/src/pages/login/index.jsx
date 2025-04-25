@@ -55,6 +55,7 @@ export const Login = () => {
           ]}
         >
           <Input
+            data-cy="loginEmail"
             size="large"
             style={styles.input}
             prefix={<MailOutlined />}
@@ -69,6 +70,7 @@ export const Login = () => {
           rules={[{ required: true, message: "Please enter your password!" }]}
         >
           <Input.Password
+            data-cy="loginPassword"
             size="large"
             style={styles.input}
             prefix={<LockOutlined />}
@@ -77,6 +79,7 @@ export const Login = () => {
         </Form.Item>
         <Form.Item>
           <Button
+            data-cy="loginSubmit"
             size="large"
             style={styles.button}
             type="primary"
@@ -88,6 +91,7 @@ export const Login = () => {
           <div style={styles.registerWrapper}>
             No account?{" "}
             <span
+              data-cy="toRegister"
               style={styles.registerTitle}
               onClick={handleClickRegisterTitle}
             >

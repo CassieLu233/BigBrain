@@ -214,6 +214,7 @@ export const CreateGameModal = ({ title, visible, onCreate, onCancel }) => {
         onCancel();
       }}
       okButtonProps={{
+        "data-cy": "gameSubmit",
         disabled: !hasExternalTitle && mode === "json" && fileList.length === 0,
       }}
       destroyOnClose
@@ -288,10 +289,14 @@ export const CreateGameModal = ({ title, visible, onCreate, onCancel }) => {
             label="Game Title"
             rules={[{ required: true, message: "Please enter a title" }]}
           >
-            <Input placeholder="Title" />
+            <Input data-cy="gameTitleInput" placeholder="Title" />
           </Form.Item>
           <Form.Item name="description" label="Description">
-            <Input.TextArea rows={3} placeholder="Description" />
+            <Input.TextArea
+              data-cy="gameDescriptionInput"
+              rows={3}
+              placeholder="Description"
+            />
           </Form.Item>
 
           <button type="submit" style={{ display: "none" }} />

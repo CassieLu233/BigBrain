@@ -17,7 +17,12 @@ export const EndSessionModal = ({ visible, onCancel, onClick }) => {
         <Button type="default" key="cancle" onClick={onCancel}>
           Close
         </Button>,
-        <Button key="checkOutcome" type="primary" onClick={onClick}>
+        <Button
+          data-cy="viewResultsBtn"
+          key="checkOutcome"
+          type="primary"
+          onClick={onClick}
+        >
           View Results
         </Button>,
       ]}

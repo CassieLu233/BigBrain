@@ -52,6 +52,8 @@ export const Register = () => {
           rules={[{ required: true, message: "Please enter your name!" }]}
         >
           <Input
+            data-cy="registerName"
+            id="name"
             size="large"
             style={styles.input}
             prefix={<UserOutlined />}
@@ -69,6 +71,8 @@ export const Register = () => {
           ]}
         >
           <Input
+            data-cy="registerEmail"
+            id="email"
             size="large"
             style={styles.input}
             prefix={<MailOutlined />}
@@ -83,6 +87,8 @@ export const Register = () => {
           rules={[{ required: true, message: "Please enter your password!" }]}
         >
           <Input.Password
+            data-cy="registerPassword"
+            id="password"
             size="large"
             style={styles.input}
             prefix={<LockOutlined />}
@@ -108,6 +114,8 @@ export const Register = () => {
           ]}
         >
           <Input.Password
+            data-cy="registerConfirmPassword"
+            id="confirmPassword"
             size="large"
             style={styles.input}
             prefix={<LockOutlined />}
@@ -116,6 +124,7 @@ export const Register = () => {
         </Form.Item>
         <Form.Item>
           <Button
+            data-cy="registerSubmit"
             size="large"
             style={styles.button}
             type="primary"

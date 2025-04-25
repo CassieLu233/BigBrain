@@ -36,11 +36,6 @@ export const CreateSessionModal = ({ visible, sessionId, onCancel }) => {
         </Button>,
       ]}
       destroyOnClose
-      style={
-        {
-          //display: "flex",
-        }
-      }
     >
       <Title
         level={3}
@@ -76,7 +71,12 @@ export const CreateSessionModal = ({ visible, sessionId, onCancel }) => {
           marginTop: 16,
         }}
       >
-        <a href={fullLink} target="_blank" rel="noopener noreferrer">
+        <a
+          data-cy="sessionLink"
+          href={fullLink}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
           {fullLink}
         </a>
       </Paragraph>

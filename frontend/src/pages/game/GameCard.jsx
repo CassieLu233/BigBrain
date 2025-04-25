@@ -42,6 +42,7 @@ export const GameCard = ({
 
   return (
     <Card
+      data-cy={`gameCard${game.id}`}
       hoverable
       style={{ width: 300 }}
       cover={
@@ -59,17 +60,23 @@ export const GameCard = ({
               description="Are you sure to end this game?"
               okText="Yes"
               cancelText="No"
+              okButtonProps={{ "data-cy": "confirmEndGameBtn" }}
+              cancelButtonProps={{ "data-cy": "cancelEndGameBtn" }}
               onConfirm={() => {
                 onEnd(game.id);
               }}
               onCancel={() => {}}
             >
-              <StopOutlined style={{ color: "red", fontSize: 20 }} />
+              <StopOutlined
+                data-cy="endGameBtn"
+                style={{ color: "red", fontSize: 20 }}
+              />
             </Popconfirm>
           </Tooltip>
         ) : (
           <Tooltip key="startGame" title="Start the game">
             <PlayCircleOutlined
+              data-cy="startGameBtn"
               style={{ color: "#56ae56", fontSize: 20 }}
               onClick={() => {
                 onStart(game.id);
