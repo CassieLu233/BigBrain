@@ -1,17 +1,17 @@
-//=============================================================================
+// ==============================================================================
 // File: dashboard/index.jsx
-// Purpose: Dashboard page with navbar, user menu, create-game modal, and game cards
+// Purpose: Dashboard page with styled-components
 // Author: Qian Lu (z5506082@ad.unsw.edu.au)
 // Course: COMP6080
-// Created: 2025-04-18
+// Created: 2025-04-18, Refactored: 2025-05-09
 // ==============================================================================
+
 import { useEffect, useState, useRef } from "react";
-import { Layout, Button, Avatar, Dropdown, message } from "antd";
-import { PlusOutlined, LogoutOutlined, DownOutlined } from "@ant-design/icons";
+import { Dropdown, message } from "antd";
+import { PlusOutlined, LogoutOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router";
 import logoImg from "../../assets/bigbrain.svg";
 import {
-  dashboardStyles as styles,
   CreateGameModal,
   GameCardList,
   CreateSessionModal,
@@ -26,52 +26,59 @@ import {
   updateGames,
 } from "utils";
 
+import {
+  PageContainer,
+  PageHeader,
+  PageContent,
+  LogoWrapper,
+  LogoImg,
+  LogoText,
+  ActionWrapper,
+  NavButton,
+  UserInfoContainer,
+  StyledAvatar,
+  StyledUsername,
+  StyledDropdownIcon,
+} from "styles";
+
 export const Dashboard = () => {
   const navigate = useNavigate();
   const createBtnRef = useRef(null);
   const [games, setGames] = useState([]);
   const [currentSessionId, setCurrentSessionId] = useState("");
-  // Controls the display and hide of the "Create Game" pop-up window.
   const [modalVisible, setModalVisible] = useState(false);
   const [sessionModalVisible, setSessionModalVisible] = useState(false);
   const [endSessionModalVisible, setEndSessionModalVisible] = useState(false);
-  // Get the displayed username (local part of the email address) and avatar
+
   const currentUserEmail = localStorage.getItem("email") || "";
   const emailName = currentUserEmail.split("@")[0];
   const avatarLetter = emailName.charAt(0).toUpperCase();
 
-  const initialdashBoard = async () => {
-    const loginStatus = isLogin();
-    if (loginStatus) {
-      const games = await fetchGames();
-      setGames(games);
-    } else {
-      message.warning("No user login, redirect to login page!", 0.5, () => {
-        navigate("/login");
-      });
-    }
-  };
+  useEffect(() => {
+    const init = async () => {
+      const loginStatus = isLogin();
+      if (loginStatus) {
+        const games = await fetchGames();
+        setGames(games);
+      } else {
+        message.warning("No user login, redirect to login page!", 0.5, () => {
+          navigate("/login");
+        });
+      }
+    };
+    init();
+  }, []);
 
-  // Logout handler
   const handleLogout = () => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("email");
-    localStorage.removeItem("sessionId");
-    localStorage.removeItem("sessionStatus");
-    localStorage.removeItem("startedSessionGameId");
-    localStorage.removeItem("newQuestionTime");
-    localStorage.removeItem("endSessionTime");
+    localStorage.clear();
     message.success("Log Out successful! Go to Login Page");
     navigate("/login");
   };
 
-  // Create-game modal OK handler
   const handleCreateGame = async (newGameArr) => {
-    // If user does not upload image, get a default image
     const gamesWithCover = await Promise.all(
       newGameArr.map(async (game) => {
         if (!game.image) {
-          // Get default logo
           const resp = await fetch(logoImg);
           const blob = await resp.blob();
           game.image = await fileToDataUrl(blob);
@@ -98,24 +105,16 @@ export const Dashboard = () => {
     createBtnRef.current?.blur();
   };
 
-  // Start a game handler
   const handleStartGame = async (gameId) => {
     try {
-      // Get the session from backend
       const response = await post(`/admin/game/${gameId}/mutate`, {
         mutationType: "START",
       });
-
-      // If start game sucessfully, popup game session
       const data = response.data;
       if (data.status === "started" && data.sessionId) {
-        // Refresh game page
-        const result = await updateGameActive(gameId, true);
-        if (result) {
-          const games = await fetchGames();
-          setGames(games);
-        }
-
+        await updateGameActive(gameId, true);
+        const games = await fetchGames();
+        setGames(games);
         message.success("The game session has started");
         setCurrentSessionId(data.sessionId);
         localStorage.setItem("sessionId", data.sessionId);
@@ -130,20 +129,15 @@ export const Dashboard = () => {
     }
   };
 
-  // End a game handler
   const handleEndGame = async (gameId) => {
     try {
       const response = await post(`/admin/game/${gameId}/mutate`, {
         mutationType: "END",
       });
       const data = response.data;
-
-      // Refresh game page
-      const result = await updateGameActive(gameId, false);
-      if (result) {
-        const games = await fetchGames();
-        setGames(games);
-      }
+      await updateGameActive(gameId, false);
+      const games = await fetchGames();
+      setGames(games);
       if (data?.status === "ended") {
         setEndSessionModalVisible(true);
         localStorage.setItem("sessionStatus", data.status);
@@ -156,18 +150,17 @@ export const Dashboard = () => {
     }
   };
 
-  const handleViewResult = async () => {
+  const handleViewResult = () => {
     const sessionId = localStorage.getItem("sessionId");
     const startedSessionGameId = localStorage.getItem("startedSessionGameId");
     navigate(`/session/${sessionId}?gameId=${startedSessionGameId}`);
   };
 
-  const handleClickManagementSession = async (gameId) => {
+  const handleClickManagementSession = (gameId) => {
     const sessionId = localStorage.getItem("sessionId");
     navigate(`/session/${sessionId}?gameId=${gameId}`);
   };
 
-  // Delete Game
   const handleDeleteGame = async (gameId) => {
     const newGames = games.filter((game) => game.id !== gameId);
     try {
@@ -182,80 +175,55 @@ export const Dashboard = () => {
     }
   };
 
-  // Dropdown menu for user
   const userMenuItems = [
     {
       key: "logout",
       label: (
-        <div
-          style={styles.logoutLabel}
-          onMouseEnter={(e) =>
-            (e.currentTarget.style.color = styles.logoutHoverColor)
-          }
-          onMouseLeave={(e) =>
-            (e.currentTarget.style.color = styles.logoutLabel.color)
-          }
-        >
-          <LogoutOutlined
-            data-cy="logoutButton"
-            style={{ marginRight: 8, color: "inherit" }}
-          />
+        <div onClick={handleLogout}>
+          <LogoutOutlined style={{ marginRight: 8 }} />
           Log Out
         </div>
       ),
-      onClick: handleLogout,
     },
   ];
 
-  useEffect(() => {
-    initialdashBoard();
-  }, []);
-
   return (
-    <Layout style={styles.container}>
-      {/* Navbar */}
-      <Layout.Header style={styles.header}>
-        {/* Left: logo + title */}
-        <div style={styles.logo}>
-          <img src={logoImg} alt="Logo Img" style={styles.logoImage} />
-          <span style={styles.logoTitle}>BigBrain</span>
-        </div>
+    <PageContainer>
+      <PageHeader>
+        <LogoWrapper>
+          <LogoImg src={logoImg} alt="Logo Img" />
+          <LogoText>BigBrain</LogoText>
+        </LogoWrapper>
 
-        {/* Right: create button + user avatar/name + dropdown */}
-        <div style={styles.actions}>
-          <Button
+        <ActionWrapper>
+          <NavButton
             data-cy="createGameBtn"
             ref={createBtnRef}
             type="primary"
             icon={<PlusOutlined />}
-            style={styles.createGameButton}
             onClick={() => setModalVisible(true)}
             onMouseDown={(e) => e.preventDefault()}
           >
             Create Game
-          </Button>
+          </NavButton>
 
           <Dropdown
-            menu={{
-              items: userMenuItems,
-              selectable: false,
-            }}
+            menu={{ items: userMenuItems }}
             trigger={["click"]}
-            dropdownMatchSelectWidth={true}
+            dropdownMatchSelectWidth
           >
-            <div style={styles.userContainer}>
-              <Avatar data-cy="userAvatar" style={styles.avatar}>
+            <UserInfoContainer>
+              <StyledAvatar data-cy="userAvatar">
                 {avatarLetter || "A"}
-              </Avatar>
-              <span style={styles.username}>{emailName || "Admin"}</span>
-              <DownOutlined style={styles.dropdownIcon} />
-            </div>
+              </StyledAvatar>
+              <StyledUsername>{emailName || "Admin"}</StyledUsername>
+              <StyledDropdownIcon />
+            </UserInfoContainer>
           </Dropdown>
-        </div>
-      </Layout.Header>
+        </ActionWrapper>
+      </PageHeader>
 
-      {/* Main content */}
-      <Layout.Content style={styles.content}>
+      <PageContent>
         <GameCardList
           games={games}
           onDelete={handleDeleteGame}
@@ -282,7 +250,7 @@ export const Dashboard = () => {
           onCancel={() => setEndSessionModalVisible(false)}
           onClick={handleViewResult}
         />
-      </Layout.Content>
-    </Layout>
+      </PageContent>
+    </PageContainer>
   );
 };
