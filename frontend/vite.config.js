@@ -17,6 +17,7 @@ export default defineConfig({
     alias: {
       pages: path.resolve(__dirname, "src/pages"),
       utils: path.resolve(__dirname, "src/utils"),
+      styles: path.resolve(__dirname, "src/styles"),
     },
   },
 });

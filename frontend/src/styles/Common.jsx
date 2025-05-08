@@ -62,3 +62,17 @@ export const StyledPassword = styled(Input.Password)`
 export const StyledButton = styled(Button)`
   font-size: 16px;
 `;
+
+// Text jump link under the button
+export const BottomTextWrapper = styled.div`
+  display: block;
+  text-align: right;
+  margin-top: 8px;
+`;
+
+export const BottomTextLink = styled.span`
+  text-decoration: underline;
+  cursor: pointer;
+  font-size: 16px;
+  color: #1890ff;
+`;

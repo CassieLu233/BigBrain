@@ -1,17 +1,29 @@
-//=============================================================================
+// ==============================================================================
 // File: login/index.jsx
-// Purpose: Login page
+// Purpose: Login page with styled-components
 // Author: Qian Lu (z5506082@ad.unsw.edu.au)
 // Course: COMP6080
-// Created: 2025-04-18
+// Created: 2025-04-18, Refactored: 2025-05-09
 // ==============================================================================
 
-import { Card, Form, Input, Button, message } from "antd";
+import { Form, message } from "antd";
 import { MailOutlined, LockOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router";
 import { post } from "utils";
-import { loginStyles as styles } from "pages";
 import logoImg from "../../assets/bigbrain.svg";
+
+import {
+  CenteredContainer,
+  StyledCard,
+  LogoHeader,
+  LogoImage,
+  LogoTitle,
+  StyledInput,
+  StyledPassword,
+  StyledButton,
+  BottomTextWrapper,
+  BottomTextLink,
+} from "styles";
 
 export const Login = () => {
   const navigate = useNavigate();
@@ -32,76 +44,68 @@ export const Login = () => {
     navigate("/register");
   };
 
-  const formCard = (
-    <Card style={styles.card}>
-      <div style={styles.header}>
-        <img src={logoImg} alt="bigbrain logo" style={styles.logoImage} />
-        <span style={styles.logoTitle}>BigBrain</span>
-      </div>
-      <Form
-        name="loginForm"
-        layout="vertical"
-        onFinish={handleFinish}
-        requiredMark={false}
-      >
-        <Form.Item
-          name="email"
-          label="Email"
-          style={styles.formItem}
-          labelCol={{ style: styles.label }}
-          rules={[
-            { required: true, message: "Please enter your email address!" },
-            { type: "email", message: "The email format is incorrect!" },
-          ]}
+  return (
+    <CenteredContainer>
+      <StyledCard $width="320px">
+        <LogoHeader>
+          <LogoImage src={logoImg} alt="bigbrain logo" />
+          <LogoTitle>BigBrain</LogoTitle>
+        </LogoHeader>
+        <Form
+          name="loginForm"
+          layout="vertical"
+          onFinish={handleFinish}
+          requiredMark={false}
         >
-          <Input
-            data-cy="loginEmail"
-            size="large"
-            style={styles.input}
-            prefix={<MailOutlined />}
-            placeholder="Email"
-          />
-        </Form.Item>
-        <Form.Item
-          name="password"
-          label="Password"
-          style={styles.formItem}
-          labelCol={{ style: styles.label }}
-          rules={[{ required: true, message: "Please enter your password!" }]}
-        >
-          <Input.Password
-            data-cy="loginPassword"
-            size="large"
-            style={styles.input}
-            prefix={<LockOutlined />}
-            placeholder="Password"
-          />
-        </Form.Item>
-        <Form.Item>
-          <Button
-            data-cy="loginSubmit"
-            size="large"
-            style={styles.button}
-            type="primary"
-            htmlType="submit"
-            block
+          <Form.Item
+            name="email"
+            label="Email"
+            rules={[
+              { required: true, message: "Please enter your email address!" },
+              { type: "email", message: "The email format is incorrect!" },
+            ]}
           >
-            Log In
-          </Button>
-          <div style={styles.registerWrapper}>
-            No account?{" "}
-            <span
-              data-cy="toRegister"
-              style={styles.registerTitle}
-              onClick={handleClickRegisterTitle}
+            <StyledInput
+              data-cy="loginEmail"
+              size="large"
+              prefix={<MailOutlined />}
+              placeholder="Email"
+            />
+          </Form.Item>
+          <Form.Item
+            name="password"
+            label="Password"
+            rules={[{ required: true, message: "Please enter your password!" }]}
+          >
+            <StyledPassword
+              data-cy="loginPassword"
+              size="large"
+              prefix={<LockOutlined />}
+              placeholder="Password"
+            />
+          </Form.Item>
+          <Form.Item>
+            <StyledButton
+              data-cy="loginSubmit"
+              size="large"
+              type="primary"
+              htmlType="submit"
+              block
             >
-              Register now!
-            </span>
-          </div>
-        </Form.Item>
-      </Form>
-    </Card>
+              Log In
+            </StyledButton>
+            <BottomTextWrapper>
+              No account?{" "}
+              <BottomTextLink
+                data-cy="toRegister"
+                onClick={handleClickRegisterTitle}
+              >
+                Register now!
+              </BottomTextLink>
+            </BottomTextWrapper>
+          </Form.Item>
+        </Form>
+      </StyledCard>
+    </CenteredContainer>
   );
-
-  return <div style={styles.container}>{formCard}</div>;
 };
