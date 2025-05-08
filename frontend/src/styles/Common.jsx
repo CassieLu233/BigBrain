@@ -7,7 +7,8 @@
 // ==============================================================================
 
 import styled from "styled-components";
-import { Card, Input, Button } from "antd";
+import { Card, Input, Button, Avatar, Layout } from "antd";
+import { DownOutlined } from "@ant-design/icons";
 
 // Page centering container
 export const CenteredContainer = styled.div`
@@ -75,4 +76,84 @@ export const BottomTextLink = styled.span`
   cursor: pointer;
   font-size: 16px;
   color: #1890ff;
+`;
+
+// ================= General layout structure =================
+
+export const PageContainer = styled(Layout)`
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+`;
+
+export const PageHeader = styled(Layout.Header)`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 24px;
+  background: #fff;
+  box-shadow: 0 2px 8px #f0f1f2;
+`;
+
+export const PageContent = styled(Layout.Content)`
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 24px;
+  background: #fafafa;
+`;
+
+// ================= Dashboard Common Components =================
+
+// LeftTop Logo + Title
+export const LogoWrapper = styled.div`
+  display: flex;
+  align-items: center;
+`;
+
+export const LogoImg = styled.img`
+  width: 40px;
+  height: 40px;
+  object-fit: contain;
+  margin-right: 8px;
+`;
+
+export const LogoText = styled.span`
+  font-size: 20px;
+  font-weight: bold;
+`;
+
+// Right Top button + User Information
+
+export const NavButton = styled(Button)`
+  margin-right: 16px;
+  font-size: 16px;
+`;
+
+export const ActionWrapper = styled.div`
+  display: flex;
+  align-items: center;
+`;
+
+export const UserInfoContainer = styled.div`
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+`;
+
+export const StyledAvatar = styled(Avatar)`
+  background-color: #1677ff;
+  vertical-align: middle;
+  font-size: 18px;
+`;
+
+export const StyledUsername = styled.span`
+  margin-left: 8px;
+  font-size: 18px;
+`;
+
+export const StyledDropdownIcon = styled(DownOutlined)`
+  font-size: 12px;
+  color: #555;
+  margin-left: 4px;
 `;
