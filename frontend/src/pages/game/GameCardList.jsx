@@ -1,12 +1,18 @@
-//=============================================================================
+// ==============================================================================
 // File: game/GameCardList.jsx
 // Purpose: Render a grid of game cards (or empty state) using GameCard component
 // Author: Qian Lu (z5506082@ad.unsw.edu.au)
 // Course: COMP6080
-// Created: 2025-04-18
+// Created: 2025-04-18, Refactored: 2025-05-09
 // ==============================================================================
-import { Empty, Row, Col } from "antd";
+
 import { GameCard } from "pages";
+import {
+  GameCardListWrapper,
+  GameCardGrid,
+  GameCardColumn,
+  StyledEmpty,
+} from "styles";
 
 /**
  * GameCardList
@@ -22,23 +28,16 @@ export const GameCardList = ({
 }) => {
   if (games.length === 0) {
     return (
-      <div
-        style={{
-          flex: 1,
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-        }}
-      >
-        <Empty description="No games created yet" />
-      </div>
+      <GameCardListWrapper>
+        <StyledEmpty description="No games created yet" />
+      </GameCardListWrapper>
     );
   }
 
   return (
-    <Row gutter={[16, 16]}>
+    <GameCardGrid>
       {games.map((game) => (
-        <Col key={game.id}>
+        <GameCardColumn key={game.id}>
           <GameCard
             game={game}
             onDelete={onDelete}
@@ -46,8 +45,8 @@ export const GameCardList = ({
             onEnd={onEnd}
             onClickManagementSession={onClickManagementSession}
           />
-        </Col>
+        </GameCardColumn>
       ))}
-    </Row>
+    </GameCardGrid>
   );
 };

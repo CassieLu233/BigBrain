@@ -7,7 +7,7 @@
 // ==============================================================================
 
 import styled from "styled-components";
-import { Card, Divider, Typography } from "antd";
+import { Card, Divider, Typography, Row, Col } from "antd";
 
 const { Text } = Typography;
 
@@ -67,3 +67,17 @@ export const CardDivider = styled(Divider)`
   border-color: #e1e1e1;
   color: #969696;
 `;
+
+// GameCard Empty status container (centered to display Empty)
+export const GameCardListWrapper = styled.div`
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
+export const GameCardGrid = styled((props) => (
+  <Row gutter={[16, 16]} {...props} />
+))``;
+
+export const GameCardColumn = styled(Col)``;
