@@ -8,12 +8,13 @@
 
 import React from "react";
 import styled from "styled-components";
-import { Button, Dropdown, Form, Input, Card } from "antd";
+import { Button, Dropdown, Form, Input, Card, Segmented } from "antd";
 import {
   PlusOutlined,
   MailOutlined,
   LockOutlined,
   UserOutlined,
+  UploadOutlined,
 } from "@ant-design/icons";
 
 // ------------------------------------------------------------------------------
@@ -110,3 +111,27 @@ export const RefVerificationCard = styled(RefCard)`
   width: 350px;
 `;
 RefVerificationCard.displayName = "RefVerificationCard";
+
+// ------------------------------------------------------------------------------
+// UploadButton with ref (icon + primary button)
+// ------------------------------------------------------------------------------
+const BaseUploadButton = React.forwardRef((props, ref) => (
+  <Button ref={ref} icon={<UploadOutlined />} size="large" {...props} />
+));
+BaseUploadButton.displayName = "BaseUploadButton";
+
+export const UploadButton = styled(BaseUploadButton)``;
+UploadButton.displayName = "UploadButton";
+
+// ------------------------------------------------------------------------------
+// Segmented control with ref (mode toggle)
+// ------------------------------------------------------------------------------
+const BaseSegmented = React.forwardRef((props, ref) => (
+  <Segmented ref={ref} {...props} />
+));
+BaseSegmented.displayName = "BaseSegmented";
+
+export const StyledSegmented = styled(BaseSegmented)`
+  margin-bottom: 16px;
+`;
+StyledSegmented.displayName = "StyledSegmented";

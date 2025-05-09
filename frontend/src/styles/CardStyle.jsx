@@ -9,7 +9,7 @@
 import styled from "styled-components";
 import { Card, Divider, Typography, Row, Col } from "antd";
 
-const { Text } = Typography;
+const { Text, Title } = Typography;
 
 // Universal card container
 export const BaseCard = styled(Card)`
@@ -81,3 +81,80 @@ export const GameCardGrid = styled((props) => (
 ))``;
 
 export const GameCardColumn = styled(Col)``;
+
+export const CardBodyWrapper = styled.div`
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
+
+export const CardVerticalDivider = styled(Divider)`
+  height: 150px;
+  margin-left: 0;
+  margin-right: 24px;
+`;
+
+// Title for horizontal card layout
+export const HorizontalTitle = styled(Title).attrs(() => ({
+  level: 4,
+  ellipsis: { tooltip: true },
+}))`
+  && {
+    margin: 0;
+    color: #2cafdc;
+    font-size: 18px;
+    max-height: 50px;
+    overflow: hidden;
+  }
+`;
+
+export const HorizontalSubtitle = styled(Title).attrs(() => ({
+  level: 5,
+}))`
+  && {
+    margin: 0;
+    font-size: 16px;
+    max-height: 48px;
+    overflow: hidden;
+  }
+`;
+
+export const HorizontalDescription = styled(Text).attrs(() => ({
+  type: "secondary",
+  ellipsis: { tooltip: true },
+}))`
+  && {
+    font-size: 16px;
+    max-height: 64px;
+    overflow: hidden;
+    white-space: normal;
+    word-break: break-word;
+  }
+`;
+
+// ================= Horizontal Card Layout for Game Info =================
+
+// Horizontal container for image and text (used in CustomCard)
+export const HorizontalCardContainer = styled(BaseCard)`
+  min-width: 200px;
+  width: 100%;
+  background-color: #edf4fe;
+`;
+
+// Left image area
+export const LeftImageSection = styled.img`
+  min-width: 120px;
+  max-width: 50%;
+  min-height: 120px;
+  object-fit: fill;
+  background-color: #d0edf7;
+`;
+
+// Right text section inside the horizontal layout
+export const RightContentSection = styled.div`
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+`;

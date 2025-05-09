@@ -7,14 +7,13 @@
 // ==============================================================================
 
 import styled from "styled-components";
-import { Input, Button, Avatar, Layout, Segmented, Empty } from "antd";
+import { Input, Button, Avatar, Layout, Empty } from "antd";
 import {
   DownOutlined,
   EditOutlined,
   DeleteOutlined,
   PlayCircleOutlined,
   StopOutlined,
-  UploadOutlined,
   LogoutOutlined,
 } from "@ant-design/icons";
 
@@ -184,16 +183,8 @@ export const DefaultButton = styled((props) => (
   <Button type="default" size="large" block {...props} />
 ))``;
 
-export const UploadButton = styled((props) => (
-  <Button icon={<UploadOutlined />} size="large" {...props} />
-))``;
-
 export const HiddenSubmitButton = styled.button`
   display: none;
-`;
-
-export const StyledSegmented = styled(Segmented)`
-  margin-bottom: 16px;
 `;
 
 // ================= No Data Display =================
