@@ -7,7 +7,7 @@
 // ==============================================================================
 
 import styled from "styled-components";
-import { Input, Button, Avatar, Layout, Segmented, Form } from "antd";
+import { Input, Button, Avatar, Layout, Segmented } from "antd";
 import {
   DownOutlined,
   EditOutlined,
@@ -50,14 +50,6 @@ export const LogoTitle = styled.span`
   margin-left: 8px;
   cursor: default;
 `;
-
-// ------------------------------------------------------------------------------
-// Standard Form Wrapper
-// ------------------------------------------------------------------------------
-
-export const StyledForm = styled((props) => (
-  <Form layout="vertical" requiredMark={false} {...props} />
-))``;
 
 // ================= Form Controls =================
 

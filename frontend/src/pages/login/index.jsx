@@ -6,21 +6,20 @@
 // Created: 2025-04-18, Refactored: 2025-05-09
 // ==============================================================================
 
-import { Form, message } from "antd";
-import { MailOutlined, LockOutlined } from "@ant-design/icons";
+import { message } from "antd";
 import { useNavigate } from "react-router";
 import { post } from "utils";
 import logoImg from "../../assets/bigbrain.svg";
 
 import {
   CenteredContainer,
-  StyledCard,
+  StyledForm,
   LogoHeader,
   LogoImage,
   LogoTitle,
-  StyledInput,
-  StyledPassword,
-  StyledButton,
+  StyledEmailInput,
+  StyledPasswordInput,
+  PrimaryButton,
   BottomTextWrapper,
   BottomTextLink,
 } from "styles";
@@ -28,6 +27,7 @@ import {
 export const Login = () => {
   const navigate = useNavigate();
 
+  // Submit form handler
   const handleFinish = async (values) => {
     try {
       const data = await post("/admin/auth/login", values);
@@ -46,66 +46,46 @@ export const Login = () => {
 
   return (
     <CenteredContainer>
-      <StyledCard $width="320px">
+      <StyledForm name="loginForm" onFinish={handleFinish}>
         <LogoHeader>
           <LogoImage src={logoImg} alt="bigbrain logo" />
           <LogoTitle>BigBrain</LogoTitle>
         </LogoHeader>
-        <Form
-          name="loginForm"
-          layout="vertical"
-          onFinish={handleFinish}
-          requiredMark={false}
+
+        <StyledForm.Item
+          name="email"
+          label="Email"
+          rules={[
+            { required: true, message: "Please enter your email address!" },
+            { type: "email", message: "The email format is incorrect!" },
+          ]}
         >
-          <Form.Item
-            name="email"
-            label="Email"
-            rules={[
-              { required: true, message: "Please enter your email address!" },
-              { type: "email", message: "The email format is incorrect!" },
-            ]}
-          >
-            <StyledInput
-              data-cy="loginEmail"
-              size="large"
-              prefix={<MailOutlined />}
-              placeholder="Email"
-            />
-          </Form.Item>
-          <Form.Item
-            name="password"
-            label="Password"
-            rules={[{ required: true, message: "Please enter your password!" }]}
-          >
-            <StyledPassword
-              data-cy="loginPassword"
-              size="large"
-              prefix={<LockOutlined />}
-              placeholder="Password"
-            />
-          </Form.Item>
-          <Form.Item>
-            <StyledButton
-              data-cy="loginSubmit"
-              size="large"
-              type="primary"
-              htmlType="submit"
-              block
+          <StyledEmailInput data-cy="loginEmail" placeholder="Email" />
+        </StyledForm.Item>
+
+        <StyledForm.Item
+          name="password"
+          label="Password"
+          rules={[{ required: true, message: "Please enter your password!" }]}
+        >
+          <StyledPasswordInput data-cy="loginPassword" placeholder="Password" />
+        </StyledForm.Item>
+
+        <StyledForm.Item>
+          <PrimaryButton data-cy="loginSubmit" htmlType="submit">
+            Log In
+          </PrimaryButton>
+          <BottomTextWrapper>
+            No account?{" "}
+            <BottomTextLink
+              data-cy="toRegister"
+              onClick={handleClickRegisterTitle}
             >
-              Log In
-            </StyledButton>
-            <BottomTextWrapper>
-              No account?{" "}
-              <BottomTextLink
-                data-cy="toRegister"
-                onClick={handleClickRegisterTitle}
-              >
-                Register now!
-              </BottomTextLink>
-            </BottomTextWrapper>
-          </Form.Item>
-        </Form>
-      </StyledCard>
+              Register now!
+            </BottomTextLink>
+          </BottomTextWrapper>
+        </StyledForm.Item>
+      </StyledForm>
     </CenteredContainer>
   );
 };
