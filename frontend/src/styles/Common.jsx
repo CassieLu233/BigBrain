@@ -7,7 +7,7 @@
 // ==============================================================================
 
 import styled from "styled-components";
-import { Input, Button, Avatar, Layout, Segmented } from "antd";
+import { Input, Button, Avatar, Layout, Segmented, Dropdown } from "antd";
 import {
   DownOutlined,
   EditOutlined,
@@ -18,6 +18,8 @@ import {
   MailOutlined,
   LockOutlined,
   UserOutlined,
+  PlusOutlined,
+  LogoutOutlined,
 } from "@ant-design/icons";
 
 // ================= General Layout Wrappers =================
@@ -51,19 +53,7 @@ export const LogoTitle = styled.span`
   cursor: default;
 `;
 
-// ================= Form Controls =================
-
-export const StyledInput = styled(Input)`
-  font-size: 16px;
-`;
-
-export const StyledPassword = styled(Input.Password)`
-  font-size: 16px;
-`;
-
-export const StyledButton = styled(Button)`
-  font-size: 16px;
-`;
+// ================= Text Link =================
 
 export const BottomTextWrapper = styled.div`
   display: block;
@@ -122,11 +112,6 @@ export const LogoText = styled.span`
   font-weight: bold;
 `;
 
-export const NavButton = styled(Button)`
-  margin-right: 16px;
-  font-size: 16px;
-`;
-
 export const ActionWrapper = styled.div`
   display: flex;
   align-items: center;
@@ -153,6 +138,24 @@ export const StyledDropdownIcon = styled(DownOutlined)`
   font-size: 12px;
   color: #555;
   margin-left: 4px;
+`;
+
+// Styled dropdown used in dashboard user menu
+export const StyledDropdown = styled((props) => (
+  <Dropdown trigger={["click"]} {...props} />
+))``;
+
+// Logout icon used in dropdown item
+export const LogoutIcon = styled(LogoutOutlined)`
+  margin-right: 8px;
+`;
+
+// Logout text wrapper in dropdown item
+export const LogoutLabel = styled.div`
+  display: flex;
+  align-items: center;
+  font-size: 14px;
+  cursor: pointer;
 `;
 
 // ================= Icon Buttons =================
@@ -211,6 +214,13 @@ export const UploadButton = styled((props) => (
 
 export const HiddenSubmitButton = styled.button`
   display: none;
+`;
+
+export const CreateButton = styled((props) => (
+  <Button type="primary" icon={<PlusOutlined />} size="large" {...props} />
+))`
+  margin-right: 16px;
+  font-size: 16px;
 `;
 
 export const StyledSegmented = styled(Segmented)`

@@ -6,25 +6,10 @@
 // Created: 2025-04-18, Refactored: 2025-05-09
 // ==============================================================================
 
-import { useEffect, useState, useRef } from "react";
-import { Dropdown, message } from "antd";
-import { PlusOutlined, LogoutOutlined } from "@ant-design/icons";
+import { message } from "antd";
 import { useNavigate } from "react-router";
+import { useEffect, useRef, useState } from "react";
 import logoImg from "../../assets/bigbrain.svg";
-import {
-  CreateGameModal,
-  GameCardList,
-  CreateSessionModal,
-  EndSessionModal,
-} from "pages";
-import {
-  isLogin,
-  post,
-  fetchGames,
-  fileToDataUrl,
-  updateGameActive,
-  updateGames,
-} from "utils";
 
 import {
   PageContainer,
@@ -34,12 +19,31 @@ import {
   LogoImg,
   LogoText,
   ActionWrapper,
-  NavButton,
+  CreateButton,
+  StyledDropdown,
+  LogoutLabel,
+  LogoutIcon,
   UserInfoContainer,
   StyledAvatar,
   StyledUsername,
   StyledDropdownIcon,
 } from "styles";
+
+import {
+  CreateGameModal,
+  GameCardList,
+  CreateSessionModal,
+  EndSessionModal,
+} from "pages";
+
+import {
+  fetchGames,
+  isLogin,
+  post,
+  fileToDataUrl,
+  updateGameActive,
+  updateGames,
+} from "utils";
 
 export const Dashboard = () => {
   const navigate = useNavigate();
@@ -179,10 +183,10 @@ export const Dashboard = () => {
     {
       key: "logout",
       label: (
-        <div onClick={handleLogout}>
-          <LogoutOutlined style={{ marginRight: 8 }} />
+        <LogoutLabel onClick={handleLogout}>
+          <LogoutIcon />
           Log Out
-        </div>
+        </LogoutLabel>
       ),
     },
   ];
@@ -196,22 +200,16 @@ export const Dashboard = () => {
         </LogoWrapper>
 
         <ActionWrapper>
-          <NavButton
+          <CreateButton
             data-cy="createGameBtn"
             ref={createBtnRef}
-            type="primary"
-            icon={<PlusOutlined />}
             onClick={() => setModalVisible(true)}
             onMouseDown={(e) => e.preventDefault()}
           >
             Create Game
-          </NavButton>
+          </CreateButton>
 
-          <Dropdown
-            menu={{ items: userMenuItems }}
-            trigger={["click"]}
-            dropdownMatchSelectWidth
-          >
+          <StyledDropdown menu={{ items: userMenuItems }}>
             <UserInfoContainer>
               <StyledAvatar data-cy="userAvatar">
                 {avatarLetter || "A"}
@@ -219,7 +217,7 @@ export const Dashboard = () => {
               <StyledUsername>{emailName || "Admin"}</StyledUsername>
               <StyledDropdownIcon />
             </UserInfoContainer>
-          </Dropdown>
+          </StyledDropdown>
         </ActionWrapper>
       </PageHeader>
 
