@@ -7,16 +7,21 @@
 // ==============================================================================
 
 import styled from "styled-components";
-import { Input, Button, Avatar, Layout } from "antd";
+import { Input, Button, Avatar, Layout, Segmented, Form } from "antd";
 import {
   DownOutlined,
   EditOutlined,
   DeleteOutlined,
   PlayCircleOutlined,
   StopOutlined,
+  UploadOutlined,
+  MailOutlined,
+  LockOutlined,
+  UserOutlined,
 } from "@ant-design/icons";
 
-// Page centering container
+// ================= General Layout Wrappers =================
+
 export const CenteredContainer = styled.div`
   height: 100vh;
   display: flex;
@@ -25,7 +30,6 @@ export const CenteredContainer = styled.div`
   font-size: 20px;
 `;
 
-// Logo Regional Style
 export const LogoHeader = styled.div`
   display: flex;
   align-items: center;
@@ -47,7 +51,16 @@ export const LogoTitle = styled.span`
   cursor: default;
 `;
 
-// antd form input and button style expansion
+// ------------------------------------------------------------------------------
+// Standard Form Wrapper
+// ------------------------------------------------------------------------------
+
+export const StyledForm = styled((props) => (
+  <Form layout="vertical" requiredMark={false} {...props} />
+))``;
+
+// ================= Form Controls =================
+
 export const StyledInput = styled(Input)`
   font-size: 16px;
 `;
@@ -60,7 +73,6 @@ export const StyledButton = styled(Button)`
   font-size: 16px;
 `;
 
-// Text jump link under the button
 export const BottomTextWrapper = styled.div`
   display: block;
   text-align: right;
@@ -74,7 +86,7 @@ export const BottomTextLink = styled.span`
   color: #1890ff;
 `;
 
-// ================= General layout structure =================
+// ================= Layout Containers =================
 
 export const PageContainer = styled(Layout)`
   display: flex;
@@ -99,9 +111,8 @@ export const PageContent = styled(Layout.Content)`
   background: #fafafa;
 `;
 
-// ================= Dashboard Common Components =================
+// ================= Dashboard Components =================
 
-// LeftTop Logo + Title
 export const LogoWrapper = styled.div`
   display: flex;
   align-items: center;
@@ -118,8 +129,6 @@ export const LogoText = styled.span`
   font-size: 20px;
   font-weight: bold;
 `;
-
-// Right Top button + User Information
 
 export const NavButton = styled(Button)`
   margin-right: 16px;
@@ -154,26 +163,64 @@ export const StyledDropdownIcon = styled(DownOutlined)`
   margin-left: 4px;
 `;
 
-// Blue: Edit button
+// ================= Icon Buttons =================
+
 export const EditIcon = styled(EditOutlined)`
   color: #1395c2;
   font-size: 20px;
 `;
 
-// Red: Delete button
 export const DeleteIcon = styled(DeleteOutlined)`
   color: #c54949;
   font-size: 20px;
 `;
 
-// Green: Start button
 export const StartIcon = styled(PlayCircleOutlined)`
   color: #56ae56;
   font-size: 20px;
 `;
 
-// Red: End button
 export const StopIcon = styled(StopOutlined)`
   color: red;
   font-size: 20px;
+`;
+
+// ================= Extended Inputs and Buttons =================
+
+export const StyledEmailInput = styled((props) => (
+  <Input size="large" prefix={<MailOutlined />} {...props} />
+))``;
+
+export const StyledPasswordInput = styled((props) => (
+  <Input.Password size="large" prefix={<LockOutlined />} {...props} />
+))``;
+
+export const StyledNameInput = styled((props) => (
+  <Input size="large" prefix={<UserOutlined />} {...props} />
+))``;
+
+export const StyledTextArea = styled(Input.TextArea).attrs(() => ({
+  rows: 3,
+}))`
+  font-size: 16px;
+`;
+
+export const PrimaryButton = styled((props) => (
+  <Button type="primary" size="large" block {...props} />
+))``;
+
+export const DefaultButton = styled((props) => (
+  <Button type="default" size="large" block {...props} />
+))``;
+
+export const UploadButton = styled((props) => (
+  <Button icon={<UploadOutlined />} size="large" {...props} />
+))``;
+
+export const HiddenSubmitButton = styled.button`
+  display: none;
+`;
+
+export const StyledSegmented = styled(Segmented)`
+  margin-bottom: 16px;
 `;
