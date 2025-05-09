@@ -58,7 +58,6 @@ export const QuestionPage = () => {
     } catch (err) {
       message.error(err.message);
     }
-    // prevent default upload
     return false;
   };
 
@@ -70,10 +69,8 @@ export const QuestionPage = () => {
   // Submit handler
   const handleFinish = async (values) => {
     try {
-      // Build updatedAnswer answers
       let answers;
       if (values.type === "Judgement") {
-        // Judgement only has two answers
         answers = [
           {
             text: "True",
@@ -155,7 +152,6 @@ export const QuestionPage = () => {
         // Get judgement answer
         let judgementValue = undefined;
         if (currentQuestion.type === "Judgement") {
-          // Ensure answers is effective
           if (currentQuestion.answers.length > 0) {
             const correct = currentQuestion.answers.find(
               (ans) => ans.isCorrect
@@ -175,7 +171,6 @@ export const QuestionPage = () => {
           singleIndex: singleIdx >= 0 ? singleIdx : undefined,
           judgementAnswer: judgementValue,
         });
-        // If image exists, show in upload
         if (currentQuestion.image) {
           setUploadList([
             {
@@ -196,5 +191,80 @@ export const QuestionPage = () => {
     initForm();
   }, [questionId]);
 
-  return <PageContainer></PageContainer>;
+  return (
+    <PageContainer>
+      <PageHeader>
+        <BackButton onClick={handleBackToGame}>Back to Game</BackButton>
+        <StyledText ellipsis={{ tooltip: currentQuestion.title }}>
+          {currentQuestion.title}
+        </StyledText>
+      </PageHeader>
+
+      <PageContent>
+        <StyledDivider>Question Information</StyledDivider>
+        <StyledForm form={form} layout="vertical" onFinish={handleFinish}>
+          <StyledForm.Item
+            name="title"
+            label="Question"
+            rules={[{ required: true, message: "Enter question text" }]}
+          >
+            <StyledInput />
+          </StyledForm.Item>
+
+          <StyledForm.Item
+            name="type"
+            label="Question Type"
+            rules={[{ required: true }]}
+          >
+            <StyledSelect
+              onChange={(value) => {
+                setQustionType(value);
+                form.setFieldsValue({
+                  answers:
+                    form.getFieldValue("answers")?.length > 0
+                      ? form.getFieldValue("answers")
+                      : initialAnswer,
+                });
+              }}
+            >
+              <StyledSelect.Option value="Single Choice">
+                Single Choice
+              </StyledSelect.Option>
+              <StyledSelect.Option value="Multiple Choice">
+                Multiple Choice
+              </StyledSelect.Option>
+              <StyledSelect.Option value="Judgement">
+                Judgement
+              </StyledSelect.Option>
+            </StyledSelect>
+          </StyledForm.Item>
+
+          <InlineFlex>
+            <StyledForm.Item
+              name="duration"
+              label="Time Limit (s)"
+              rules={[{ required: true, type: "number", min: 1 }]}
+            >
+              <StyledInputNumber />
+            </StyledForm.Item>
+            <StyledForm.Item
+              name="points"
+              label="Points"
+              rules={[{ required: true, type: "number", min: 0 }]}
+            >
+              <StyledInputNumber />
+            </StyledForm.Item>
+          </InlineFlex>
+
+          <StyledForm.Item name="videoUrl" label="YouTube URL (Option)">
+            <StyledInput placeholder="Optional video link" />
+          </StyledForm.Item>
+
+          <StyledForm.Item>
+            <PrimaryButton htmlType="submit">Save Question</PrimaryButton>
+          </StyledForm.Item>
+        </StyledForm>
+      </PageContent>
+    </PageContainer>
+  );
 };
