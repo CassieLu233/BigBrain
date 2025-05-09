@@ -30,6 +30,7 @@ import {
   LockOutlined,
   UserOutlined,
   UploadOutlined,
+  EditOutlined,
 } from "@ant-design/icons";
 
 // ------------------------------------------------------------------------------
@@ -145,6 +146,22 @@ BaseUploadButton.displayName = "BaseUploadButton";
 
 export const UploadButton = styled(BaseUploadButton)``;
 UploadButton.displayName = "UploadButton";
+
+const BaseEditButton = React.forwardRef((props, ref) => (
+  <Button ref={ref} type="default" icon={<EditOutlined />} {...props} />
+));
+BaseEditButton.displayName = "BaseEditButton";
+
+export const EditButton = styled(BaseEditButton)`
+  color: #1677ff;
+  border-color: #1677ff;
+  margin-right: 16px;
+
+  &:hover {
+    background-color: #b9d6ff !important;
+  }
+`;
+EditButton.displayName = "EditButton";
 
 // ------------------------------------------------------------------------------
 // Segmented control with ref (mode toggle)
