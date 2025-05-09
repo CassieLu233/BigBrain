@@ -6,21 +6,21 @@
 // Created: 2025-04-18, Refactored: 2025-05-09
 // ==============================================================================
 
-import { Form, message } from "antd";
-import { UserOutlined, MailOutlined, LockOutlined } from "@ant-design/icons";
+import { message } from "antd";
 import { useNavigate } from "react-router";
 import { post } from "utils";
 import logoImg from "../../assets/bigbrain.svg";
 
 import {
   CenteredContainer,
-  StyledCard,
+  StyledForm,
   LogoHeader,
   LogoImage,
   LogoTitle,
-  StyledInput,
-  StyledPassword,
-  StyledButton,
+  StyledEmailInput,
+  StyledPasswordInput,
+  StyledNameInput,
+  PrimaryButton,
   BottomTextWrapper,
   BottomTextLink,
 } from "styles";
@@ -28,6 +28,7 @@ import {
 export const Register = () => {
   const navigate = useNavigate();
 
+  // Submit form handler
   const handleFinish = async (values) => {
     const { name, email, password } = values;
     const data = { email, password, name };
@@ -48,102 +49,76 @@ export const Register = () => {
 
   return (
     <CenteredContainer>
-      <StyledCard $width="360px">
+      <StyledForm name="registerForm" onFinish={handleFinish}>
         <LogoHeader>
           <LogoImage src={logoImg} alt="bigbrain logo" />
           <LogoTitle>BigBrain</LogoTitle>
         </LogoHeader>
-        <Form
-          name="registerForm"
-          layout="vertical"
-          onFinish={handleFinish}
-          requiredMark={false}
+
+        <StyledForm.Item
+          name="name"
+          label="Name"
+          rules={[{ required: true, message: "Please enter your name!" }]}
         >
-          <Form.Item
-            name="name"
-            label="Name"
-            rules={[{ required: true, message: "Please enter your name!" }]}
-          >
-            <StyledInput
-              data-cy="registerName"
-              id="name"
-              size="large"
-              prefix={<UserOutlined />}
-              placeholder="Name"
-            />
-          </Form.Item>
-          <Form.Item
-            name="email"
-            label="Email"
-            rules={[
-              { required: true, message: "Please enter your email address!" },
-              { type: "email", message: "The email format is incorrect!" },
-            ]}
-          >
-            <StyledInput
-              data-cy="registerEmail"
-              id="email"
-              size="large"
-              prefix={<MailOutlined />}
-              placeholder="Email"
-            />
-          </Form.Item>
-          <Form.Item
-            name="password"
-            label="Password"
-            rules={[{ required: true, message: "Please enter your password!" }]}
-          >
-            <StyledPassword
-              data-cy="registerPassword"
-              id="password"
-              size="large"
-              prefix={<LockOutlined />}
-              placeholder="Password"
-            />
-          </Form.Item>
-          <Form.Item
-            name="confirm"
-            label="Confirm Password"
-            dependencies={["password"]}
-            rules={[
-              { required: true, message: "Please confirm your password!" },
-              ({ getFieldValue }) => ({
-                validator(_, value) {
-                  if (!value || getFieldValue("password") === value) {
-                    return Promise.resolve();
-                  }
-                  return Promise.reject(new Error("Passwords do not match!"));
-                },
-              }),
-            ]}
-          >
-            <StyledPassword
-              data-cy="registerConfirmPassword"
-              id="confirmPassword"
-              size="large"
-              prefix={<LockOutlined />}
-              placeholder="Confirm Password"
-            />
-          </Form.Item>
-          <Form.Item>
-            <StyledButton
-              data-cy="registerSubmit"
-              size="large"
-              type="primary"
-              htmlType="submit"
-              block
-            >
-              Register
-            </StyledButton>
-            <BottomTextWrapper>
-              Already have an account?{" "}
-              <BottomTextLink onClick={handleClickLoginTitle}>
-                Log in now!
-              </BottomTextLink>
-            </BottomTextWrapper>
-          </Form.Item>
-        </Form>
-      </StyledCard>
+          <StyledNameInput data-cy="registerName" placeholder="Name" />
+        </StyledForm.Item>
+
+        <StyledForm.Item
+          name="email"
+          label="Email"
+          rules={[
+            { required: true, message: "Please enter your email address!" },
+            { type: "email", message: "The email format is incorrect!" },
+          ]}
+        >
+          <StyledEmailInput data-cy="registerEmail" placeholder="Email" />
+        </StyledForm.Item>
+
+        <StyledForm.Item
+          name="password"
+          label="Password"
+          rules={[{ required: true, message: "Please enter your password!" }]}
+        >
+          <StyledPasswordInput
+            data-cy="registerPassword"
+            placeholder="Password"
+          />
+        </StyledForm.Item>
+
+        <StyledForm.Item
+          name="confirm"
+          label="Confirm Password"
+          dependencies={["password"]}
+          rules={[
+            { required: true, message: "Please confirm your password!" },
+            ({ getFieldValue }) => ({
+              validator(_, value) {
+                if (!value || getFieldValue("password") === value) {
+                  return Promise.resolve();
+                }
+                return Promise.reject(new Error("Passwords do not match!"));
+              },
+            }),
+          ]}
+        >
+          <StyledPasswordInput
+            data-cy="registerConfirmPassword"
+            placeholder="Confirm Password"
+          />
+        </StyledForm.Item>
+
+        <StyledForm.Item>
+          <PrimaryButton data-cy="registerSubmit" htmlType="submit">
+            Register
+          </PrimaryButton>
+          <BottomTextWrapper>
+            Already have an account?{" "}
+            <BottomTextLink onClick={handleClickLoginTitle}>
+              Log in now!
+            </BottomTextLink>
+          </BottomTextWrapper>
+        </StyledForm.Item>
+      </StyledForm>
     </CenteredContainer>
   );
 };
