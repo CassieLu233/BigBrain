@@ -23,6 +23,7 @@ import {
   PrimaryButton,
   BottomTextWrapper,
   BottomTextLink,
+  RefVerificationCard,
 } from "styles";
 
 export const Register = () => {
@@ -49,76 +50,78 @@ export const Register = () => {
 
   return (
     <CenteredContainer>
-      <StyledForm name="registerForm" onFinish={handleFinish}>
-        <LogoHeader>
-          <LogoImage src={logoImg} alt="bigbrain logo" />
-          <LogoTitle>BigBrain</LogoTitle>
-        </LogoHeader>
+      <RefVerificationCard>
+        <StyledForm name="registerForm" onFinish={handleFinish}>
+          <LogoHeader>
+            <LogoImage src={logoImg} alt="bigbrain logo" />
+            <LogoTitle>BigBrain</LogoTitle>
+          </LogoHeader>
 
-        <StyledForm.Item
-          name="name"
-          label="Name"
-          rules={[{ required: true, message: "Please enter your name!" }]}
-        >
-          <StyledNameInput data-cy="registerName" placeholder="Name" />
-        </StyledForm.Item>
+          <StyledForm.Item
+            name="name"
+            label="Name"
+            rules={[{ required: true, message: "Please enter your name!" }]}
+          >
+            <StyledNameInput data-cy="registerName" placeholder="Name" />
+          </StyledForm.Item>
 
-        <StyledForm.Item
-          name="email"
-          label="Email"
-          rules={[
-            { required: true, message: "Please enter your email address!" },
-            { type: "email", message: "The email format is incorrect!" },
-          ]}
-        >
-          <StyledEmailInput data-cy="registerEmail" placeholder="Email" />
-        </StyledForm.Item>
+          <StyledForm.Item
+            name="email"
+            label="Email"
+            rules={[
+              { required: true, message: "Please enter your email address!" },
+              { type: "email", message: "The email format is incorrect!" },
+            ]}
+          >
+            <StyledEmailInput data-cy="registerEmail" placeholder="Email" />
+          </StyledForm.Item>
 
-        <StyledForm.Item
-          name="password"
-          label="Password"
-          rules={[{ required: true, message: "Please enter your password!" }]}
-        >
-          <StyledPasswordInput
-            data-cy="registerPassword"
-            placeholder="Password"
-          />
-        </StyledForm.Item>
+          <StyledForm.Item
+            name="password"
+            label="Password"
+            rules={[{ required: true, message: "Please enter your password!" }]}
+          >
+            <StyledPasswordInput
+              data-cy="registerPassword"
+              placeholder="Password"
+            />
+          </StyledForm.Item>
 
-        <StyledForm.Item
-          name="confirm"
-          label="Confirm Password"
-          dependencies={["password"]}
-          rules={[
-            { required: true, message: "Please confirm your password!" },
-            ({ getFieldValue }) => ({
-              validator(_, value) {
-                if (!value || getFieldValue("password") === value) {
-                  return Promise.resolve();
-                }
-                return Promise.reject(new Error("Passwords do not match!"));
-              },
-            }),
-          ]}
-        >
-          <StyledPasswordInput
-            data-cy="registerConfirmPassword"
-            placeholder="Confirm Password"
-          />
-        </StyledForm.Item>
+          <StyledForm.Item
+            name="confirm"
+            label="Confirm Password"
+            dependencies={["password"]}
+            rules={[
+              { required: true, message: "Please confirm your password!" },
+              ({ getFieldValue }) => ({
+                validator(_, value) {
+                  if (!value || getFieldValue("password") === value) {
+                    return Promise.resolve();
+                  }
+                  return Promise.reject(new Error("Passwords do not match!"));
+                },
+              }),
+            ]}
+          >
+            <StyledPasswordInput
+              data-cy="registerConfirmPassword"
+              placeholder="Confirm Password"
+            />
+          </StyledForm.Item>
 
-        <StyledForm.Item>
-          <PrimaryButton data-cy="registerSubmit" htmlType="submit">
-            Register
-          </PrimaryButton>
-          <BottomTextWrapper>
-            Already have an account?{" "}
-            <BottomTextLink onClick={handleClickLoginTitle}>
-              Log in now!
-            </BottomTextLink>
-          </BottomTextWrapper>
-        </StyledForm.Item>
-      </StyledForm>
+          <StyledForm.Item>
+            <PrimaryButton data-cy="registerSubmit" htmlType="submit">
+              Register
+            </PrimaryButton>
+            <BottomTextWrapper>
+              Already have an account?{" "}
+              <BottomTextLink onClick={handleClickLoginTitle}>
+                Log in now!
+              </BottomTextLink>
+            </BottomTextWrapper>
+          </StyledForm.Item>
+        </StyledForm>
+      </RefVerificationCard>
     </CenteredContainer>
   );
 };

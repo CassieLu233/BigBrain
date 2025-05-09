@@ -22,6 +22,7 @@ import {
   PrimaryButton,
   BottomTextWrapper,
   BottomTextLink,
+  RefVerificationCard,
 } from "styles";
 
 export const Login = () => {
@@ -46,46 +47,51 @@ export const Login = () => {
 
   return (
     <CenteredContainer>
-      <StyledForm name="loginForm" onFinish={handleFinish}>
-        <LogoHeader>
-          <LogoImage src={logoImg} alt="bigbrain logo" />
-          <LogoTitle>BigBrain</LogoTitle>
-        </LogoHeader>
+      <RefVerificationCard>
+        <StyledForm name="loginForm" onFinish={handleFinish}>
+          <LogoHeader>
+            <LogoImage src={logoImg} alt="bigbrain logo" />
+            <LogoTitle>BigBrain</LogoTitle>
+          </LogoHeader>
 
-        <StyledForm.Item
-          name="email"
-          label="Email"
-          rules={[
-            { required: true, message: "Please enter your email address!" },
-            { type: "email", message: "The email format is incorrect!" },
-          ]}
-        >
-          <StyledEmailInput data-cy="loginEmail" placeholder="Email" />
-        </StyledForm.Item>
+          <StyledForm.Item
+            name="email"
+            label="Email"
+            rules={[
+              { required: true, message: "Please enter your email address!" },
+              { type: "email", message: "The email format is incorrect!" },
+            ]}
+          >
+            <StyledEmailInput data-cy="loginEmail" placeholder="Email" />
+          </StyledForm.Item>
 
-        <StyledForm.Item
-          name="password"
-          label="Password"
-          rules={[{ required: true, message: "Please enter your password!" }]}
-        >
-          <StyledPasswordInput data-cy="loginPassword" placeholder="Password" />
-        </StyledForm.Item>
+          <StyledForm.Item
+            name="password"
+            label="Password"
+            rules={[{ required: true, message: "Please enter your password!" }]}
+          >
+            <StyledPasswordInput
+              data-cy="loginPassword"
+              placeholder="Password"
+            />
+          </StyledForm.Item>
 
-        <StyledForm.Item>
-          <PrimaryButton data-cy="loginSubmit" htmlType="submit">
-            Log In
-          </PrimaryButton>
-          <BottomTextWrapper>
-            No account?{" "}
-            <BottomTextLink
-              data-cy="toRegister"
-              onClick={handleClickRegisterTitle}
-            >
-              Register now!
-            </BottomTextLink>
-          </BottomTextWrapper>
-        </StyledForm.Item>
-      </StyledForm>
+          <StyledForm.Item>
+            <PrimaryButton data-cy="loginSubmit" htmlType="submit">
+              Log In
+            </PrimaryButton>
+            <BottomTextWrapper>
+              No account?{" "}
+              <BottomTextLink
+                data-cy="toRegister"
+                onClick={handleClickRegisterTitle}
+              >
+                Register now!
+              </BottomTextLink>
+            </BottomTextWrapper>
+          </StyledForm.Item>
+        </StyledForm>
+      </RefVerificationCard>
     </CenteredContainer>
   );
 };
