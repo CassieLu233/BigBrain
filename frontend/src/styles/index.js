@@ -9,3 +9,4 @@ export * from "./Common";
 export * from "./CardStyle";
 export * from "./GameStyle";
 export * from "./QuestionStyle";
+export * from "./ModalStyle";
