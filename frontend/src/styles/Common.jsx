@@ -7,8 +7,14 @@
 // ==============================================================================
 
 import styled from "styled-components";
-import { Card, Input, Button, Avatar, Layout } from "antd";
-import { DownOutlined } from "@ant-design/icons";
+import { Input, Button, Avatar, Layout } from "antd";
+import {
+  DownOutlined,
+  EditOutlined,
+  DeleteOutlined,
+  PlayCircleOutlined,
+  StopOutlined,
+} from "@ant-design/icons";
 
 // Page centering container
 export const CenteredContainer = styled.div`
@@ -17,16 +23,6 @@ export const CenteredContainer = styled.div`
   justify-content: center;
   align-items: center;
   font-size: 20px;
-`;
-
-// Card extension based on antd
-export const StyledCard = styled(Card)`
-  width: ${(props) => props.$width || "360px"};
-  text-align: center;
-  padding: 24px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-  font-size: 20px;
-  border-radius: 8px;
 `;
 
 // Logo Regional Style
@@ -156,4 +152,28 @@ export const StyledDropdownIcon = styled(DownOutlined)`
   font-size: 12px;
   color: #555;
   margin-left: 4px;
+`;
+
+// Blue: Edit button
+export const EditIcon = styled(EditOutlined)`
+  color: #1395c2;
+  font-size: 20px;
+`;
+
+// Red: Delete button
+export const DeleteIcon = styled(DeleteOutlined)`
+  color: #c54949;
+  font-size: 20px;
+`;
+
+// Green: Start button
+export const StartIcon = styled(PlayCircleOutlined)`
+  color: #56ae56;
+  font-size: 20px;
+`;
+
+// Red: End button
+export const StopIcon = styled(StopOutlined)`
+  color: red;
+  font-size: 20px;
 `;
