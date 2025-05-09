@@ -1,18 +1,26 @@
-//=============================================================================
+// ==============================================================================
 // File: question/CreateQuestionModal.jsx
-// Purpose: Modal for adding a new question (text + type only)
-// Author: Qian Lu
+// Purpose: Modal for adding a new question (fully styled-components version)
+// Author: Qian Lu (z5506082@ad.unsw.edu.au)
 // Course: COMP6080
-// Created: 2025-04-19
-//=============================================================================
-import { Modal, Form, Input, Select, message } from "antd";
+// Created: 2025-04-19, Refactored: 2025-05-09
+// ==============================================================================
+
+import { message, Form } from "antd";
+import {
+  StyledModal,
+  StyledForm,
+  StyledInput,
+  StyledSelect,
+  HiddenSubmitButton,
+} from "styles";
 
 export const CreateQuestionModal = ({ visible, onCreate, onCancel }) => {
   const [form] = Form.useForm();
 
   const handleOk = async () => {
     try {
-      // values = { title: "...", type: "single" | "multiple" | "judgement" }
+      // values = { title: "...", type: "Single Choice" | "Multiple Choice" | "Judgement" }
       const values = await form.validateFields();
       onCreate(values);
       form.resetFields();
@@ -22,7 +30,7 @@ export const CreateQuestionModal = ({ visible, onCreate, onCancel }) => {
   };
 
   return (
-    <Modal
+    <StyledModal
       title="Add Question"
       open={visible}
       onOk={handleOk}
@@ -31,33 +39,38 @@ export const CreateQuestionModal = ({ visible, onCreate, onCancel }) => {
         onCancel();
       }}
       okText="Add"
-      destroyOnClose
     >
-      <Form form={form} layout="vertical" preserve={false} onFinish={handleOk}>
-        <Form.Item
+      <StyledForm form={form} preserve={false} onFinish={handleOk}>
+        <StyledForm.Item
           name="title"
           label="Question"
           rules={[
             { required: true, message: "Please enter the question title" },
           ]}
         >
-          <Input placeholder="Enter question..." />
-        </Form.Item>
-        <Form.Item
+          <StyledInput placeholder="Enter question..." />
+        </StyledForm.Item>
+
+        <StyledForm.Item
           name="type"
           label="Question Type"
           rules={[{ required: true, message: "Please select a type" }]}
         >
-          <Select placeholder="Select type">
-            <Select.Option value="Single Choice">Single Choice</Select.Option>
-            <Select.Option value="Multiple Choice">
+          <StyledSelect placeholder="Select type">
+            <StyledSelect.Option value="Single Choice">
+              Single Choice
+            </StyledSelect.Option>
+            <StyledSelect.Option value="Multiple Choice">
               Multiple Choice
-            </Select.Option>
-            <Select.Option value="Judgement">Judgement</Select.Option>
-          </Select>
-        </Form.Item>
-        <button type="submit" style={{ display: "none" }} />
-      </Form>
-    </Modal>
+            </StyledSelect.Option>
+            <StyledSelect.Option value="Judgement">
+              Judgement
+            </StyledSelect.Option>
+          </StyledSelect>
+        </StyledForm.Item>
+
+        <HiddenSubmitButton type="submit" />
+      </StyledForm>
+    </StyledModal>
   );
 };
