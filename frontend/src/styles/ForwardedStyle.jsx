@@ -8,7 +8,17 @@
 
 import React from "react";
 import styled from "styled-components";
-import { Button, Dropdown, Form, Input, Card, Segmented } from "antd";
+import {
+  Button,
+  Dropdown,
+  Form,
+  Input,
+  Card,
+  Segmented,
+  Modal,
+  Upload,
+  Select,
+} from "antd";
 import {
   PlusOutlined,
   MailOutlined,
@@ -63,6 +73,16 @@ StyledForm.displayName = "StyledForm";
 // ------------------------------------------------------------------------------
 // Input with ref and prefix
 // ------------------------------------------------------------------------------
+
+// Plain input (no prefix)
+const BaseStyledInput = React.forwardRef((props, ref) => (
+  <Input ref={ref} size="large" {...props} />
+));
+BaseStyledInput.displayName = "BaseStyledInput";
+
+export const StyledInput = styled(BaseStyledInput)``;
+StyledInput.displayName = "StyledInput";
+
 // Email input
 const BaseStyledEmailInput = React.forwardRef((props, ref) => (
   <Input ref={ref} size="large" prefix={<MailOutlined />} {...props} />
@@ -135,3 +155,33 @@ export const StyledSegmented = styled(BaseSegmented)`
   margin-bottom: 16px;
 `;
 StyledSegmented.displayName = "StyledSegmented";
+
+// Modal wrapper with ref
+const BaseModal = React.forwardRef((props, ref) => (
+  <Modal ref={ref} destroyOnClose {...props} />
+));
+BaseModal.displayName = "BaseModal";
+
+export const StyledModal = styled(BaseModal)``;
+StyledModal.displayName = "StyledModal";
+
+// Upload wrapper with ref
+const BaseUpload = React.forwardRef((props, ref) => (
+  <Upload ref={ref} {...props} />
+));
+BaseUpload.displayName = "BaseUpload";
+
+export const StyledUpload = styled(BaseUpload)``;
+StyledUpload.displayName = "StyledUpload";
+
+// ------------------------------------------------------------------------------
+// Select with ref
+// ------------------------------------------------------------------------------
+const BaseSelect = React.forwardRef((props, ref) => (
+  <Select ref={ref} size="large" {...props} />
+));
+BaseSelect.displayName = "BaseSelect";
+
+export const StyledSelect = styled(BaseSelect)``;
+StyledSelect.Option = Select.Option;
+StyledSelect.displayName = "StyledSelect";

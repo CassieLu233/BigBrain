@@ -5,10 +5,21 @@
 // Course: COMP6080
 // Created: 2025-04-18
 // ==============================================================================
+
 import { useState } from "react";
-import { Modal, Form, Input, Upload, message, Segmented, Button } from "antd";
-import { PlusOutlined, UploadOutlined } from "@ant-design/icons";
+import { message, Form } from "antd";
+import { PlusOutlined } from "@ant-design/icons";
 import { fileToDataUrl } from "utils";
+import {
+  StyledModal,
+  StyledForm,
+  StyledInput,
+  StyledTextArea,
+  StyledSegmented,
+  UploadButton,
+  StyledUpload,
+  HiddenSubmitButton,
+} from "styles";
 
 export const CreateGameModal = ({ title, visible, onCreate, onCancel }) => {
   const [mode, setMode] = useState("form");
@@ -128,7 +139,7 @@ export const CreateGameModal = ({ title, visible, onCreate, onCancel }) => {
     // Only JSON is allowed
     if (!file.name.match(/\.(json)$/i)) {
       message.error("Please upload a JSON file");
-      return Upload.LIST_IGNORE;
+      return StyledUpload.LIST_IGNORE;
     }
     try {
       const text = await file.text();
@@ -205,7 +216,7 @@ export const CreateGameModal = ({ title, visible, onCreate, onCancel }) => {
   };
 
   return (
-    <Modal
+    <StyledModal
       title={title || "Create New Game"}
       open={visible}
       onOk={() => form.submit()}
@@ -221,22 +232,21 @@ export const CreateGameModal = ({ title, visible, onCreate, onCancel }) => {
     >
       {/* If there is no external title, the toggle button will appear */}
       {!hasExternalTitle && (
-        <Segmented
+        <StyledSegmented
           options={[
             { label: "Manual Input", value: "form" },
             { label: "JSON Upload", value: "json" },
           ]}
           value={mode}
           onChange={handleModeChange}
-          style={{ marginBottom: 16 }}
         />
       )}
 
       {!hasExternalTitle && mode === "json" ? (
         // JSON Upload
-        <Form layout="vertical" preserve={false} onFinish={handleOk}>
-          <Form.Item label="Upload Games JSON">
-            <Upload
+        <StyledForm layout="vertical" preserve={false} onFinish={handleOk}>
+          <StyledForm.Item label="Upload Games JSON">
+            <StyledUpload
               accept=".json"
               beforeUpload={handleBeforeUploadData}
               onRemove={handleRemoveData}
@@ -251,21 +261,16 @@ export const CreateGameModal = ({ title, visible, onCreate, onCancel }) => {
               }}
             >
               {fileList.length === 0 && (
-                <Button icon={<UploadOutlined />}>Select Json File</Button>
+                <UploadButton>Select Json File</UploadButton>
               )}
-            </Upload>
-          </Form.Item>
-        </Form>
+            </StyledUpload>
+          </StyledForm.Item>
+        </StyledForm>
       ) : (
         // Manual Input
-        <Form
-          form={form}
-          layout="vertical"
-          preserve={false}
-          onFinish={handleOk}
-        >
-          <Form.Item label="Thumbnail (JPEG/PNG/SVG)">
-            <Upload
+        <StyledForm form={form} preserve={false} onFinish={handleOk}>
+          <StyledForm.Item label="Thumbnail (JPEG/PNG/SVG)">
+            <StyledUpload
               listType="picture-card"
               maxCount={1}
               beforeUpload={handleBeforeUploadThumb}
@@ -282,26 +287,26 @@ export const CreateGameModal = ({ title, visible, onCreate, onCancel }) => {
               }}
             >
               {thumbList.length === 0 && <PlusOutlined />}
-            </Upload>
-          </Form.Item>
-          <Form.Item
+            </StyledUpload>
+          </StyledForm.Item>
+          <StyledForm.Item
             name="title"
             label="Game Title"
             rules={[{ required: true, message: "Please enter a title" }]}
           >
-            <Input data-cy="gameTitleInput" placeholder="Title" />
-          </Form.Item>
-          <Form.Item name="description" label="Description">
-            <Input.TextArea
+            <StyledInput data-cy="gameTitleInput" placeholder="Title" />
+          </StyledForm.Item>
+          <StyledForm.Item name="description" label="Description">
+            <StyledTextArea
               data-cy="gameDescriptionInput"
               rows={3}
               placeholder="Description"
             />
-          </Form.Item>
+          </StyledForm.Item>
 
-          <button type="submit" style={{ display: "none" }} />
-        </Form>
+          <HiddenSubmitButton type="submit" />
+        </StyledForm>
       )}
-    </Modal>
+    </StyledModal>
   );
 };
