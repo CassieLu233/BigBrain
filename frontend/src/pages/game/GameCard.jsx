@@ -1,24 +1,27 @@
-//=============================================================================
+// ==============================================================================
 // File: game/GameCard.jsx
 // Purpose: Component for rendering a single game card
 // Author: Qian Lu (z5506082@ad.unsw.edu.au)
 // Course: COMP6080
-// Created: 2025-04-18
+// Created: 2025-04-18, Refactored: 2025-05-09
 // ==============================================================================
-import {
-  EditOutlined,
-  DeleteOutlined,
-  PlayCircleOutlined,
-  StopOutlined,
-} from "@ant-design/icons";
-import { Avatar, Card, Typography, Popconfirm, Divider, Tooltip } from "antd";
+
+import { Popconfirm, Tooltip } from "antd";
 import { useNavigate } from "react-router";
-/**
- * GameCard
- * Props:
- *  - game: { id: string, title: string, description: string }
- *  - onDelete: function that delete game
- */
+
+import {
+  GameCardContainer,
+  GameCardCover,
+  GameAvatar,
+  GameTitleText,
+  GameDivider,
+  GameInfoTitle,
+  GameInfoDescription,
+  GameSessionLink,
+  CardTopSection,
+} from "styles/GameStyle";
+
+import { StartIcon, StopIcon, EditIcon, DeleteIcon } from "styles";
 
 export const GameCard = ({
   game,
@@ -27,31 +30,13 @@ export const GameCard = ({
   onEnd,
   onClickManagementSession,
 }) => {
-  const { Text, Title } = Typography;
   const navigate = useNavigate();
 
-  const autoWrapStyle = {
-    maxHeight: 160,
-    whiteSpace: "normal",
-    wordBreak: "break-word",
-    overflow: "hidden",
-  };
-  const showToolTipStyle = {
-    textOverflow: "ellipsis",
-  };
-
   return (
-    <Card
+    <GameCardContainer
       data-cy={`gameCard${game.id}`}
       hoverable
-      style={{ width: 300 }}
-      cover={
-        <img
-          alt="Cover Image"
-          src={game.image}
-          style={{ backgroundColor: "#d0edf7", height: 200 }}
-        />
-      }
+      cover={<GameCardCover alt="Cover Image" src={game.image} />}
       actions={[
         game.active ? (
           <Tooltip key="endGame" title="End the game">
@@ -62,35 +47,22 @@ export const GameCard = ({
               cancelText="No"
               okButtonProps={{ "data-cy": "confirmEndGameBtn" }}
               cancelButtonProps={{ "data-cy": "cancelEndGameBtn" }}
-              onConfirm={() => {
-                onEnd(game.id);
-              }}
+              onConfirm={() => onEnd(game.id)}
               onCancel={() => {}}
             >
-              <StopOutlined
-                data-cy="endGameBtn"
-                style={{ color: "red", fontSize: 20 }}
-              />
+              <StopIcon data-cy="endGameBtn" />
             </Popconfirm>
           </Tooltip>
         ) : (
           <Tooltip key="startGame" title="Start the game">
-            <PlayCircleOutlined
+            <StartIcon
               data-cy="startGameBtn"
-              style={{ color: "#56ae56", fontSize: 20 }}
-              onClick={() => {
-                onStart(game.id);
-              }}
+              onClick={() => onStart(game.id)}
             />
           </Tooltip>
         ),
         <Tooltip key="edit" title="Edit the game">
-          <EditOutlined
-            style={{ color: "#1395c2", fontSize: 20 }}
-            onClick={() => {
-              navigate(`/game/${game.id}`);
-            }}
-          />
+          <EditIcon onClick={() => navigate(`/game/${game.id}`)} />
         </Tooltip>,
         <Tooltip key="delete" title="Delete the game">
           <Popconfirm
@@ -98,87 +70,39 @@ export const GameCard = ({
             description="Are you sure to delete this game?"
             okText="Yes"
             cancelText="No"
-            onConfirm={() => {
-              onDelete(game.id);
-            }}
+            onConfirm={() => onDelete(game.id)}
             onCancel={() => {}}
           >
-            <DeleteOutlined style={{ color: "#c54949", fontSize: 20 }} />
+            <DeleteIcon />
           </Popconfirm>
         </Tooltip>,
       ]}
     >
-      <div
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-        }}
-      >
-        <Avatar
-          style={{
-            backgroundColor: "#1395c2",
-            fontSize: 20,
-          }}
-        >
-          {game.owner[0].toUpperCase()}
-        </Avatar>
-        <Text
-          style={{
-            ...autoWrapStyle,
-            ...showToolTipStyle,
-            flex: 1,
-            fontSize: 20,
-            fontWeight: 600,
-            color: "#2cafdc",
-          }}
-          ellipsis={{ tooltip: game.title }}
-        >
+      <CardTopSection>
+        <GameAvatar>{game.owner[0].toUpperCase()}</GameAvatar>
+        <GameTitleText ellipsis={{ tooltip: game.title }}>
           {game.title}
-        </Text>
-      </div>
-      <Divider
-        style={{
-          margin: "0 0 10px",
-          borderColor: "#e1e1e1",
-          color: "#969696",
-        }}
-      ></Divider>
-      <div style={{ flex: 1 }}>
-        <Title level={5} style={{ ...autoWrapStyle, margin: 0 }}>
+        </GameTitleText>
+      </CardTopSection>
+
+      <GameDivider />
+
+      <div>
+        <GameInfoTitle>
           {`Questions number: ${game.questions.length}`}
-        </Title>
-        <Text
-          type="secondary"
-          style={{
-            ...autoWrapStyle,
-            ...showToolTipStyle,
-            fontSize: 16,
-          }}
-          ellipsis={{ tooltip: game.description }}
-        >
+        </GameInfoTitle>
+        <GameInfoDescription ellipsis={{ tooltip: game.description }}>
           {game.description}
-        </Text>
+        </GameInfoDescription>
 
         {game.active && (
           <Tooltip title="Management Session">
-            <Title
-              level={5}
-              style={{
-                ...autoWrapStyle,
-                margin: 0,
-                color: "blue",
-                textDecoration: "underline",
-              }}
-              onClick={() => {
-                onClickManagementSession(game.id);
-              }}
-            >
+            <GameSessionLink onClick={() => onClickManagementSession(game.id)}>
               Session in progress ...
-            </Title>
+            </GameSessionLink>
           </Tooltip>
         )}
       </div>
-    </Card>
+    </GameCardContainer>
   );
 };

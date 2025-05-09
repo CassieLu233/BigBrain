@@ -30,7 +30,7 @@ export const StyledCard = styled(Card)`
 export const CoverImage = styled.img`
   width: 100%;
   height: 200px;
-  object-fit: cover;
+  object-fit: fill;
 `;
 
 // Vertical container

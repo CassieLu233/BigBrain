@@ -110,6 +110,7 @@ export const LogoImg = styled.img`
 export const LogoText = styled.span`
   font-size: 20px;
   font-weight: bold;
+  color: #1677ff;
 `;
 
 export const ActionWrapper = styled.div`
@@ -160,25 +161,21 @@ export const LogoutLabel = styled.div`
 
 // ================= Icon Buttons =================
 
-export const EditIcon = styled(EditOutlined)`
-  color: #1395c2;
-  font-size: 20px;
-`;
+export const EditIcon = styled(EditOutlined).attrs(() => ({
+  style: { color: "#1395c2", fontSize: 20 },
+}))``;
 
-export const DeleteIcon = styled(DeleteOutlined)`
-  color: #c54949;
-  font-size: 20px;
-`;
+export const DeleteIcon = styled(DeleteOutlined).attrs(() => ({
+  style: { color: "#c54949", fontSize: 20 },
+}))``;
 
-export const StartIcon = styled(PlayCircleOutlined)`
-  color: #56ae56;
-  font-size: 20px;
-`;
+export const StartIcon = styled(PlayCircleOutlined).attrs(() => ({
+  style: { color: "#56ae56", fontSize: 20 },
+}))``;
 
-export const StopIcon = styled(StopOutlined)`
-  color: red;
-  font-size: 20px;
-`;
+export const StopIcon = styled(StopOutlined).attrs(() => ({
+  style: { color: "red", fontSize: 20 },
+}))``;
 
 // ================= Extended Inputs and Buttons =================
 

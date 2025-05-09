@@ -14,12 +14,18 @@ import {
   CardTitle,
   CardDescription,
   CardDivider,
-} from "./CardStyle";
+} from "styles";
 
 const { Title } = Typography;
 
 // Card container
 export const GameCardContainer = styled(BaseCard)``;
+
+export const CardTopSection = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`;
 
 export const GameCardCover = styled(CoverImage)`
   background-color: #d0edf7;
@@ -47,17 +53,19 @@ export const GameInfoTitle = styled(Title)`
 `;
 
 // Game description
-export const GameInfoDescription = styled(CardDescription)``;
+export const GameInfoDescription = styled(CardDescription).attrs(() => ({
+  type: "secondary",
+}))``;
 
 // In progress Session link
-export const GameSessionLink = styled(Title)`
-  && {
-    font-size: 16px;
-    margin: 0;
-    color: blue;
-    text-decoration: underline;
-    cursor: pointer;
-  }
+export const GameSessionLink = styled(Title).attrs(() => ({
+  level: 5,
+}))`
+  font-size: 16px;
+  margin: 0;
+  color: blue;
+  text-decoration: underline;
+  cursor: pointer;
 `;
 
 // ================= Horizontal Card Layout for Game Info =================
