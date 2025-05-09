@@ -7,7 +7,7 @@
 // ==============================================================================
 
 import styled from "styled-components";
-import { Input, Button, Avatar, Layout, Segmented, Dropdown } from "antd";
+import { Input, Button, Avatar, Layout, Segmented, Empty } from "antd";
 import {
   DownOutlined,
   EditOutlined,
@@ -15,10 +15,6 @@ import {
   PlayCircleOutlined,
   StopOutlined,
   UploadOutlined,
-  MailOutlined,
-  LockOutlined,
-  UserOutlined,
-  PlusOutlined,
   LogoutOutlined,
 } from "@ant-design/icons";
 
@@ -141,11 +137,6 @@ export const StyledDropdownIcon = styled(DownOutlined)`
   margin-left: 4px;
 `;
 
-// Styled dropdown used in dashboard user menu
-export const StyledDropdown = styled((props) => (
-  <Dropdown trigger={["click"]} {...props} />
-))``;
-
 // Logout icon used in dropdown item
 export const LogoutIcon = styled(LogoutOutlined)`
   margin-right: 8px;
@@ -179,18 +170,6 @@ export const StopIcon = styled(StopOutlined).attrs(() => ({
 
 // ================= Extended Inputs and Buttons =================
 
-export const StyledEmailInput = styled((props) => (
-  <Input size="large" prefix={<MailOutlined />} {...props} />
-))``;
-
-export const StyledPasswordInput = styled((props) => (
-  <Input.Password size="large" prefix={<LockOutlined />} {...props} />
-))``;
-
-export const StyledNameInput = styled((props) => (
-  <Input size="large" prefix={<UserOutlined />} {...props} />
-))``;
-
 export const StyledTextArea = styled(Input.TextArea).attrs(() => ({
   rows: 3,
 }))`
@@ -213,13 +192,12 @@ export const HiddenSubmitButton = styled.button`
   display: none;
 `;
 
-export const CreateButton = styled((props) => (
-  <Button type="primary" icon={<PlusOutlined />} size="large" {...props} />
-))`
-  margin-right: 16px;
-  font-size: 16px;
-`;
-
 export const StyledSegmented = styled(Segmented)`
   margin-bottom: 16px;
 `;
+
+// ================= No Data Display =================
+
+export const StyledEmpty = styled((props) => (
+  <Empty description="No data available" {...props} />
+))``;
