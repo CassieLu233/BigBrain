@@ -59,3 +59,28 @@ export const GameSessionLink = styled(Title)`
     cursor: pointer;
   }
 `;
+
+// ================= Horizontal Card Layout for Game Info =================
+
+// Horizontal container for image and text (used in CustomCard)
+export const HorizontalCardContainer = styled(BaseCard)`
+  min-width: 200px;
+  background-color: #edf4fe;
+`;
+
+// Left image area
+export const LeftImageSection = styled.img`
+  min-width: 120px;
+  max-width: 50%;
+  min-height: 120px;
+  object-fit: cover;
+  background-color: #d0edf7;
+`;
+
+// Right text section inside the horizontal layout
+export const RightContentSection = styled.div`
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+`;
