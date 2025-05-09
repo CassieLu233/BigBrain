@@ -36,13 +36,7 @@ import {
 // Create Button with ref
 // ------------------------------------------------------------------------------
 const BaseCreateButton = React.forwardRef((props, ref) => (
-  <Button
-    ref={ref}
-    type="primary"
-    icon={<PlusOutlined />}
-    size="large"
-    {...props}
-  />
+  <Button ref={ref} type="primary" icon={<PlusOutlined />} {...props} />
 ));
 BaseCreateButton.displayName = "BaseCreateButton";
 

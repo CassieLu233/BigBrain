@@ -199,6 +199,18 @@ export const BackButton = styled((props) => (
   <Button type="default" icon={<ArrowLeftOutlined />} {...props} />
 ))``;
 
+export const EditButton = styled((props) => (
+  <Button type="default" icon={<EditOutlined />} {...props} />
+))`
+  color: #1677ff;
+  border-color: #1677ff;
+  margin-right: 16px;
+
+  &:hover {
+    background-color: #b9d6ff !important;
+  }
+`;
+
 // ================= No Data Display =================
 
 export const StyledEmpty = styled((props) => (

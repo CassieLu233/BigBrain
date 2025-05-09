@@ -1,21 +1,25 @@
-//=============================================================================
+// ==============================================================================
 // File: game/index.jsx
-// Purpose: The main page of a single game
+// Purpose: The main page of a single game (fully styled-components version)
 // Author: Qian Lu (z5506082@ad.unsw.edu.au)
 // Course: COMP6080
-// Created: 2025-04-18
+// Created: 2025-04-18, Refactored: 2025-05-09
 // ==============================================================================
 
 import { useEffect, useState, useRef } from "react";
 import { useParams, useNavigate } from "react-router";
-import { Layout, Button, message, Typography, Divider } from "antd";
+import { message } from "antd";
 import {
-  ArrowLeftOutlined,
-  EditOutlined,
-  PlusOutlined,
-} from "@ant-design/icons";
+  PageContainer,
+  PageHeader,
+  PageContent,
+  BackButton,
+  StyledText,
+  StyledDivider,
+  EditButton,
+  CreateButton as CreateQuestionButton,
+} from "styles";
 import {
-  dashboardStyles as styles,
   CreateGameModal,
   QuestionCardList,
   CustomCard,
@@ -30,7 +34,6 @@ import {
 
 export const GamePage = () => {
   const navigate = useNavigate();
-  const { Text } = Typography;
   const [currentGame, setCurrentGame] = useState({ questions: [] });
   const editBtnRef = useRef(null);
   const addQuestionBtnRef = useRef(null);
@@ -139,96 +142,45 @@ export const GamePage = () => {
   };
 
   return (
-    <Layout style={styles.container}>
+    <PageContainer>
       {/* Navbar */}
-      <Layout.Header style={styles.header}>
-        {/* Left: back to dashboard btn and game title*/}
-        <Button
-          type="default"
-          icon={<ArrowLeftOutlined />}
-          onClick={() => {
-            navigate("/dashboard");
-          }}
-        >
+      <PageHeader>
+        <BackButton onClick={() => navigate("/dashboard")}>
           Back to Dashboard
-        </Button>
-        <Text
-          style={{
-            fontSize: 24,
-            fontWeight: 700,
-            color: "#1677ff",
-            whiteSpace: "nowrap",
-            wordBreak: "break-word",
-            overflow: "hidden",
-          }}
-          ellipsis={{ tooltip: currentGame.title }}
-        >
+        </BackButton>
+        <StyledText ellipsis={{ tooltip: currentGame.title }}>
           {currentGame.title}
-        </Text>
-
-        {/* Right: edit game btn and create question btn */}
-        <div style={styles.actions}>
-          <Button
+        </StyledText>
+        <div style={{ display: "flex", alignItems: "center" }}>
+          <EditButton
             ref={editBtnRef}
-            type="default"
-            icon={<EditOutlined />}
-            style={{
-              color: "#1677ff",
-              borderColor: "#1677ff",
-              marginRight: 16,
-            }}
-            onMouseEnter={(e) =>
-              (e.currentTarget.style.backgroundColor = "#b9d6ff")
-            }
-            onMouseLeave={(e) =>
-              (e.currentTarget.style.backgroundColor = "#ffffff")
-            }
             onClick={() => setModalVisible(true)}
             onMouseDown={(e) => e.preventDefault()}
           >
             Edit Game
-          </Button>
-          <Button
+          </EditButton>
+          <CreateQuestionButton
             ref={addQuestionBtnRef}
-            type="primary"
-            icon={<PlusOutlined />}
-            style={{ marginRight: 16 }}
             onClick={() => setQuestionModalVisible(true)}
             onMouseDown={(e) => e.preventDefault()}
           >
             Create Question
-          </Button>
+          </CreateQuestionButton>
         </div>
-      </Layout.Header>
+      </PageHeader>
 
       {/* Main content */}
-      <Layout.Content style={styles.content}>
-        <Divider
-          style={{
-            margin: "0 0 16px",
-            borderColor: "#e1e1e1",
-            color: "#969696",
-          }}
-        >
-          Game Information
-        </Divider>
-        <CustomCard style={{ width: "100vw" }} game={currentGame}></CustomCard>
-        <Divider
-          style={{
-            margin: "0 0 16px",
-            borderColor: "#e1e1e1",
-            color: "#969696",
-          }}
-        >
-          Game Questions
-        </Divider>
+      <PageContent>
+        <StyledDivider>Game Information</StyledDivider>
+        <CustomCard game={currentGame} />
+        <StyledDivider>Game Questions</StyledDivider>
         <QuestionCardList
           questions={currentGame.questions}
           onDelete={handleDeleteQuestion}
           onEdit={handleEditQuestion}
         />
         <CreateGameModal
-          title={`Update Game Information`}
+          title="Update Game Information"
           visible={modalVisible}
           onCreate={handleEditGame}
           onCancel={() => {
@@ -244,7 +196,7 @@ export const GamePage = () => {
             addQuestionBtnRef.current?.blur();
           }}
         />
-      </Layout.Content>
-    </Layout>
+      </PageContent>
+    </PageContainer>
   );
 };
