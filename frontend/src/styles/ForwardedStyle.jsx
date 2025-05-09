@@ -18,6 +18,11 @@ import {
   Modal,
   Upload,
   Select,
+  InputNumber,
+  Checkbox,
+  Radio,
+  Divider,
+  Typography,
 } from "antd";
 import {
   PlusOutlined,
@@ -68,6 +73,10 @@ BaseStyledForm.displayName = "BaseStyledForm";
 
 export const StyledForm = styled(BaseStyledForm)``;
 StyledForm.Item = Form.Item;
+StyledForm.List = Form.List;
+StyledForm.ErrorList = Form.ErrorList;
+StyledForm.Provider = Form.Provider;
+StyledForm.useForm = Form.useForm;
 StyledForm.displayName = "StyledForm";
 
 // ------------------------------------------------------------------------------
@@ -185,3 +194,70 @@ BaseSelect.displayName = "BaseSelect";
 export const StyledSelect = styled(BaseSelect)``;
 StyledSelect.Option = Select.Option;
 StyledSelect.displayName = "StyledSelect";
+
+// ------------------------------------------------------------------------------
+// InputNumber with ref
+// ------------------------------------------------------------------------------
+const BaseInputNumber = React.forwardRef((props, ref) => (
+  <InputNumber ref={ref} size="large" {...props} />
+));
+BaseInputNumber.displayName = "BaseInputNumber";
+
+export const StyledInputNumber = styled(BaseInputNumber)``;
+StyledInputNumber.displayName = "StyledInputNumber";
+
+// ------------------------------------------------------------------------------
+// Checkbox with ref
+// ------------------------------------------------------------------------------
+const BaseCheckbox = React.forwardRef((props, ref) => (
+  <Checkbox ref={ref} {...props} />
+));
+BaseCheckbox.displayName = "BaseCheckbox";
+
+export const StyledCheckbox = styled(BaseCheckbox)``;
+StyledCheckbox.displayName = "StyledCheckbox";
+
+// ------------------------------------------------------------------------------
+// Radio Group with ref
+// ------------------------------------------------------------------------------
+const BaseRadioGroup = React.forwardRef((props, ref) => (
+  <Radio.Group ref={ref} {...props} />
+));
+BaseRadioGroup.displayName = "BaseRadioGroup";
+
+export const StyledRadioGroup = styled(BaseRadioGroup)``;
+StyledRadioGroup.Button = Radio.Button;
+StyledRadioGroup.displayName = "StyledRadioGroup";
+
+// ------------------------------------------------------------------------------
+// Typography.Text
+// ------------------------------------------------------------------------------
+const BaseText = React.forwardRef((props, ref) => (
+  <Typography.Text ref={ref} {...props} />
+));
+BaseText.displayName = "BaseText";
+
+export const StyledText = styled(BaseText)`
+  font-size: 24px;
+  font-weight: 700;
+  color: #1677ff;
+  white-space: nowrap;
+  word-break: break-word;
+  overflow: hidden;
+`;
+StyledText.displayName = "StyledText";
+
+// ------------------------------------------------------------------------------
+// Divider with ref
+// ------------------------------------------------------------------------------
+const BaseDivider = React.forwardRef((props, ref) => (
+  <Divider ref={ref} {...props} />
+));
+BaseDivider.displayName = "BaseDivider";
+
+export const StyledDivider = styled(BaseDivider)`
+  margin-bottom: 16px;
+  border-color: #e1e1e1;
+  color: #969696;
+`;
+StyledDivider.displayName = "StyledDivider";

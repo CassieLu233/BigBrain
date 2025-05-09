@@ -61,9 +61,11 @@ export const GameInfoDescription = styled(CardDescription).attrs(() => ({
 export const GameSessionLink = styled(Title).attrs(() => ({
   level: 5,
 }))`
-  font-size: 16px;
-  margin: 0;
-  color: blue;
-  text-decoration: underline;
-  cursor: pointer;
+  && {
+    font-size: 16px;
+    margin: 0;
+    color: blue;
+    text-decoration: underline;
+    cursor: pointer;
+  }
 `;

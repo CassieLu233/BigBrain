@@ -15,6 +15,7 @@ import {
   PlayCircleOutlined,
   StopOutlined,
   LogoutOutlined,
+  ArrowLeftOutlined,
 } from "@ant-design/icons";
 
 // ================= General Layout Wrappers =================
@@ -186,9 +187,37 @@ export const DefaultButton = styled((props) => (
 export const HiddenSubmitButton = styled.button`
   display: none;
 `;
+export const DashedButton = styled((props) => (
+  <Button type="dashed" size="large" {...props} />
+))``;
+
+export const DangerButton = styled((props) => (
+  <Button danger size="small" {...props} />
+))``;
+
+export const BackButton = styled((props) => (
+  <Button type="default" icon={<ArrowLeftOutlined />} {...props} />
+))``;
 
 // ================= No Data Display =================
 
 export const StyledEmpty = styled((props) => (
   <Empty description="No data available" {...props} />
 ))``;
+
+export const InlineFlex = styled.div`
+  display: flex;
+  gap: 16px;
+`;
+
+export const AnswerItem = styled.div`
+  display: flex;
+  align-items: center;
+  width: 100%;
+  margin-bottom: 16px;
+`;
+
+export const ErrorBox = styled.div`
+  color: red;
+  margin-bottom: 16px;
+`;
