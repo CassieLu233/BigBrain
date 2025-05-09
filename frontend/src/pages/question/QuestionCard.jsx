@@ -1,40 +1,35 @@
-//=============================================================================
+// ==============================================================================
 // File: question/QuestionCard.jsx
-// Purpose: Component for rendering a single question card
+// Purpose: Component for rendering a single question card (fully styled-components version)
 // Author: Qian Lu (z5506082@ad.unsw.edu.au)
 // Course: COMP6080
-// Created: 2025-04-19
+// Created: 2025-04-19, Refactored: 2025-05-09
 // ==============================================================================
-import { EditOutlined, DeleteOutlined } from "@ant-design/icons";
-import { Card, Typography, Popconfirm, Divider } from "antd";
+
+import { Popconfirm } from "antd";
+import {
+  QuestionCardContainer,
+  QuestionTitle,
+  QuestionDivider,
+  QuestionInfoText,
+  EditIcon,
+  DeleteIcon,
+} from "styles";
+
 /**
  * QuestionCard
  * Props:
  *  - question: { id: string, title: string, description: string , ...}
- *  - onDelete: function that delete question
+ *  - onDelete: function that deletes question
+ *  - onEdit: function that edits question
  */
-
 export const QuestionCard = ({ question, onDelete, onEdit }) => {
-  const { Text } = Typography;
-
-  const autoWrapStyle = {
-    maxHeight: 160,
-    whiteSpace: "normal",
-    wordBreak: "break-word",
-    overflow: "hidden",
-  };
-  const showToolTipStyle = {
-    textOverflow: "ellipsis",
-  };
-
   return (
-    <Card
+    <QuestionCardContainer
       hoverable
-      style={{ width: 300, backgroundColor: "#498ae6", borderWidth: 2 }}
       actions={[
-        <EditOutlined
+        <EditIcon
           key="edit"
-          style={{ color: "#1395c2", fontSize: 20 }}
           onClick={() => {
             onEdit(question.id);
           }}
@@ -50,48 +45,31 @@ export const QuestionCard = ({ question, onDelete, onEdit }) => {
           }}
           onCancel={() => {}}
         >
-          <DeleteOutlined style={{ color: "#c54949", fontSize: 20 }} />
+          <DeleteIcon />
         </Popconfirm>,
       ]}
     >
       <div>
-        <Text
-          style={{
-            ...autoWrapStyle,
-            showToolTipStyle,
-            fontSize: 20,
-            fontWeight: 600,
-            color: "#fff",
-          }}
-          ellipsis={{ tooltip: question.title }}
-        >
+        <QuestionTitle ellipsis={{ tooltip: question.title }}>
           {question.title}
-        </Text>
+        </QuestionTitle>
       </div>
 
-      <Divider
-        style={{
-          borderColor: "#e1e1e1",
-          color: "#969696",
-          marginTop: 6,
-          marginBottom: 6,
-        }}
-      ></Divider>
+      <QuestionDivider />
+
       <div>
-        <Text strong style={{ color: "#fff" }}>{`Type: ${question.type}`}</Text>
+        <QuestionInfoText strong>{`Type: ${question.type}`}</QuestionInfoText>
       </div>
       <div>
-        <Text
+        <QuestionInfoText
           strong
-          style={{ color: "#fff" }}
-        >{`Score: ${question.points}`}</Text>
+        >{`Score: ${question.points}`}</QuestionInfoText>
       </div>
       <div>
-        <Text
+        <QuestionInfoText
           strong
-          style={{ color: "#fff" }}
-        >{`Limited time: ${question.duration} s`}</Text>
+        >{`Limited time: ${question.duration} s`}</QuestionInfoText>
       </div>
-    </Card>
+    </QuestionCardContainer>
   );
 };
