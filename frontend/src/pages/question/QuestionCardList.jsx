@@ -1,44 +1,46 @@
-//=============================================================================
+// ==============================================================================
 // File: question/QuestionCardList.jsx
-// Purpose: Render a grid of question cards (or empty state) using QuestionCard component
+// Purpose: Render a grid of question cards (fully styled-components version)
 // Author: Qian Lu (z5506082@ad.unsw.edu.au)
 // Course: COMP6080
-// Created: 2025-04-19
+// Created: 2025-04-19, Refactored: 2025-05-09
 // ==============================================================================
-import { Empty, Row, Col } from "antd";
+
+import {
+  GameCardGrid,
+  GameCardColumn,
+  GameCardListWrapper,
+  StyledEmpty,
+} from "styles";
 import { QuestionCard } from "pages";
 
 /**
  * QuestionCardList
  * Props:
  *  - questions: Array<{ id, title, description }>
+ *  - onDelete: function to delete question
+ *  - onEdit: function to edit question
  */
 export const QuestionCardList = ({ questions, onDelete, onEdit }) => {
   if (questions.length === 0) {
     return (
-      <div
-        style={{
-          flex: 1,
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-        }}
-      >
-        <Empty description="No question created yet" />
-      </div>
+      <GameCardListWrapper>
+        <StyledEmpty description="No question created yet" />
+      </GameCardListWrapper>
     );
   }
+
   return (
-    <Row gutter={[16, 16]}>
+    <GameCardGrid>
       {questions.map((question) => (
-        <Col key={question.id}>
+        <GameCardColumn key={question.id}>
           <QuestionCard
             question={question}
             onDelete={onDelete}
             onEdit={onEdit}
           />
-        </Col>
+        </GameCardColumn>
       ))}
-    </Row>
+    </GameCardGrid>
   );
 };
