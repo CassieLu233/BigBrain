@@ -84,7 +84,7 @@ git clone https://github.com/CassieLu233/BigBrain.git
 
 已经设置了默认的开发环境，如果需要改成开发环境，请分别修改backend和frontend文件夹下，`.env.production`的文件内容
 
-1. 进入 **backend** 文件夹
+3. 进入 **backend** 文件夹
 
 * 运行以下命令安装后端依赖：
 
@@ -98,7 +98,7 @@ npm install
 npm run dev
 ```
 
-1. 进入 **frontend** 文件夹
+4. 进入 **frontend** 文件夹
 
 * 运行以下命令安装前端依赖：
 ```bash
@@ -110,4 +110,4 @@ npm install
 npm run dev
 ```
 
-1. 项目支持完整的 **Lint 检查** 与 **组件/UI 测试**（Vitest 已配置）。
+5. 项目支持完整的 **Lint 检查** 与 **组件/UI 测试**（Vitest 已配置）。
