@@ -3,6 +3,8 @@ import cors from 'cors';
 import express from 'express';
 import fs from 'fs';
 import swaggerUi from 'swagger-ui-express';
+import dotenv from 'dotenv';
+import path from 'path';
 
 import swaggerDocument from '../swagger.json';
 import { AccessError, InputError, } from './error';
@@ -27,9 +29,22 @@ import {
   updateGamesFromAdmin
 } from './service';
 
+const envFile = process.env.NODE_ENV === 'production' 
+  ? '.env.production' 
+  : '.env.development';
+
+dotenv.config({ path: path.resolve(process.cwd(), envFile) });
+
 const app = express();
 
-app.use(cors());
+const corsOrigins = process.env.CORS_ORIGIN ? 
+  process.env.CORS_ORIGIN.split(',').map(origin => origin.trim()) : 
+  ['http://localhost:3000', 'http://localhost:5173'];
+
+app.use(cors({
+  origin: corsOrigins,
+  credentials: true
+}));
 app.use(bodyParser.urlencoded({ extended: true, }));
 app.use(bodyParser.json({ limit: '100mb', }));
 
@@ -166,12 +181,12 @@ app.get('/', (req, res) => res.redirect('/docs'));
 
 app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
-const configData = JSON.parse(fs.readFileSync('../frontend/backend.config.json', 'utf8'));
-const port = 'BACKEND_PORT' in configData ? configData.BACKEND_PORT : 5000;
+const port = process.env.PORT ? parseInt(process.env.PORT) : 5005;
+const apiBaseUrl = process.env.API_BASE_URL || `http://localhost:${port}`;
 
-const server = app.listen(port, () => {
+const server = app.listen(port, '0.0.0.0', () => {
   console.log(`Backend is now listening on port ${port}!`);
-  console.log(`For API docs, navigate to http://localhost:${port}`);
+  console.log(`For API docs, navigate to ${apiBaseUrl}`);
 });
 
 export default server;

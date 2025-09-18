@@ -1,8 +1,6 @@
 //=============================================================================
 // File: utils/update.js
 // Purpose: Processing functions related to update data to backend
-// Author: Qian Lu (z5506082@ad.unsw.edu.au)
-// Course: COMP6080
 // Created: 2025-04-21
 // ==============================================================================
 import { message } from "antd";

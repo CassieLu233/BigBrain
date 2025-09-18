@@ -1,8 +1,6 @@
 //=============================================================================
 // File: play/ResultsPage.jsx
 // Purpose: Render palyer answer results page component
-// Author: Qian Lu (z5506082@ad.unsw.edu.au)
-// Course: COMP6080
 // Created: 2025-04-23
 //=============================================================================
 

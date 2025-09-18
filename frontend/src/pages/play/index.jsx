@@ -1,8 +1,6 @@
 //=============================================================================
 // File: play/index.jsx
 // Purpose: Render JoinPage or PlayPage based on the playerId query parameters in the URL
-// Author: Qian Lu (z5506082@ad.unsw.edu.au)
-// Course: COMP6080
 // Created: 2025-04-23
 //=============================================================================
 

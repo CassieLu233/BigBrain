@@ -3,7 +3,7 @@
     "image": "",
     "title": "Math Quiz",
     "description": "Basic Addition and Subtraction",
-    "owner": "test01@123.com",
+    "owner": "test02@123.com",
     "updateTime": "2025-04-24T12:00:00Z",
     "questions": [
       {
@@ -35,7 +35,7 @@
     "image": "",
     "title": "English Quiz",
     "description": "Word Spelling",
-    "owner": "test01@123.com",
+    "owner": "test02@123.com",
     "updateTime": "2025-04-24T12:05:00Z",
     "questions": [
       {

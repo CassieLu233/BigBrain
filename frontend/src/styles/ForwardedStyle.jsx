@@ -1,8 +1,6 @@
 // ==============================================================================
 // File: ForwardedStyle.jsx
 // Purpose: Styled-components with React.forwardRef to support ref forwarding
-// Author: Qian Lu (z5506082@ad.unsw.edu.au)
-// Course: COMP6080
 // Created: 2025-05-09
 // ==============================================================================
 

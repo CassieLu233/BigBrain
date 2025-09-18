@@ -1,8 +1,6 @@
 // ==============================================================================
 // File: question/QuestionCardList.jsx
 // Purpose: Render a grid of question cards (fully styled-components version)
-// Author: Qian Lu (z5506082@ad.unsw.edu.au)
-// Course: COMP6080
 // Created: 2025-04-19, Refactored: 2025-05-09
 // ==============================================================================
 

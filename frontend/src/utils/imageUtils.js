@@ -1,8 +1,6 @@
 //=============================================================================
 // File: utils/imageUtils.js
 // Purpose: Utility functions for converting between image Files and Base64 or displayable URLs
-// Author: Qian Lu (z5506082@ad.unsw.edu.au)
-// Course: COMP6080
 // Created: 2025-04-19
 // ==============================================================================
 

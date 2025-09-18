@@ -193,7 +193,7 @@ export const updateGamesFromAdmin = ({ gamesArrayFromRequest, email }) =>
         }
         if (gameFromRequest.owner !== email) {
           return reject(
-            new InputError("Cannot modify games owned by other admins")
+            new InputError("Cannot modify games owned by other admins, Please check that the owner of the uploaded game is the current user")
           );
         }
       }

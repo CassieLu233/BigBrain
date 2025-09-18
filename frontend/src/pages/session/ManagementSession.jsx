@@ -1,8 +1,6 @@
 //=============================================================================
 // File: session/ManagementSesson.jsx
 // Purpose: Render management session component
-// Author: Qian Lu (z5506082@ad.unsw.edu.au)
-// Course: COMP6080
 // Created: 2025-04-23
 // ==============================================================================
 

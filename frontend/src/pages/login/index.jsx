@@ -1,8 +1,6 @@
 // ==============================================================================
 // File: login/index.jsx
 // Purpose: Login page with styled-components
-// Author: Qian Lu (z5506082@ad.unsw.edu.au)
-// Course: COMP6080
 // Created: 2025-04-18, Refactored: 2025-05-09
 // ==============================================================================
 

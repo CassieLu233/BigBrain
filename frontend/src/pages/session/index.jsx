@@ -1,8 +1,6 @@
 //=============================================================================
 // File: session/index.jsx
 // Purpose: Render Manage sessions page or View results page
-// Author: Qian Lu (z5506082@ad.unsw.edu.au)
-// Course: COMP6080
 // Created: 2025-04-22
 //=============================================================================
 import { useEffect, useState, useCallback, useRef } from "react";

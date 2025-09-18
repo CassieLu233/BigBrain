@@ -1,8 +1,6 @@
 //=============================================================================
 // File: play/JoinPage.jsx
 // Purpose: Render player join page component
-// Author: Qian Lu (z5506082@ad.unsw.edu.au)
-// Course: COMP6080
 // Created: 2025-04-23
 // ==============================================================================
 

@@ -1,11 +1,8 @@
 //=============================================================================
 // File: utils/request.js
 // Purpose: Processing functions related to backend API requests
-// Author: Qian Lu (z5506082@ad.unsw.edu.au)
-// Course: COMP6080
-// Created: 2025-04-17
 // ==============================================================================
-const BASE_HOST = "http://localhost:5005";
+const BASE_HOST = import.meta.env.VITE_API_BASE_URL;
 
 const defaultOptions = {
   method: "GET",

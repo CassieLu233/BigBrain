@@ -1,8 +1,6 @@
 //=============================================================================
 // File: globalStyle.js
 // Purpose: Remove the default style of the browser
-// Author: Qian Lu (z5506082@ad.unsw.edu.au)
-// Course: COMP6080
 // Created: 2025-04-18
 // ==============================================================================
 

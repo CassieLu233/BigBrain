@@ -1,8 +1,6 @@
 //=============================================================================
 // File: session/EndSessionModal.jsx
 // Purpose: Modal prompting admin to view results after ending a session
-// Author: Qian Lu (z5506082@ad.unsw.edu.au)
-// Course: COMP6080
 // Created: 2025-04-23
 //=============================================================================
 import { Modal, Button, Typography } from "antd";

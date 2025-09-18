@@ -1,8 +1,6 @@
 // ==============================================================================
 // File: CardStyle.jsx
 // Purpose: Neutral, reusable styled-components for card-based layouts
-// Author: Qian Lu (z5506082@ad.unsw.edu.au)
-// Course: COMP6080
 // Created: 2025-05-09
 // ==============================================================================
 

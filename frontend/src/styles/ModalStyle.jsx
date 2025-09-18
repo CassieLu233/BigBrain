@@ -1,8 +1,6 @@
 // ==============================================================================
 // File: ModalStyle.jsx
 // Purpose: Shared styled-components for modal dialogs (CreateGameModal, EditGameModal, etc.)
-// Author: Qian Lu (z5506082@ad.unsw.edu.au)
-// Course: COMP6080
 // Created: 2025-05-09
 // ==============================================================================
 

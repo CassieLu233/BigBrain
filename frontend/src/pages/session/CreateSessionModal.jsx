@@ -1,8 +1,6 @@
 //=============================================================================
 // File: session/CreateSessionModal.jsx
 // Purpose: Modal for displaying and copying the newly created session ID
-// Author: Qian Lu (z5506082@ad.unsw.edu.au)
-// Course: COMP6080
 // Created: 2025-04-23
 //=============================================================================
 import { Modal, Button, Typography, message } from "antd";

@@ -1,8 +1,6 @@
 // ==============================================================================
 // File: GameStyle.jsx
 // Purpose: Styled-components for GameCard-specific visual styling
-// Author: Qian Lu (z5506082@ad.unsw.edu.au)
-// Course: COMP6080
 // Created: 2025-05-09
 // ==============================================================================
 
