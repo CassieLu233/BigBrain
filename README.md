@@ -88,14 +88,26 @@ git clone https://github.com/CassieLu233/BigBrain.git
 
 3. 进入 **backend** 文件夹
 运行以下命令安装后端依赖：
-`npm install`
+
+```bash
+npm install
+```
+
 运行以下命令启动后端服务：
-`npm run dev`
+
+```bash
+npm run dev
+```
 
 4. 进入 **frontend** 文件夹
 运行以下命令安装前端依赖：
-`npm install`
+```bash
+npm install
+```
+
 运行以下命令启动前端服务：
-`npm run dev`
+```bash
+npm run dev
+```
 
 5. 项目支持完整的 **Lint 检查** 与 **组件/UI 测试**（Vitest 已配置）。

@@ -38,7 +38,7 @@ for file in $(git diff --cached --name-only); do
   fi
 done
 
-if ! $only_ignored_files && [[ "$insertions" -gt 200 ]]; then
+if ! $only_ignored_files && [[ "$insertions" -gt 20000 ]]; then
   eval "$command"
   echo -e "\033[0;31m"
   echo "================================================================================"
