@@ -4,6 +4,7 @@
 // Created: 2025-04-23
 //=============================================================================
 import { Modal, Button, Typography, message } from "antd";
+import copy from 'copy-to-clipboard';
 
 export const CreateSessionModal = ({ visible, sessionId, onCancel }) => {
   const { Text, Title, Paragraph } = Typography;
@@ -13,11 +14,11 @@ export const CreateSessionModal = ({ visible, sessionId, onCancel }) => {
 
   // Copy game link to clipboard
   const handleCopyGameLink = async () => {
-    try {
-      await navigator.clipboard.writeText(fullLink);
+    const success = copy(fullLink);
+    if(success){
       message.success("Game link has been copied to the clipboard");
-    } catch (err) {
-      message.error("Copy failed: " + err.message);
+    }else{
+      message.error("Copy failed! Please copy the link manually.");
     }
   };
 
