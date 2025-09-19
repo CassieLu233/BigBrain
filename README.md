@@ -1,6 +1,6 @@
 ## 项目简介
 
-本项目是一个基于 **React.js** 的在线答题与互动平台（类似 Kahoot/BigBrain），支持多人实时参与答题。
+本项目是一个基于 **React.js** 的在线答题与互动平台（类似 Kahoot），支持多人实时参与答题。
 
 主要用户分为 **管理员 (Admin)** 和 **玩家 (Player)** 两类：
 
@@ -8,6 +8,9 @@
 * **玩家** 可以通过加入会话参与答题，在限定时间内作答，并在最后看到个人表现与排行榜。
 
 这是一个完整的单页应用（SPA），无需页面刷新即可完成所有操作。
+
+## 在线访问地址
+http://45.77.242.54:3000
 
 ## 核心功能
 
@@ -111,3 +114,42 @@ npm run dev
 ```
 
 5. 项目支持完整的 **Lint 检查** 与 **组件/UI 测试**（Vitest 已配置）。
+
+6. json文件的导入格式
+
+```json
+[
+   {
+    "image": "",
+    "title": "Math Quiz",
+    "description": "Basic Addition and Subtraction",
+    "owner": "test02@123.com",
+    "updateTime": "2025-04-24T12:00:00Z",
+    "questions": [
+      {
+        "id":  951827878,
+        "title": "What is 1 + 1?",
+        "type": "Single Choice",
+        "duration": 10,
+        "points": 1,
+        "answers": [{ "text": "1" }, { "text": "2" }, { "text": "3" }],
+        "correctAnswers": [1]
+      },
+      {
+        "id": 978947732,
+        "title": "Which of the following are even numbers?",
+        "type": "Multiple Choice",
+        "duration": 10,
+        "points": 2,
+        "answers": [
+          { "text": "1", "isCorrect": false },
+          { "text": "2", "isCorrect": true },
+          { "text": "3", "isCorrect": false },
+          { "text": "4", "isCorrect": true }
+        ],
+        "correctAnswers": [1, 3]
+      }
+    ]
+  }
+]
+```
